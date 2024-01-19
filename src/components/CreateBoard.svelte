@@ -1,0 +1,123 @@
+
+
+<script lang="ts">
+	import { onMount } from "svelte";
+	import { initialBackgrounds } from "$lib";
+	import { enhance } from "$app/forms";
+	import type { SubmitFunction } from "@sveltejs/kit";
+
+    // Components
+	import SelectBackgroundUnsplash from "./SelectBackgroundUnsplash.svelte";
+	import PreviewBackgroundBoard from "./PreviewBackgroundBoard.svelte";
+
+
+
+    let titleValue= ''; // save the title value of the input
+    let loading= false; // spinner fetch put
+    let selectedBackground: string= 'https://images.unsplash.com/photo-1699775292727-06fabf36730d'; // default background
+
+    $: if(selectedBackground) console.log('', selectedBackground);
+
+    const handleBackgroundSelected= (background: string) =>{
+        selectedBackground= background;
+    }
+
+    const submitCreateBoard: SubmitFunction= ({formElement, formData, action, cancel}) =>{
+        const { title }= Object.fromEntries(formData);
+        if(!title) cancel();
+        formData.append('background', selectedBackground);
+        loading= true;
+
+        return async ({ result, update }) =>{
+            loading= false;
+            await update(); // no hay que ponerlo porque se va a redirigir al usuario al tablero
+        };
+    }
+
+    onMount(() =>{
+        // poner focus el input title al abrir el componente
+        const title= document.getElementById('title');
+        title?.focus();
+    });
+</script>
+
+
+<div class="flex flex-row bg-[white] dark:bg-[#282E32]">
+    <section class="flex flex-col items-center w-[300px] border rounded-lg px-[15px] shadow-lg h-[504px] pt-[15px]">
+        
+        <header class="w-full flex flex-row justify-between items-center pb-[15px]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#626f86" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" /></svg>
+            <h3 class="font-semibold text-[#44546F] dark:text-[#9FADBC]">Create Board</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#626f86" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+        </header>
+    
+    
+        <PreviewBackgroundBoard image={selectedBackground}/>
+     
+        <form method="POST" action="?/createBoard" use:enhance={submitCreateBoard} class="mt-[12px]">
+            <!-- Backgorund picker  -->
+            <div>
+                <label class="text-[12px] font-bold text-[#44546F] dark:text-[#9FADBC]" for="background-picker">Background</label>
+                <div class="grid grid-rows-2 grid-flow-col gap-[5px]" id="background-picker">
+                    {#each initialBackgrounds as background}
+                        <button class="backHover cursor-pointer h-[40px] w-[64px]" type="button" class:selected={selectedBackground === background} on:click={() => { handleBackgroundSelected(background) } }>
+                            <img id="background" class="h-[40px] w-[64px] bg-cover rounded-sm"  src="{background}" alt="">
+                        </button>
+                    {/each}
+                </div>
+            
+            </div>
+    
+            <!-- Title -->
+            <div class="mt-[12px]">
+                <label for="title" class="text-[12px] text-[#44546F] dark:text-[#9FADBC] font-bold">Title for the board *</label>
+                <input bind:value={titleValue} class:input-border-empty={!titleValue.trim()} class="h-[36px] mt-[2px] w-full px-[12px] rounded-sm" type="text" name="title" id="title" required>
+            </div>
+    
+            <!-- Visibility-->
+            <div class="flex flex-col mt-[12px]">
+                <label for="visibility" class="text-[12px] font-bold text-[#44546F] dark:text-[#9FADBC]">Visibility</label> 
+                <select class="mt-[2px] rounded-sm h-[36px] px-[12px]" name="visibility" id="visibility">
+                    <option value="private">Private</option>
+                    <option value="public">Public</option>
+                    <option value="workSpace" selected>Work Space</option>
+                </select>
+            </div>
+    
+            <button type="submit" disabled={!titleValue.trim()} class="w-full h-[36px] mt-[16px] text-white transition-colors duration-300 ease-in-out bg-[#0C66E4] hover:bg-[#0055CC]">Create</button>
+        </form>
+    
+    
+    </section>
+    
+    <div class="">
+        <SelectBackgroundUnsplash on:selectBackgroundUnsplash={(e) => selectedBackground= e.detail}/>
+    </div>
+</div>
+
+<style>
+
+    :disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .backHover{
+        transition: filter 0.3s ease;
+    }
+
+    .backHover:hover{
+        filter: brightness(80%);
+    }
+
+    .selected{
+        filter: brightness(70%);
+    }
+
+    .input-border-empty{
+        border: 2px solid red;
+        outline: none;
+    }
+</style>
+
+
