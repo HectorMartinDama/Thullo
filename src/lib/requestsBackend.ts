@@ -1,29 +1,63 @@
 import type { User } from '@auth/core/types';
-import type { Board } from './types';
+import type { Board, List, TaskItem } from './types';
+import type Task from '../components/Task.svelte';
 
 export const saveBoard = async (authToken: string | undefined, board: Board) => {
 	return await fetch('http://localhost:4000/boards', {
-		method: 'POST',
+		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${authToken}`
 		},
-		body: JSON.stringify(board)
+		body: JSON.stringify({
+			id: crypto.randomUUID(),
+			title: board.title,
+			background: board.background,
+			visibility: board.visibility
+		})
 	});
 };
 
-export const getAllBoard = async (authToken: string | undefined) => {
+export const getAllBoard = async (authToken: string | undefined): Promise<Board[]> => {
 	return await fetch('http://localhost:4000/boards', {
 		method: 'GET',
 		headers: {
-			'Content-Type': 'application/json',
 			Authorization: `Bearer ${authToken}`
 		}
 	}).then((res) => res.json());
 };
 
+//getAllBoardAny
+
+export const getAllBoardAny = async () => {
+	return await fetch('http://localhost:4000/boards', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}).then((res) => {
+		if (res.ok) {
+			return res.json();
+		} else {
+			console.log(res.statusText);
+		}
+	});
+};
+
+export const getBoardById = async (authToken: string | undefined, id: string) => {
+	return await fetch(`http://localhost:4000/boards/${id}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		}
+	}).then((res) => {
+		if (res.ok) return res.json();
+	});
+};
+
 export const saveUser = async (user: User) => {
-	return await fetch(`http://localhost:4000/users`, {
+	fetch('http://localhost:4000/users', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -34,5 +68,47 @@ export const saveUser = async (user: User) => {
 			email: user.email,
 			image: user.image
 		})
-	}).then((res) => res.json());
+	});
+};
+
+export const loginUser = async (email: string) => {
+	return await fetch(`http://localhost:4000/users/login/${email}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}).then((res) => {
+		if (res.ok) return res.json();
+	});
+};
+
+export const createList = async (authToken: string | undefined, boardId: string, list: List) => {
+	return await fetch(`http://localhost:4000/lists/${boardId}`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify(list)
+	});
+};
+
+export const createTask = async (authToken: string | undefined, listId: string, task: TaskItem) => {
+	return await fetch(`http://localhost:4000/tasks/${listId}`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify(task)
+	});
+};
+
+export const deleteList = async (authToken: string | undefined, id: string) => {
+	fetch(`http://localhost:4000/lists/${id}`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${authToken}`
+		}
+	});
 };

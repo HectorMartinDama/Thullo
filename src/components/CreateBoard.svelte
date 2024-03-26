@@ -39,7 +39,7 @@
         const title= document.getElementById('title');
         title?.focus();
     });
-</script>
+</script> 
 
 
 <div class="flex flex-row bg-[white] dark:bg-[#282E32]">

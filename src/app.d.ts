@@ -8,9 +8,11 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			theme: 'light' | 'dark' | 'auto';
+			sessionToken: string | undefined;
 		}
 		interface PageData {
 			theme: Theme;
+			sessionToken: string | undefined;
 		}
 		// interface Platform {}
 	}

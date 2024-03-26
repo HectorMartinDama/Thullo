@@ -3,12 +3,6 @@
 <script type="ts">
    import { signIn } from "@auth/sveltekit/client";
 
-
-
-
-
-   export let data;
-   console.log('hola a todos', data.session);
 </script>
 
 <h1>Pagina para inicar session</h1>

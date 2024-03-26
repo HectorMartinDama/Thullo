@@ -1,13 +1,15 @@
 import type { Label } from 'bits-ui';
 
+export const ARROWS = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
+
 export type Image = {
 	urls: typeImage;
 	description: string;
 };
 
 export type List = {
-	title: string;
 	id: string;
+	title: string;
 	tasks?: TaskItem[];
 };
 

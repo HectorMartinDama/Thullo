@@ -1,8 +1,9 @@
-import type { Board } from '$lib/types';
-import { addScript } from '$lib';
-import { redirect, type Actions } from '@sveltejs/kit';
-import { getAllBoard, saveBoard } from '$lib/requestsBackend';
 // todo: see this web article (https://dev.to/theether0/sveltekit-changes-session-and-cookies-enb)
+
+import { addScript } from '$lib';
+import { getAllBoard, saveBoard } from '$lib/requestsBackend';
+import type { Board } from '$lib/types';
+import { type Actions, redirect } from '@sveltejs/kit';
 
 export const load = async ({ cookies }) => {
 	const authToken = cookies.get('AuthorizationToken');

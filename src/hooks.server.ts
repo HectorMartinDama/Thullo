@@ -10,7 +10,7 @@ import {
 } from '$env/static/private';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-import { saveUser } from '$lib/requestsBackend';
+import { loginUser, saveUser } from '$lib/requestsBackend';
 
 export type Theme = 'light' | 'dark' | 'auto';
 
@@ -18,16 +18,23 @@ export const isValidTheme = (theme: FormDataEntryValue | null): theme is string 
 	!!theme && (theme === 'light' || theme === 'dark' || theme === 'auto');
 
 const authorization = async ({ event, resolve }) => {
-	const session = await event.locals.getSession();
+	const session = await event.locals.getSession(); // get the
 	if (session) {
-		const { token } = await saveUser(session.user);
-		await event.cookies.set('AuthorizationToken', token, {
-			path: '/',
-			httpOnly: true,
-			secure: true,
-			sameSite: 'strict',
-			maxAge: 60 * 60 * 24 // 1 day
-		});
+		await saveUser(session.user);
+		const { token } = await loginUser(session.user.email);
+
+		// save the token
+		if (token) {
+			event.locals.sessionToken = token; // save the token in the frontend
+			await event.cookies.set('AuthorizationToken', token, {
+				path: '/',
+				httpOnly: true,
+				secure: true,
+				sameSite: 'strict',
+				maxAge: 60 * 60 * 24 // 1 day
+			}); // in the server
+		}
+		console.log(token);
 	}
 
 	if (event.url.pathname.startsWith('/boards')) {

@@ -1,21 +1,31 @@
 <script lang="ts">
-	import type { TaskItem } from "$lib/types";
-    import Navbar from "../../../../components/Navbar.svelte";
-    import { Lists } from "$lib";
+	import type { TaskItem, Board } from "$lib/types";
+
 
     // moock de datos. Se remplaza por consulta en la base de datos.
 	import ListTasks from "../../../../components/ListTasks.svelte";
+	import AddAnotherList from "../../../../components/AddAnotherList.svelte";
+	import TypeBoardButton from "../../../../components/TypeBoardButton.svelte";
 
     const background= '/background-crystallBall.svg';
-
     let taskDragging: TaskItem;
+    export let data;
+    const board: Board= data.board;
+
+
+    
+    
+    
 
 
     const prueba= (listId: string) =>{
         console.log(`se ha dropeado la task ${taskDragging.title} en la list ${listId}`);
-
-
     }
+
+    console.log(board);
+
+
+    // header dark #0000003d
 
 
     
@@ -27,28 +37,45 @@
 </script>
 
 
+<svelte:head>
+    <title>{data.pageTitle} | Thullo</title> 
+</svelte:head>
 
 
 
+    <section class="px-[16px] flex flex-row bg-center bg-no-repeat" style="background-image: url({board.background});">
 
-<section class="pt-[56px] px-[16px] flex flex-row gap-[6px]" style="background-image: url({background});">
-
-    {#each Lists as list (list.id)}
-        <ListTasks {list} on:taskDragging={(e) => taskDragging= e.detail} on:assignedTask={(e) => prueba(e.detail)}/>
-    {/each}
-
-
-    <!-- Add other list -->
-    <button class="w-[272px] h-[44px] rounded-xl bg-[#DFE1E6] text-[#172B4D] text-[14px] flex items-center justify-around shadow-xl bg-opacity-50">
-        Add another list
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="black" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-    </button>
+        {#if board}
+            <!-- <header class="fixed h-[56px] w-full flex items-center">
+                <h2 class="font-bold text-[18px] text-[#FFFFFF]">{board.title}</h2>
+                <TypeBoardButton visibility={board.visibility}/>
+            </header> -->
 
 
+           
+                <!-- BOARD SPACE  -->
+    
+                <div class="flex flex-row pt-[56px] gap-[15px] h-full w-screen min-w-screen max-w-screen overflow-x-auto">
+                    {#if board.lists}
+                        {#each board.lists as list (list.id)}
+                            <ListTasks {list} on:taskDragging={(e) => taskDragging= e.detail} on:assignedTask={(e) => prueba(e.detail)}/>
+                        {/each}
+                    {/if}
+                      <!-- Add other list -->
+                    <AddAnotherList/>
+                </div>
+
+        
 
 
+        
 
-</section>
+
+          
+            
+        {/if}
+    </section>
+
 
 
 

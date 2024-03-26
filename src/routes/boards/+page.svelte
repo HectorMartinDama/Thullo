@@ -1,12 +1,8 @@
 <script>
-	import Navbar from "../../components/Navbar.svelte";
 	import PreviewBoard from "../../components/PreviewBoard.svelte";
 	export let data;
 
-	const boards= data.boards;
-
-
-	console.log(boards)
+	const boards = data.boards;
 </script>
 
 
