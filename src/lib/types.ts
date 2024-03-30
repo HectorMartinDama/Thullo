@@ -10,7 +10,7 @@ export type Image = {
 export type List = {
 	id: string;
 	title: string;
-	tasks?: TaskItem[];
+	tasks: TaskItem[];
 };
 
 export type TaskItem = {
@@ -18,7 +18,7 @@ export type TaskItem = {
 	title: string;
 	description?: string;
 	attachaments?: Attachament[];
-	background?: string;
+	cover?: string;
 	labels?: Label[];
 };
 

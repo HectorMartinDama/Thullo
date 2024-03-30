@@ -1,14 +1,14 @@
 <script lang="ts">
 	import type { TaskItem } from '$lib/types';
-	import { onMount } from 'svelte';
-	import DialogTask from './DialogTask.svelte';
-	import { createEventDispatcher } from 'svelte';
 	import CloseIcon from './icons/CloseIcon.svelte';
 	import EditIcon from './icons/EditIcon.svelte';
 	import NoteIcon from './icons/NoteIcon.svelte';
 	import AddIcon from './icons/AddIcon.svelte';
 	import Attachment from './Attachment.svelte';
 	import { page } from '$app/stores';
+	import SelectTaskCover from './SelectTaskCover.svelte';
+	import SelectLabelsTask from './SelectLabelsTask.svelte';
+	import SelectMembersTask from './SelectMembersTask.svelte';
 
 	let dialog: HTMLDialogElement | null;
 	export let task: TaskItem;
@@ -57,6 +57,16 @@
 	}}
 	class="cursor-grabbing bg-white dark:bg-[#22272B] text-[14px] dark:text-[#B6C2CF] max-w-[256px] w-[256px] shadow-md px-[10px] py-[10px] rounded-xl border-2 hover:border-[#0055CC] cursor-pointer"
 >
+	<!-- Cover  -->
+	{#if task.cover}
+		<div class="flex justify-center mb-[10px]">
+			<img
+				src={task.cover}
+				alt=""
+				class="w-full h-[130px] object-cover flex justify-center rounded-[12px]"
+			/>
+		</div>
+	{/if}
 	<!-- Content  -->
 	{task.title}
 </div>
@@ -69,7 +79,12 @@
 	</header>
 
 	<!-- COVER -->
-	<div class="w-full h-[130px] rounded-[12px] bg-[#E0E0E0] flex justify-center"></div>
+	<div
+		class="w-full h-[130px] rounded-[12px] flex justify-center"
+		style={task.cover
+			? `background-image: url(${task.cover}); object-fit: contain`
+			: 'background-color: #E0E0E0'}
+	></div>
 
 	<section class="flex flex-row">
 		<!-- Content 1  -->
@@ -154,9 +169,9 @@
 
 		<!-- Content 2 - Actions  -->
 		<div class="flex flex-col w-[150px] mt-[20px] h-full gap-[10px]">
-			<button class="bg-[#F2F2F2] text-[#828282] rounded-[8px] h-[32px]">Members</button>
-			<button class="bg-[#F2F2F2] text-[#828282] rounded-[8px] h-[32px]">Labels</button>
-			<button class="bg-[#F2F2F2] text-[#828282] rounded-[8px] h-[32px]">Cover</button>
+			<SelectMembersTask />
+			<SelectLabelsTask />
+			<SelectTaskCover taskId={task.id} />
 		</div>
 	</section>
 </dialog>

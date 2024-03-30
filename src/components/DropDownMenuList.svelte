@@ -1,39 +1,42 @@
-
-
 <script lang="ts">
-    import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-    import { Button } from "$lib/components/ui/button";
-	import type { List } from "$lib/types";
-    import {enhance} from "$app/forms"
-	import type { SubmitFunction } from "@sveltejs/kit";
+	import type { List } from '$lib/types';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import OptionsIcon from './icons/OptionsIcon.svelte';
 
+	export let list: List;
+	let isOpen = false;
 
-    export let list: List;
-
-    const prueba: SubmitFunction= ({formElement, formData, action, cancel}) =>{
-        formData.append('id', list.id);
-        return async ({ result, update }) =>{
-            await update();
-        };
-    }
+	const prueba: SubmitFunction = ({ formElement, formData, action, cancel }) => {
+		formData.append('id', list.id);
+		return async ({ result, update }) => {
+			await update();
+		};
+	};
 </script>
 
-<DropdownMenu.Root>
-    <DropdownMenu.Trigger asChild let:builder>
-        <Button builders={[builder]}>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>   
-        </Button>
-    </DropdownMenu.Trigger>
-    <DropdownMenu.Content class="w-[151px] h-[80px] bg-[white] dark:bg-[#282E33] rounded-[12px] border-none">
-        <DropdownMenu.Item class="text-[#828282]">
-            <form method="POST" action="?/deleteList">
-                <input type="hidden" name="id" id="id" value={list.id}>
-                <button type="submit">Delete this</button>
-            </form>
-            <DropdownMenu.Item class="text-[#828282]">Delete this list</DropdownMenu.Item>
-            Rename
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator class="bg-[#E0E0E0]" />
- 
-    </DropdownMenu.Content>
-</DropdownMenu.Root>
+<div class="relative">
+	<button on:click={() => (isOpen = !isOpen)}>
+		<OptionsIcon />
+	</button>
+	{#if isOpen}
+		<button
+			on:click={() => (isOpen = false)}
+			tabindex="-1"
+			class="fixed inset-0 h-full w-full cursor-default"
+		></button>
+	{/if}
+	{#if isOpen}
+		<div
+			class="absolute right-0 mt-2 py-2 w-44 bg-white dark:bg-[#282E33] dark:text-[#B6C2CF] rounded-[12px] shadow-xl border border-[#E0E0E0]"
+		>
+			<div class="block px-4 py-2 text-[#828282] dark:text-[#B6C2CF] -tracking-[3.5%] text-sm">
+				<form method="POST" action="?/deleteList">
+					<input type="hidden" name="id" id="id" value={list.id} />
+					<button type="submit">Delete this</button>
+				</form>
+			</div>
+			<hr />
+			<a href="" class="block px-4 py-2 text-[#828282] dark:text-[#B6C2CF] text-sm">Rename</a>
+		</div>
+	{/if}
+</div>

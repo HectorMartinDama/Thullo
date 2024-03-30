@@ -1,7 +1,13 @@
 // Aqui debo de recuperar los datos del tablero creado
 
 import { addScript } from '$lib';
-import { createList, createTask, deleteList, getBoardById } from '$lib/requestsBackend';
+import {
+	addCoverTask,
+	createList,
+	createTask,
+	deleteList,
+	getBoardById
+} from '$lib/requestsBackend';
 import type { List } from '$lib/types.js';
 import { error, type Actions, redirect } from '@sveltejs/kit';
 
@@ -46,5 +52,11 @@ export const actions: Actions = {
 			};
 			await createTask(authToken, listId, task);
 		}
+	},
+	addCoverTask: async ({ request, cookies }) => {
+		const authToken = cookies.get('AuthorizationToken');
+		const { cover, id } = Object.fromEntries(await request.formData()) as unknown;
+		console.log('datos recogidos del formulario', cover, id);
+		await addCoverTask(authToken, id, cover);
 	}
 };

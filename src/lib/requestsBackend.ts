@@ -1,6 +1,5 @@
 import type { User } from '@auth/core/types';
 import type { Board, List, TaskItem } from './types';
-import type Task from '../components/Task.svelte';
 
 export const saveBoard = async (authToken: string | undefined, board: Board) => {
 	return await fetch('http://localhost:4000/boards', {
@@ -110,5 +109,31 @@ export const deleteList = async (authToken: string | undefined, id: string) => {
 		headers: {
 			Authorization: `Bearer ${authToken}`
 		}
+	});
+};
+
+export const addCoverTask = async (authToken: string | undefined, id: string, cover: string) => {
+	fetch(`http://localhost:4000/tasks/addCover/${id}`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify({ cover })
+	});
+};
+
+export const updateOrderList = (
+	authToken: string | undefined,
+	boardId: string,
+	listsId: Array<string>
+) => {
+	fetch(`http://localhost:4000/lists/updateOrder/${boardId}`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify({ listsId })
 	});
 };
