@@ -1,61 +1,107 @@
 <script lang="ts">
-	import type { Visibility } from "$lib/types";
-    import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import type { Board, Visibility } from '$lib/types';
+	import { slide } from 'svelte/transition';
+	import PrivateVisibilityIcon from './icons/PrivateVisibilityIcon.svelte';
+	import PublicVisibilityIcon from './icons/PublicVisibilityIcon.svelte';
+	import { page } from '$app/stores';
+	import toast from 'svelte-french-toast';
+	import type { SubmitFunction } from '@sveltejs/kit';
 
-    import { Button } from "$lib/components/ui/button";
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
 
+	export let visibility: Visibility;
+	export let board: Board;
+	let isOpen = false;
 
-    export let visibility: Visibility;
-
-    console.log(visibility)
+	const submitChangeVisibility: SubmitFunction = () => {
+		return async ({ result, formData, update }) => {
+			const visibility = formData.get('visibility');
+			if (result.type === 'success') {
+				dispatch('changeVisibility');
+				isOpen = false;
+				toast.success(`The board has changed to ${visibility}`, {
+					position: 'bottom-right',
+					duration: 8000
+				});
+			}
+			update();
+		};
+	};
 </script>
 
+<div class="relative">
+	<button
+		disabled={$page.data.session?.user?.email === board.user.email ? false : true}
+		on:click={() => (isOpen = !isOpen)}
+		class="flex items-center justify-center text-center bg-[#F2F2F2] dark:bg-[#323940] h-[36px] w-[108px] rounded-[8px] text-sm gap-2 hover:bg-[#d0d4db] dark:hover:bg-[#3d4750] duration-150 transition-colors font-medium text-[#828282] dark:text-[#B6C2CF]"
+	>
+		{#if visibility === 'private'}
+			<PrivateVisibilityIcon />
+		{:else if visibility === 'public'}
+			<PublicVisibilityIcon />
+		{/if}
 
+		{visibility}
+	</button>
+	{#if isOpen}
+		<button
+			on:click={() => (isOpen = false)}
+			tabindex="-1"
+			class="fixed inset-0 h-full w-full cursor-default"
+		></button>
+	{/if}
+	{#if isOpen}
+		<div
+			transition:slide={{ duration: 250 }}
+			class="absolute flex flex-col justify-between z-10 left-0 mt-3 py-2 w-[256px] h-[200px] bg-white dark:bg-[#282E33] dark:text-[#B6C2CF] rounded-[12px] shadow-xl px-[12px]"
+		>
+			<header class="pb-[15px] pl-[5px]">
+				<h3 class="font-semibold text-[#4F4F4F]">Visibility</h3>
+				<span class="text-[#828282] font-normal text-sm">Choose who can see to this board.</span>
+			</header>
 
+			<form action="?/changeVisibility" method="post" use:enhance={submitChangeVisibility}>
+				<input
+					type="hidden"
+					name="visibility"
+					value={visibility === 'public' ? 'private' : 'public'}
+				/>
 
+				<!-- Public Visibility -->
+				<button
+					type="submit"
+					disabled={visibility === 'public'}
+					class="pl-[15px] h-[58px] w-full mb-[10px] rounded-[8px] hover:bg-[#F2F2F2] dark:hover:bg-[#323940] duration-150 transition-colors"
+				>
+					<header class="flex flex-col items-start gap-2">
+						<h3
+							class="font-medium text-[#4F4F4F] dark:text-[#B6C2CF] flex flex-row gap-2 text-normal"
+						>
+							<PublicVisibilityIcon />
+							Public
+						</h3>
+						<span class="text-xs text-[#828282]">Anyone on the internet can see this.</span>
+					</header>
+				</button>
 
-<DropdownMenu.Root>
-    <DropdownMenu.Trigger asChild let:builder>
-        <!-- <button builders={[builder]} class="inline-flex items-center justify-center text-center bg-[#F2F2F2] h-[36px] w-[98px] rounded-[8px] text-sm font-medium text-[#828282] gap-[7px]">
-            {#if visibility === 'private'}
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-lock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
-            {:else if visibility === 'public'}
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-world"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg>
-            {/if}
-            {visibility}
-        </button>     -->
-
-      
-        <Button builders={[builder]} class="gap-[7px] hover:bg-[#d0d4db] dark:hover:bg-[#282E33] duration-150 transition-colors">
-          
-            {#if visibility === 'private'}
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-lock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
-            {:else if visibility === 'public'}
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-world"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg>
-            {/if}
-            {visibility}
-        </Button>
-
-    </DropdownMenu.Trigger>
-    <DropdownMenu.Content class="w-[250px] bg-[white] text-[#172B4D] dark:bg-[#282e33] dark:text-[#B6C2CF] text-base border-none rounded-xl" >
-        <DropdownMenu.Label class="text-base font-semibold flex flex-col gap-[10px]">Visibility <span class="text-sm font-normal text-[#828282]">Choose who can see to this board.</span> </DropdownMenu.Label>
-        <DropdownMenu.Separator />
-       
-      
-
-        <DropdownMenu.Item class="flex-col text-base w-[234px] h-[58px] rounded-[8px] hover:bg-red-500 duration-150 transition-colors">
-            <div class="flex flex-row gap-[10px]">
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-world"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg>
-                <h3>Public</h3>
-            </div>
-            <span class="text-sm font-light text-[#828282]">Anyone on the internet can see this.</span>
-        </DropdownMenu.Item>
-
-        <DropdownMenu.Separator />
-
-        <DropdownMenu.Item class="text-base">GitHub</DropdownMenu.Item>
-
-
-    </DropdownMenu.Content>
-    
-</DropdownMenu.Root>
+				<!-- Private Visibility -->
+				<button
+					type="submit"
+					disabled={visibility === 'private'}
+					class="pl-[15px] h-[58px] w-full mb-[10px] rounded-[8px] hover:bg-[#F2F2F2] dark:hover:bg-[#323940] duration-150 transition-colors"
+				>
+					<header class="flex flex-col items-start gap-2">
+						<h3
+							class="font-medium text-[#4F4F4F] dark:text-[#B6C2CF] flex flex-row gap-2 text-normal"
+						>
+							<PrivateVisibilityIcon />
+							Private
+						</h3>
+						<span class="text-[#828282] text-xs">Only board members can see this.</span>
+					</header>
+				</button>
+			</form>
+		</div>
+	{/if}
+</div>

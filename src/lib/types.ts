@@ -10,22 +10,23 @@ export type Image = {
 export type List = {
 	id: string;
 	title: string;
-	tasks: TaskItem[];
+	tasks?: TaskItem[];
 };
 
 export type TaskItem = {
 	id: string;
 	title: string;
 	description?: string;
-	attachaments?: Attachament[];
+	attachments?: Attachment[];
 	cover?: string;
 	labels?: Label[];
 };
 
-export type Attachament = {
-	title: string;
+export type Attachment = {
+	name: string;
+	url: string;
+	key: string;
 	createdAt: Date;
-	source: string;
 };
 
 export type Label = {
@@ -47,11 +48,60 @@ export type Board = {
 	title: string;
 	background: string;
 	visibility: Visibility;
+	description?: string;
+	user?: User;
+	members?: User[];
 	lists?: List[];
+};
+
+export type User = {
+	id: string;
+	name: string;
+	email: string;
+	image: string;
 };
 
 export type Visibility = {
 	private: string;
 	public: string;
 	workSpace: string;
+};
+
+export type CreateListParams = {
+	title: string;
+};
+
+export type DeleteListParams = {
+	id: string;
+};
+
+export type CreateTaskParams = {
+	title: string;
+	listId: string;
+};
+
+export type addCoverTaskParams = {
+	cover: string;
+	id: string;
+};
+
+export type addLabelTaskParams = {
+	title: string;
+	color: string;
+	id: string;
+};
+
+export type addMemberParams = {
+	email: string;
+};
+
+export type changeVisibilityParams = {
+	visibility: string;
+};
+
+export type changeBackgroundParams = {
+	background: string;
+};
+export type deleteBoardParams = {
+	id: string;
 };

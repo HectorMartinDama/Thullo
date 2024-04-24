@@ -4,6 +4,9 @@ import type { Theme } from './hooks.server';
 
 // for information about these interfaces
 declare global {
+	interface Document {
+		startViewTransition?(callback: () => Promise<void>): void;
+	}
 	namespace App {
 		// interface Error {}
 		interface Locals {

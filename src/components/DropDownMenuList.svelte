@@ -14,7 +14,7 @@
 	};
 </script>
 
-<div class="relative">
+<div class="relative z-10">
 	<button on:click={() => (isOpen = !isOpen)}>
 		<OptionsIcon />
 	</button>

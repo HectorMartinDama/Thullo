@@ -1,15 +1,40 @@
 <script lang="ts">
+	import type { User } from '$lib/types';
 	import GroupIcon from '../components/icons/GroupIcon.svelte';
-	let isOpen = false;
-	let userValue: string = '';
+	import toast, { Toaster } from 'svelte-french-toast';
 
-	const search = (userValue: string) => {};
+	let isOpen = false;
+	let memberId: string;
+	let userValue: string = '';
+	let preValue: string = userValue;
+	export let members: User[] | undefined;
+	let intialMembers = members;
+
+	const filterNameMembers = (userValue: string) => {
+		members = intialMembers; // cojo de nuevo todos los miembros
+		members = members?.filter((member) =>
+			member.name.toLocaleLowerCase().includes(userValue.toLocaleLowerCase())
+		);
+	};
+
+	const clearMembers = () => {
+		members = intialMembers;
+	};
+
+	const searchMembers = (userValue: string) => {
+		if (userValue.length > 0 && userValue != preValue) {
+			filterNameMembers(userValue);
+		} else if (preValue.length != userValue.length) {
+			clearMembers();
+		}
+		preValue = userValue;
+	};
 </script>
 
 <div class="relative">
 	<button
 		on:click={() => (isOpen = !isOpen)}
-		class="bg-[#F2F2F2] text-[#828282] rounded-[8px] w-[150px] h-[32px] flex items-center pl-[15px] gap-[10px]"
+		class="bg-[#f0f1f4] text-[#828282] dark:bg-[#323940] dark:text-[#B6C2CF] rounded-[8px] w-[150px] h-[32px] flex items-center pl-[15px] gap-[10px] transition-colors duration-150 dark:hover:bg-[#3d4750] hover:bg-[#dcdfe4]"
 	>
 		<GroupIcon />
 		Members
@@ -23,34 +48,46 @@
 	{/if}
 	{#if isOpen}
 		<div
-			class="absolute right-0 mt-2 py-2 px-4 z-10 w-[245px] h-[300px] bg-[white] dark:bg-[#282E33] rounded-[12px] shadow-xl border border-[#E0E0E0]"
+			class="absolute right-0 py-2 px-4 z-10 w-[245px] h-[300px] bg-[white] dark:bg-[#282E33] rounded-[12px] shadow-xl border border-[#E0E0E0]"
 		>
 			<header class="mb-[15px]">
-				<h3 class="font-semibold text-[#4F4F4F]">Photo Search</h3>
-				<span class="text-[#828282] text-sm">Search Unsplash for photos</span>
+				<h3 class="font-semibold text-[#4F4F4F]">Members</h3>
+				<span class="text-[#828282] text-sm">Assign members to this card</span>
 			</header>
 
 			<input
 				type="search"
-				class="w-full h-[32px] outline-none rounded-[8px] text-[#BDBDBD] border border-[#E0E0E0] pl-[10px]"
+				class="w-full h-[32px] outline-none rounded-[8px] text-[#BDBDBD] border border-[#E0E0E0] pl-[10px] text-sm"
 				placeholder="User..."
 				bind:value={userValue}
-				on:input={async () => await search(userValue)}
+				on:input={() => searchMembers(userValue)}
 			/>
 
-			<div class="gap-2 mt-[15px] grid grid-cols-4 overflow-y-auto h-[170px]">
-				<!-- {#if covers}
-					{#each covers as image}
-						<button on:click={() => selectCover(image.urls.full)}>
+			<div class="mt-[15px] overflow-y-auto h-[150px] w-full">
+				{#if members}
+					{#each members as member}
+						<button
+							on:click={() => (memberId = member.id)}
+							class="flex flex-row items-center gap-4 w-full font-semibold rounded-[8px] py-2 pl-2 text-sm transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940]"
+						>
 							<img
-								class="rounded-[4px] w-[50px] h-[50px] object-cover"
-								src={image.urls.small}
-								alt={image.description}
+								src={member.image}
+								alt="profile image of {member.name}"
+								class="h-[30px] w-[30px] rounded-full"
 							/>
+							{member.name}
 						</button>
 					{/each}
-				{/if} -->
+				{:else}
+					<h1 class="text-red-500">No se ha encontrado ningun memberx</h1>
+				{/if}
 			</div>
+
+			<footer class="pb-4 flex justify-center">
+				{#if memberId}
+					<button class="bg-blue-500 rounded-[8px] text-sm text-white px-5 py-2">Invite</button>
+				{/if}
+			</footer>
 		</div>
 	{/if}
 </div>

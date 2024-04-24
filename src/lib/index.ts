@@ -3,10 +3,36 @@
 import type { List } from './types';
 
 export const initialBackgrounds = [
-	'https://images.unsplash.com/photo-1545472956-3ebf777846cc',
+	'/background-peach.svg',
+	'/background-ice.svg',
+	'/background-wave.svg',
+	'/background-crystallBall.svg',
+	'/background-raimbow.svg'
+];
+
+export const allInitialsBackgrounds = [
+	'/background-peach.svg',
+	'/background-ice.svg',
+	'/background-wave.svg',
+	'/background-crystallBall.svg',
+	'/background-raimbow.svg',
+	'/background-flower.svg',
+	'/background-earth.svg'
+];
+
+const unsplash = [
+	'https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1701962541409-e2c1256a8574',
+	'https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1545472956-3ebf777846cc',
+	'https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1699775292727-06fabf36730d',
+	'https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1701364406051-156d47df2477',
 	'https://images.unsplash.com/photo-1701962541409-e2c1256a8574',
+	'https://images.unsplash.com/photo-1545472956-3ebf777846cc',
 	'https://images.unsplash.com/photo-1699775292727-06fabf36730d',
-	'https://images.unsplash.com/photo-1701364406051-156d47df2477',
+	'https://images.unsplash.com/photo-1701364406051-156d47df2477'
+];
+
+export const initialBackgroundsSmall = [
+	'/background-peach.svg',
 	'/background-ice.svg',
 	'/background-wave.svg',
 	'/background-crystallBall.svg',
@@ -14,18 +40,18 @@ export const initialBackgrounds = [
 ];
 
 export const labelColors = [
-	'#219653',
-	'#F2C94C',
-	'#F2994A',
-	'#EB5757',
-	'#2F80ED',
-	'#56CCF2',
-	'#6FCF97',
-	'#333333',
-	'#4F4F4F',
-	'#828282',
-	'#BDBDBD',
-	'#E0E0E0'
+	'rgba(33, 150, 83, 1)',
+	'rgba(242, 201, 76, 1)',
+	'rgba(242, 153, 74, 1)',
+	'rgba(235, 87, 87, 1)',
+	'rgba(47, 128, 237, 1)',
+	'rgba(86, 204, 242, 1)',
+	'rgba(111, 207, 151, 1)',
+	'rgba(51, 51, 51, 1)',
+	'rgba(79, 79, 79, 1)',
+	'rgba(130, 130, 130, 1)',
+	'rgba(189, 189, 189, 1)',
+	'rgba(224, 224, 224, 1)'
 ];
 
 export const Lists: List[] = [

@@ -1,10 +1,24 @@
 <script lang="ts">
 	import { labelColors } from '$lib';
+	import { list } from 'postcss';
 	import TagIcon from '../components/icons/TagIcon.svelte';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import { enhance } from '$app/forms';
+	import { createEventDispatcher } from 'svelte';
 
+	export let taskId: string;
 	let isOpen = false;
 	let labelTitle: string = '';
 	let colorSelected: string;
+	const dispatch = createEventDispatcher();
+
+	const submitCreateLabel: SubmitFunction = ({ formData }) => {
+		formData.append('color', colorSelected);
+		return async ({ result, update }) => {
+			dispatch('addTask');
+			await update(); // no hay que ponerlo porque se va a redirigir al usuario al tablero
+		};
+	};
 
 	const selectLabel = (color: string) => {
 		colorSelected = color;
@@ -14,7 +28,7 @@
 <div class="relative">
 	<button
 		on:click={() => (isOpen = !isOpen)}
-		class="bg-[#F2F2F2] text-[#828282] rounded-[8px] w-[150px] h-[32px] flex items-center gap-[10px] pl-[15px]"
+		class="bg-[#f0f1f4] text-[#828282] dark:bg-[#323940] dark:text-[#B6C2CF] rounded-[8px] w-[150px] h-[32px] flex items-center gap-[10px] pl-[15px] transition-colors duration-150 dark:hover:bg-[#3d4750] hover:bg-[#dcdfe4]"
 	>
 		<TagIcon />
 		Labels
@@ -35,22 +49,30 @@
 				<span class="text-[#828282] text-sm">Select a name and a color</span>
 			</header>
 
-			<input
-				type="text"
-				class="w-full h-[32px] outline-none rounded-[8px] text-[#BDBDBD] border border-[#E0E0E0] pl-[10px]"
-				placeholder="Label..."
-				bind:value={labelTitle}
-			/>
+			<form action="?/addLabelTask" method="post" use:enhance={submitCreateLabel}>
+				<input
+					type="text"
+					class="w-full text-sm h-[32px] outline-none rounded-[8px] text-[#BDBDBD] border border-[#E0E0E0] pl-[10px]"
+					placeholder="Label..."
+					bind:value={labelTitle}
+					name="title"
+				/>
 
-			<div class="gap-2 mt-[15px] grid grid-cols-4 h-[100px]">
-				{#if labelColors}
-					{#each labelColors as color}
-						<button on:click={() => selectLabel(color)}>
-							<div class="rounded-[4px] w-[50px] h-[27px]" style="background-color: {color};"></div>
-						</button>
-					{/each}
-				{/if}
-			</div>
+				<input type="hidden" name="id" value={taskId} />
+
+				<div class="gap-2 mt-[15px] grid grid-cols-4 h-[100px]">
+					{#if labelColors}
+						{#each labelColors as color}
+							<button type="button" on:click={() => selectLabel(color)}>
+								<div
+									class="rounded-[4px] w-[50px] h-[27px]"
+									style="background-color: {color};"
+								></div>
+							</button>
+						{/each}
+					{/if}
+				</div>
+			</form>
 
 			<footer class="flex justify-center">
 				<button

@@ -1,60 +1,46 @@
 <script lang="ts">
 	import Task from './Task.svelte';
 	import AddTask from './AddTask.svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { onMount } from 'svelte';
 
 	import { flip } from 'svelte/animate';
 	import DropDownMenuList from './DropDownMenuList.svelte';
-	import { dndzone, type DndEvent } from 'svelte-dnd-action';
-	import type { List, TaskItem } from '$lib/types';
+	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
+	import type { Board, List, User } from '$lib/types';
+	import { updatePositionTask } from '$lib/requestsBackend';
+	import { page } from '$app/stores';
+	import AllBoardButton from './AllBoardButton.svelte';
+	import { fade } from 'svelte/transition';
+	import { cubicIn } from 'svelte/easing';
 
-	const dispacth = createEventDispatcher();
-
+	export let notAllowModify: boolean;
 	export let list: List;
-	let taskDragging: TaskItem;
+	export let members: User[] | undefined;
+	export let board: Board;
 	const flipDurationMs = 300;
-	let tasks = list.tasks;
-
-	// when move the task
-	const taskDraggingEvent = (e: DragEvent, tasks: TaskItem[]) => {
-		const id = (e.target as HTMLElement).getAttribute('id');
-		const task = tasks.find((task) => task.id === id);
-		console.log('estoy moviendo la task', id);
-
-		//document.getElementById(id)?.remove();
-
-		dispacth('taskDragging', task);
-	};
-
-	// cada vez que muevo una task la asigno a la variable
-	function todoDragging(e: DragEvent, tasks: TaskItem[]) {
-		const id = (e.target as HTMLElement).getAttribute('id');
-		const task = tasks.find((task) => task.id === id);
-		if (task) taskDragging = task;
-	}
-
-	// when drop de task in the list
-	function assignedTask() {
-		dispacth('assignedTask', list.title);
-	}
-
-	function handleDndConsider(e) {
-		console.log(e.detail.items);
-	}
-	function handleDndFinalize(e) {
-		console.log(e.detail.items);
-	}
+	let sessionToken: string | undefined;
 
 	function handleDndConsiderCards(e) {
 		list.tasks = e.detail.items;
 	}
 
-	function handleDndFinalizeCards(cid, e) {
-		//const colIdx = columnItems.findIndex((c) => c.id === cid);
-		//columnItems[colIdx].items = e.detail.items;
-		//columnItems = [...columnItems];
-		console.log('end move', cid, e.detail.items);
+	function handleDndFinalizeCards(listId: string, e) {
+		//TODO Necesito saber cual el la task que estoy moviendo
+
+		let tasksId = list.tasks.map((task) => task.id);
+		// lista destino
+		if (e.detail.items.filter((task) => !list.tasks.includes(task)).length > 0) {
+			const taskMove = e.detail.items.filter((task) => !list.tasks.includes(task));
+			updatePositionTask(sessionToken, listId, taskMove[0].id, tasksId);
+		}
 	}
+
+	onMount(() => {
+		const unsubcribe = page.subscribe((value) => {
+			sessionToken = value.data.token;
+		});
+		return unsubcribe;
+	});
 </script>
 
 <section
@@ -62,20 +48,40 @@
 >
 	<header class="h-[38px] flex justify-between">
 		<h2 class="text-[14px] text-[#172B4D] dark:text-[#B6C2CF] font-semibold">{list.title}</h2>
-		<DropDownMenuList {list} />
+		{#if !notAllowModify}
+			<DropDownMenuList {list} />
+		{/if}
 	</header>
 
 	<div
-		class="flex flex-col justify-center items-center gap-3 overflow-y"
-		use:dndzone={{ items: list.tasks, flipDurationMs }}
+		class="flex flex-col items-center gap-3 overflow-auto overflow-y-auto max-h-[500px] w-full"
+		use:dndzone={{ items: list.tasks, flipDurationMs, dragDisabled: notAllowModify }}
 		on:consider={(e) => handleDndConsiderCards(e)}
-		on:finalize={(e) => handleDndFinalizeCards(e)}
+		on:finalize={(e) => handleDndFinalizeCards(list.id, e)}
 	>
 		{#each list.tasks as task (task.id)}
-			<div animate:flip={{ duration: 300 }}>
-				<Task {task} />
+			<div animate:flip={{ duration: 300 }} class="relative">
+				<Task {task} {members} {board} />
+				{#if task[SHADOW_ITEM_MARKER_PROPERTY_NAME]}
+					<Task {task} {members} {board} />
+				{/if}
 			</div>
 		{/each}
 	</div>
+	<AddTask listId={list.id} {notAllowModify} />
 </section>
-<AddTask listId={list.id} />
+
+<style>
+	.custom-shadow-item {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		visibility: visible;
+		border: 1px dashed grey;
+		background: lightblue;
+
+		margin: 0;
+	}
+</style>

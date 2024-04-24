@@ -14,6 +14,7 @@ const config = {
 		},
 		extend: {
 			colors: {
+				blackShadow: 'rgba(0, 0, 0, 0.54)',
 				border: 'hsl(var(--border) / <alpha-value>)',
 				input: 'hsl(var(--input) / <alpha-value>)',
 				ring: 'hsl(var(--ring) / <alpha-value>)',

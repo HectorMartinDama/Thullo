@@ -1,77 +1,73 @@
 <script lang="ts">
-	import type { TaskItem } from '$lib/types';
+	import type { Board, TaskItem, User } from '$lib/types';
 	import CloseIcon from './icons/CloseIcon.svelte';
 	import EditIcon from './icons/EditIcon.svelte';
 	import NoteIcon from './icons/NoteIcon.svelte';
-	import AddIcon from './icons/AddIcon.svelte';
 	import Attachment from './Attachment.svelte';
 	import { page } from '$app/stores';
 	import SelectTaskCover from './SelectTaskCover.svelte';
 	import SelectLabelsTask from './SelectLabelsTask.svelte';
 	import SelectMembersTask from './SelectMembersTask.svelte';
+	import Label from './Label.svelte';
+	import { getTaskById } from '$lib/requestsBackend';
+	import { onMount } from 'svelte';
+	import AddAttachments from './AddAttachments.svelte';
 
 	let dialog: HTMLDialogElement | null;
+	let sessionToken: string | undefined;
 	export let task: TaskItem;
-	let isDragging = false;
+	export let members: User[] | undefined;
+	export let board: Board;
 
-	$: taskClass = isDragging ? 'dragging' : '';
-
-	// cuando he movido la task cambio el estilo
-	const handleDragStart = (e: DragEvent) => {
-		const id = (e.target as HTMLElement).getAttribute('id');
-		const originalTask = document.getElementById(id);
-		const skeletonTask = document.createElement('div');
+	const refresh = async () => {
+		task = await getTaskById(sessionToken, task.id);
+		console.log(task.id, 'despues del refresh');
 	};
 
-	// cuando no he terminado de mover
-	const handleDragEnd = () => {
-		isDragging = false;
-	};
-
-	function clickOutside(element, callbackFunction) {
-		function onClick(event) {
-			if (!element.contains(event?.target)) {
-				callbackFunction();
-			}
-		}
-		document.addEventListener('click', onClick);
-		return {
-			update(newCallBackFunction) {
-				callbackFunction = newCallBackFunction;
-			},
-			destroy() {
-				document.removeEventListener('click', onClick);
-			}
-		};
-	}
+	onMount(() => {
+		const unsubcribe = page.subscribe((value) => {
+			sessionToken = value.data.token;
+		});
+		return unsubcribe;
+	});
 </script>
 
 <div
 	role="region"
 	draggable="true"
-	on:dragstart={(e) => handleDragStart(e)}
-	on:dragend={handleDragEnd}
 	id={task.id}
 	on:click={() => {
 		dialog?.showModal();
 	}}
-	class="cursor-grabbing bg-white dark:bg-[#22272B] text-[14px] dark:text-[#B6C2CF] max-w-[256px] w-[256px] shadow-md px-[10px] py-[10px] rounded-xl border-2 hover:border-[#0055CC] cursor-pointer"
+	class=" bg-[white] dark:bg-[#22272B] text-[14px] dark:text-[#B6C2CF] max-w-[250px] w-[250px] px-[10px] py-[10px] rounded-xl border-2 dark:border-[#22272B] hover:border-[#0055CC] cursor-pointer"
 >
 	<!-- Cover  -->
 	{#if task.cover}
 		<div class="flex justify-center mb-[10px]">
 			<img
 				src={task.cover}
-				alt=""
+				alt="cover of task {task.id}"
 				class="w-full h-[130px] object-cover flex justify-center rounded-[12px]"
 			/>
 		</div>
 	{/if}
 	<!-- Content  -->
-	{task.title}
+	<h1 class="text-sm font-normal">{task.title}</h1>
+
+	<!-- Labels -->
+	{#if task.labels}
+		<div class="grid grid-cols-3 gap-[10px] mt-[10px]">
+			{#each task.labels as label}
+				<Label {label} />
+			{/each}
+		</div>
+	{/if}
 </div>
 
-<dialog bind:this={dialog} class="w-[660px] h-[1000px] rounded-[8px] px-[25px] py-[25px]">
+<dialog
+	bind:this={dialog}
+	class="w-[660px] h-[1000px] rounded-[8px] px-[25px] py-[25px] cursor-default dark:bg-[#282e33] dark:text-[#B6C2CF]"
+>
 	<header class="flex justify-end">
 		<button on:click={() => dialog?.close()}>
 			<CloseIcon />
@@ -80,23 +76,21 @@
 
 	<!-- COVER -->
 	<div
-		class="w-full h-[130px] rounded-[12px] flex justify-center"
-		style={task.cover
-			? `background-image: url(${task.cover}); object-fit: contain`
-			: 'background-color: #E0E0E0'}
+		class="w-full h-[130px] rounded-[12px] flex justify-center items-center bg-center bg-cover"
+		style={task.cover ? `background-image: url(${task.cover});` : 'background-color: #E0E0E0'}
 	></div>
 
 	<section class="flex flex-row">
 		<!-- Content 1  -->
 		<div>
-			<h1 class="mt-[20px] mb-[35px] text-lg">{task.title}</h1>
+			<h1 class="mt-[20px] mb-[35px] text-xl font-semibold">{task.title}</h1>
 			<section class="flex flex-row gap-[40px] mb-[15px]">
 				<div class="flex gap-[7px]">
 					<NoteIcon />
 					<p class="text-[#BDBDBD] font-semibold">Description</p>
 				</div>
 				<button
-					class="h-[30px] w-[90px] rounded-[8px] border border-[#BDBDBD] text-[#828282] flex justify-center items-center gap-[7px]"
+					class="py-1 px-3 rounded-[8px] border border-[#BDBDBD] text-[#828282] flex justify-center items-center gap-[7px]"
 				>
 					<EditIcon />
 					Edit
@@ -114,29 +108,26 @@
 				</form>
 			</section>
 
-			<section class="flex flex-row gap-[40px] mb-[15px]">
+			<section class="flex flex-row gap-[40px] mb-5">
 				<div class="flex gap-[7px]">
 					<NoteIcon />
 					<p class="text-[#BDBDBD] font-semibold">Attachments</p>
 				</div>
-				<button
-					class="h-[30px] w-[90px] rounded-[8px] border border-[#BDBDBD] text-[#828282] flex justify-center items-center gap-[7px]"
-				>
-					<AddIcon />
-					Add
-				</button>
+				<AddAttachments taskId={task.id} on:addedAttachment={refresh} />
 			</section>
 
-			{#if task.attachaments}
-				{#each task.attachaments as attachament}
-					<Attachment {attachament} />
-				{/each}
+			{#if task.attachments}
+				<div class="overflow-auto h-[170px]">
+					{#each task.attachments as attachment}
+						<Attachment {attachment} />
+					{/each}
+				</div>
 			{/if}
 
 			<section
 				class="border border-[#E0E0E0] rounded-[12px] h-[104px] w-[440px] px-[15px] py-[15px]"
 			>
-				<form action="" method="post" class=" ">
+				<form action="" method="post" class="">
 					<div class="flex flex-row gap-[20px]">
 						<object
 							data={$page.data.session.user?.image}
@@ -169,9 +160,11 @@
 
 		<!-- Content 2 - Actions  -->
 		<div class="flex flex-col w-[150px] mt-[20px] h-full gap-[10px]">
-			<SelectMembersTask />
-			<SelectLabelsTask />
-			<SelectTaskCover taskId={task.id} />
+			{#if $page.data.session?.user?.email === board.user?.email}
+				<SelectMembersTask {members} />
+				<SelectLabelsTask taskId={task.id} on:addTask={refresh} />
+				<SelectTaskCover taskId={task.id} on:updatedCover={refresh} />
+			{/if}
 		</div>
 	</section>
 </dialog>
@@ -179,6 +172,10 @@
 <style>
 	dialog[open] {
 		animation: fadeIn 0.2s ease-in-out forwards;
+	}
+
+	dialog::backdrop {
+		background-color: rgba(0, 0, 0, 0.8);
 	}
 
 	/* Animación de entrada */

@@ -2,22 +2,26 @@
 	import { addCoverTask } from '$lib/requestsBackend';
 	import type { Image } from '$lib/types';
 	import { getPhotoByQuery } from '$lib/unsplashService';
-	import { onMount } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import ImageIcon from '../components/icons/ImageIcon.svelte';
 	import { page } from '$app/stores';
 	let isOpen = false;
+	let loading = true;
 	let covers: Image[] = [];
 	let searchValue: string;
 	let sessionToken: string | undefined;
 	export let taskId: string;
 
+	const dispatch = createEventDispatcher();
+
 	const search = async (searchValue: string) => {
-		let response = await getPhotoByQuery(searchValue);
-		if (response) covers = response.results;
+		let results = await getPhotoByQuery(searchValue);
+		if (results) covers = results;
 	};
 
 	const selectCover = async (cover: string) => {
 		await addCoverTask(sessionToken, taskId, cover);
+		dispatch('updatedCover');
 	};
 
 	onMount(() => {
@@ -31,7 +35,7 @@
 <div class="relative">
 	<button
 		on:click={() => (isOpen = !isOpen)}
-		class="bg-[#F2F2F2] text-[#828282] rounded-[8px] w-[150px] h-[32px] flex items-center pl-[15px] gap-[10px]"
+		class="bg-[#f0f1f4] text-[#828282] dark:bg-[#323940] dark:text-[#B6C2CF] rounded-[8px] w-[150px] h-[32px] flex items-center pl-[15px] gap-[10px] transition-colors duration-150 dark:hover:bg-[#3d4750] hover:bg-[#dcdfe4]"
 	>
 		<ImageIcon />
 		Cover
@@ -54,7 +58,7 @@
 
 			<input
 				type="search"
-				class="w-full h-[32px] outline-none rounded-[8px] text-[#BDBDBD] border border-[#E0E0E0] pl-[10px]"
+				class="w-full text-sm h-[32px] outline-none rounded-[8px] text-[#BDBDBD] dark:bg-[#22272b] border dark:border-[#22272B] border-[#E0E0E0] pl-[10px]"
 				placeholder="Keywords...."
 				bind:value={searchValue}
 				on:input={async () => await search(searchValue)}
@@ -63,7 +67,7 @@
 			<div class="gap-2 mt-[15px] grid grid-cols-4 overflow-y-auto h-[170px]">
 				{#if covers}
 					{#each covers as image}
-						<button on:click={() => selectCover(image.urls.full)}>
+						<button on:click={() => selectCover(image.urls.regular)}>
 							<img
 								class="rounded-[4px] w-[50px] h-[50px] object-cover"
 								src={image.urls.small}

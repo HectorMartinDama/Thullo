@@ -1,37 +1,79 @@
 <script lang="ts">
-    let inputTitleDom: HTMLElement;
-    let showForm: boolean= false;
-    export let listId: string;
+	let inputTitleDom: HTMLElement;
+	let showForm: boolean = false;
+	export let notAllowModify: boolean;
+	export let listId: string;
 
-    $: if(showForm && inputTitleDom) focusInputTitle();
+	$: if (showForm && inputTitleDom) focusInputTitle();
 
-
-    const focusInputTitle= () =>{
-        inputTitleDom.focus();
-    }
+	const focusInputTitle = () => {
+		inputTitleDom.focus();
+	};
 </script>
 
+{#if !notAllowModify}
+	<div class="relative">
+		<button
+			on:click={() => (showForm = true)}
+			class="w-full h-[38px] rounded-xl bg-[#F1F2F4] dark:bg-[#101204] transition-colors duration-150 hover:bg-[#d0d4db] text-[#172B4D] text-[14px] flex items-center font-medium text-sm pl-4 gap-4"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="icon icon-tabler icon-tabler-plus"
+				width="16"
+				height="16"
+				viewBox="0 0 24 24"
+				stroke-width="2"
+				stroke="#172B4D"
+				fill="none"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path
+					d="M5 12l14 0"
+				/></svg
+			>
+			Add task
+		</button>
 
-
-
-<div class="relative">
-    <button on:click={() => showForm= true} class="w-[272px] h-[44px] rounded-xl  bg-[#DAE4FD] text-[#2F80ED] text-[14px] flex items-center justify-around shadow-xl">
-        Add task
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#2F80ED" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-    </button>
-    
-    {#if showForm}
-        <div class="bg-[white] w-[272px] h-[88px] rounded-xl flex items-center absolute top-0 left-0 ">
-            <form method="POST" action="?/createTask" class="px-[10px]">
-                <textarea required name="title" bind:this={inputTitleDom} placeholder="Enter a title for this task...." class="min-h-[74px] w-[256px] py-[8px] px-[12px] rounded-[5px] mb-[8px] resize-none"/>
-                <input type="hidden" name="listId" value={listId}>
-                <div class="flex items-center gap-[15px]">
-                    <button  type="submit" class="h-[32px] text-sm font-medium text-white dark:text-[#1d2125] transition-colors duration-300 ease-in-out bg-[#0C66E4] hover:bg-[#0055CC] px-[12px] rounded-[5px]">Add task</button>
-                    <button on:click={() => showForm= false}>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
-                    </button>
-                </div>
-            </form>
-        </div>
-    {/if}
-</div>
+		{#if showForm}
+			<div
+				class="bg-[white] dark:bg-[#2b2a33] w-[272px] h-[88px] rounded-xl flex items-center absolute top-0 left-0"
+			>
+				<form method="POST" action="?/createTask" class="px-[10px]">
+					<textarea
+						required
+						name="title"
+						bind:this={inputTitleDom}
+						placeholder="Enter a title for this task...."
+						class="min-h-[74px] w-[256px] py-[8px] px-[12px] rounded-[5px] mb-[8px] resize-none"
+					/>
+					<input type="hidden" name="listId" value={listId} />
+					<div class="flex items-center gap-[15px]">
+						<button
+							type="submit"
+							class="h-[32px] text-sm font-medium text-white transition-colors duration-300 ease-in-out bg-[#0C66E4] hover:bg-[#0055CC] px-[12px] rounded-[5px]"
+							>Add task</button
+						>
+						<button on:click={() => (showForm = false)}>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="icon icon-tabler icon-tabler-x"
+								width="20"
+								height="20"
+								viewBox="0 0 24 24"
+								stroke-width="2"
+								stroke="currentColor"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path
+									d="M6 6l12 12"
+								/></svg
+							>
+						</button>
+					</div>
+				</form>
+			</div>
+		{/if}
+	</div>
+{/if}
