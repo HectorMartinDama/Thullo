@@ -62,9 +62,6 @@
 		{#each list.tasks as task (task.id)}
 			<div animate:flip={{ duration: 300 }} class="relative">
 				<Task {task} {members} {board} />
-				{#if task[SHADOW_ITEM_MARKER_PROPERTY_NAME]}
-					<Task {task} {members} {board} />
-				{/if}
 			</div>
 		{/each}
 	</div>
