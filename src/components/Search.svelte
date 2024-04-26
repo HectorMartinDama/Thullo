@@ -20,8 +20,8 @@
 	let boards: Board[];
 
 	const openDialog = async () => {
-		boards = await getAllBoard(sessionToken);
 		dialogSearch.showModal();
+		boards = await getAllBoard(sessionToken);
 	};
 
 	function moveToNextA(currentA: HTMLElement, nextA: HTMLElement) {
@@ -191,7 +191,7 @@
 						>
 							<img class="h-9 w-9 rounded-[6px]" src={board.background} alt="image of the board" />
 							<div class="ml-3 overflow-hidden">
-								<p class="text-base font-medium text-slate-900">{board.title}</p>
+								<p class="text-sm text-slate-900">{board.title}</p>
 								<p class="text-sm text-slate-500 truncate">{board.visibility}</p>
 							</div>
 						</a>
