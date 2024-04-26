@@ -9,6 +9,7 @@
 	import SearchIcon from './icons/SearchIcon.svelte';
 	import { addScript } from '$lib';
 	import type { Keyboard } from 'radix-icons-svelte';
+	import { getAllBoard } from '$lib/requestsBackend';
 
 	let ctr: AbortController;
 	let loadingData: boolean;
@@ -17,6 +18,11 @@
 	let dialogSearch: HTMLDialogElement;
 	let selectedIndex = 0;
 	let boards: Board[];
+
+	const openDialog = async () => {
+		boards = await getAllBoard(sessionToken);
+		dialogSearch.showModal();
+	};
 
 	function moveToNextA(currentA: HTMLElement, nextA: HTMLElement) {
 		currentA.blur();
@@ -105,7 +111,7 @@
 </script>
 
 <button
-	on:click={() => dialogSearch.showModal()}
+	on:click={() => openDialog()}
 	class="flex items-center justify-between h-10 bg-[#f0f1f4] dark:text-[#B6C2CF] dark:bg-[#323940] rounded-full w-[190px] border dark:border-[#4b505d] text-[#676779] uppercase text-sm px-4"
 >
 	<SearchIcon />

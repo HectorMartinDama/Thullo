@@ -5,6 +5,7 @@
 	import PublicVisibilityIcon from './icons/PublicVisibilityIcon.svelte';
 	import { page } from '$app/stores';
 	import toast from 'svelte-french-toast';
+
 	import type { SubmitFunction } from '@sveltejs/kit';
 
 	import { createEventDispatcher } from 'svelte';
@@ -25,7 +26,6 @@
 					duration: 8000
 				});
 			}
-			update();
 		};
 	};
 </script>

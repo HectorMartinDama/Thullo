@@ -5,7 +5,7 @@
 	import CloseIcon from './icons/CloseIcon.svelte';
 	import LinkIcon from './icons/LinkIcon.svelte';
 	import SharedIcon from './icons/SharedIcon.svelte';
-	import toast, { Toaster } from 'svelte-french-toast';
+	import toast from 'svelte-french-toast';
 
 	export let board: Board;
 	let dialog: HTMLDialogElement | null;
