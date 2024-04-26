@@ -16,7 +16,7 @@
 	<div class="relative">
 		<button
 			on:click={() => (showForm = true)}
-			class="w-[272px] h-[44px] rounded-xl bg-[#ffffff5d] text-white text-[14px] flex items-center justify-around shadow-xl font-medium text-sm"
+			class="w-[272px] h-[44px] rounded-xl bg-[#ffffff5d] text-white text-[14px] flex items-center justify-around shadow-xl font-medium text-sm transition-colors duration-150 hover:bg-[#00000026]"
 		>
 			Add another list
 			<svg

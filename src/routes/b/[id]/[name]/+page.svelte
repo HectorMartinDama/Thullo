@@ -24,11 +24,6 @@
 	let sessionToken: string | undefined;
 	let notAllowModify: boolean;
 
-	const hola = async () => {
-		let response = await getBoardById(sessionToken, $page.params.id);
-		board = response;
-	};
-
 	// comprueba si el tablero es suyo para poder editarlo
 	$: if (
 		$page.data.session?.user?.email === board.user.email ||

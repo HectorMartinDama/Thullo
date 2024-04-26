@@ -1,7 +1,9 @@
 <script>
-	import { dndzone } from 'svelte-dnd-action';
+	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import OptionsIcon from '../components/icons/OptionsIcon.svelte';
+	import { fade } from 'svelte/transition';
+	import { cubicIn } from 'svelte/easing';
 	const flipDurationMs = 200;
 	let board = [
 		{
@@ -56,12 +58,12 @@
 	class="absolute top-0 z-[-2] h-screen w-screen bg-white bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"
 ></div>
 
-<!-- <section class="flex items-center justify-center" id="bentor">
-	<main class="w-[1300px] h-[700px] flex justify-center items-center">
+<section class="flex items-center justify-center" id="bentor">
+	<main class="w-[1300px] h-[600px] flex justify-center items-center">
 		<div class="container">
 			<div class="row-1">
 				<div
-					class="col-1 font-semibold text-[24px] flex flex-row items-center gap-4 overflow-x-auto bg-[#141E2F]"
+					class="col-1 font-semibold text-[24px] flex flex-row items-center gap-4 overflow-x-auto"
 					style=""
 					use:dndzone={{ items: board, flipDurationMs, type: 'columns' }}
 					on:consider={handleDndConsiderColumns}
@@ -70,47 +72,90 @@
 					{#each board as column (column.id)}
 						<div
 							animate:flip={{ duration: flipDurationMs }}
-							class="w-[280px] h-[260px] bg-white rounded-[8px] text-sm font-normal px-[15px] py-[15px]"
+							class="w-[280px] h-[260px] bg-[#e7e7f5] rounded-[8px] text-sm font-normal px-[15px] py-[15px] relative
+								column
+							)}"
 						>
-							<header class="h-[38px] flex justify-between">
-								<h2 class="text-sm text-[#172B4D] dark:text-[#B6C2CF] font-semibold">
-									{column.name}
-								</h2>
-								<OptionsIcon />
-							</header>
-							<div
-								class=""
-								use:dndzone={{ items: column.items, flipDurationMs }}
-								on:consider={(e) => handleDndConsiderCards(column.id, e)}
-								on:finalize={(e) => handleDndFinalizeCards(column.id, e)}
-							>
-								{#each column.items as item (item.id)}
-									<div
-										class="flex items-center px-[10px] py-[10px] rounded-[4px] h-[35px] border-2 hover:border-[#0055CC] mb-[10px]"
-										animate:flip={{ duration: flipDurationMs }}
-									>
-										{item.name}
-									</div>
-								{/each}
+							<div>
+								<header class="h-[38px] flex justify-between">
+									<h3 class="text-sm text-[#172B4D] dark:text-[#B6C2CF] font-semibold">
+										{column.name}
+									</h3>
+									<OptionsIcon />
+								</header>
+
+								<div
+									class=""
+									use:dndzone={{ items: column.items, flipDurationMs }}
+									on:consider={(e) => handleDndConsiderCards(column.id, e)}
+									on:finalize={(e) => handleDndFinalizeCards(column.id, e)}
+								>
+									{#each column.items as item (item.id)}
+										<div
+											class="flex items-center px-[10px] py-[10px] rounded-[8px] h-[35px] bg-white border-2 hover:border-[#7289f4] mb-[10px]"
+											animate:flip={{ duration: flipDurationMs }}
+										>
+											{item.name}
+										</div>
+									{/each}
+								</div>
 							</div>
+
+							{#if column[SHADOW_ITEM_MARKER_PROPERTY_NAME]}
+								<div in:fade={{ duration: 200, easing: cubicIn }} class="custom-shadow-item"></div>
+							{/if}
 						</div>
 					{/each}
 				</div>
 
-				<div class="col-2">Columna 2</div>
+				<div class="col-2">
+					<h2 class="text-2xl mb-3 flex justify-start">Get more things done on a full screen</h2>
+					<p class="flex justify-start text-base">
+						Organize your lists in full screen board to stay on top of your work.
+					</p>
+					<div class="flex justify-center items-center">
+						<img src="board.png" alt="" class="w-[400px] -mt-9" />
+					</div>
+				</div>
 			</div>
 			<div class="row-2">
-				<div class="col-3 font-bold -tracking-[0.9px] text-[24px] font-sans">
-					Collaborative Boards
+				<div class="col-3">
+					<h2 class="text-2xl flex justify-start mb-3">Collaborative Boards</h2>
+					<p class="flex justify-start">Share your Board and Lists in real-time with your team.</p>
 				</div>
-				<div class="col-4">Integrated with Unsplash</div>
+				<div class="col-4">
+					<h2 class="text-2xl">Integrated with Unsplash</h2>
+				</div>
 				<div class="col-5">Columna 5</div>
 			</div>
 		</div>
 	</main>
-</section> -->
+</section>
 
 <style lang="css">
+	.custom-shadow-item {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		visibility: visible;
+		background: #00000026;
+		border-radius: 8px;
+		margin: 0;
+	}
+	* {
+		color: black;
+	}
+
+	@font-face {
+		font-family: 'Satoshi';
+		src: url('/fonts/Satoshi-Bold.woff2') format('woff2');
+	}
+
+	h2 {
+		font-family: 'Satoshi';
+	}
 	#bentor {
 		height: calc(100vh - 68px);
 	}
@@ -133,9 +178,13 @@
 	.col-4,
 	.col-5 {
 		flex: 1;
-		border: 1px solid #ccc;
+		border: 1px solid #cdc8db;
 		border-radius: 3rem;
 		text-align: center;
+		padding-left: 25px;
+		padding-right: 25px;
+		padding-top: 25px;
+		padding-bottom: 25px;
 	}
 
 	.col-1,
@@ -143,8 +192,12 @@
 		flex: 1; /* Elimina la distribución flexible */
 		width: 510px; /* Ancho fijo de 510px */
 		height: 370px; /* Altura fija de 370px */
-		padding: 10px;
-		border: 1px solid #ccc;
+		padding: 8px;
+		border: 1px solid #cdc8db;
+		padding-left: 25px;
+		padding-right: 25px;
+		padding-top: 25px;
+		padding-bottom: 25px;
 	}
 
 	.col-3,
@@ -153,8 +206,12 @@
 		flex: 1; /* Elimina la distribución flexible */
 		width: 330px; /* Ancho fijo de 510px */
 		height: 369px; /* Altura fija de 370px */
-		padding: 10px;
-		border: 1px solid #ccc;
+		padding: 8px;
+		border: 1px solid #cdc8db;
+		padding-left: 25px;
+		padding-right: 25px;
+		padding-top: 25px;
+		padding-bottom: 25px;
 	}
 	@media (max-width: 768px) {
 		.row-1 {

@@ -25,7 +25,6 @@ import type {
 } from '$lib/types.js';
 import { error, type Actions, fail, redirect } from '@sveltejs/kit';
 import { isValidTheme } from '../../../../hooks.server';
-import { addScript } from '$lib';
 
 export const load = async ({ cookies, params }) => {
 	const authToken = cookies.get('AuthorizationToken');
@@ -67,7 +66,7 @@ export const actions: Actions = {
 	},
 	deleteBoard: async ({ cookies, params }) => {
 		const authToken = cookies.get('AuthorizationToken');
-		await deleteBoard(authToken, params.id);
+		if (params.id) await deleteBoard(authToken, params.id);
 		throw redirect(303, '/');
 	},
 	createTask: async ({ request, cookies, params }) => {

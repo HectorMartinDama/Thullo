@@ -5,6 +5,8 @@
 	import { page } from '$app/stores';
 	import GoogleIcon from './icons/GoogleIcon.svelte';
 	import { signIn } from '@auth/sveltekit/client';
+	import GithubStart from './GithubStart.svelte';
+	import Search from './Search.svelte';
 
 	export let boardTitle = '';
 	let isDropDownOpen = false;
@@ -20,7 +22,7 @@
 </script>
 
 <nav
-	class="flex px-[35px] justify-between items-center border-b-2 border-[#D9DDE2] dark:border-[#32383D] h-[68px] w-full bg-[white] dark:bg-[#1D2125]"
+	class="flex px-[35px] justify-between items-center border-b-2 border-[#D9DDE2] text-black dark:border-[#32383D] h-[68px] w-full bg-[white] dark:bg-[#1D2125]"
 >
 	<!-- FIRST GROUP -->
 	<div class="flex flex-row">
@@ -43,14 +45,20 @@
 		{/if}
 	</div>
 	{#if $page.data.session?.user}
-		<AccountDropdown />
+		<div class="flex flex-row gap-20 items-center">
+			<Search />
+			<AccountDropdown />
+		</div>
 	{:else}
-		<button
-			class="flex flex-row items-center gap-4 rounded-[4px] py-2 px-2 border border-gray-300 transition-colors duration-150 hover:bg-[#F4F8FD]"
-			on:click={() => signIn('google', { callbackUrl: '/boards' })}
-		>
-			<GoogleIcon />
-			Sign in with Google
-		</button>
+		<div class="flex flex-row gap-8">
+			<GithubStart />
+			<button
+				class="flex flex-row items-center gap-4 rounded-[4px] py-2 px-2 border border-gray-300 transition-colors duration-150 hover:bg-[#e7e7f5]"
+				on:click={() => signIn('google', { callbackUrl: '/boards' })}
+			>
+				<GoogleIcon />
+				Sign in with Google
+			</button>
+		</div>
 	{/if}
 </nav>

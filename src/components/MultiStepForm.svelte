@@ -6,7 +6,7 @@
 	import SelectBackgroundUnsplash from './SelectBackgroundUnsplash.svelte';
 	import CloseIcon from './icons/CloseIcon.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import Spinner from './Spinner.svelte';
+	import Spinner from './SpinnerButton.svelte';
 
 	let active_step = 1;
 	let selectedBackground: string;
