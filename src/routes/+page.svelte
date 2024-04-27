@@ -4,6 +4,7 @@
 	import OptionsIcon from '../components/icons/OptionsIcon.svelte';
 	import { fade } from 'svelte/transition';
 	import { cubicIn } from 'svelte/easing';
+	import UnsplashIcon from '../components/icons/UnsplashIcon.svelte';
 	const flipDurationMs = 200;
 	let board = [
 		{
@@ -114,17 +115,27 @@
 						Organize your lists in full screen board to stay on top of your work.
 					</p>
 					<div class="flex justify-center items-center">
-						<img src="board.png" alt="" class="w-[400px] -mt-9" />
+						<img src="prueba6.png" alt="" class="w-[600px] h-[500px] -mt-20" />
 					</div>
 				</div>
 			</div>
-			<div class="row-2">
-				<div class="col-3">
+			<div class="row-2 mt-9">
+				<div class="col-3 relative h-full">
+					<div
+						class="absolute inset-0 -z-10 w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"
+					></div>
 					<h2 class="text-2xl flex justify-start mb-3">Collaborative Boards</h2>
 					<p class="flex justify-start">Share your Board and Lists in real-time with your team.</p>
 				</div>
-				<div class="col-4">
+				<div
+					class="col-4 h-full bg-[radial-gradient(circle_farthest-side,rgba(120,119,198,0.3),rgba(255,255,255,0))]"
+				>
 					<h2 class="text-2xl">Integrated with Unsplash</h2>
+					<div class="flex items-center justify-center w-full" id="prueba2">
+						<div class="flex justify-center items-center h-[230px] w-[230px]">
+							<UnsplashIcon />
+						</div>
+					</div>
 				</div>
 				<div class="col-5">Columna 5</div>
 			</div>
@@ -133,6 +144,9 @@
 </section>
 
 <style lang="css">
+	#prueba2 {
+		height: calc(100% - 28px);
+	}
 	.custom-shadow-item {
 		position: absolute;
 		top: 0;
@@ -140,7 +154,7 @@
 		right: 0;
 		bottom: 0;
 		visibility: visible;
-		background: #00000026;
+		background: #ffffff5d;
 		border-radius: 8px;
 		margin: 0;
 	}

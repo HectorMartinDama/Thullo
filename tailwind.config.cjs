@@ -1,4 +1,5 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
+import animations from '@midudev/tailwind-animations';
 /** @type {import('tailwindcss').Config} */
 const config = {
 	darkMode: ['class', '[data-theme="dark"]'],
@@ -58,6 +59,7 @@ const config = {
 				sans: ['Inter', ...fontFamily.sans]
 			}
 		}
-	}
+	},
+	plugins: [animations]
 };
 export default config;

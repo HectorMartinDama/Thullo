@@ -9,10 +9,12 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"worker:publish": "wrangler publish"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^2.0.0",
+		"@cloudflare/wrangler": "^1.21.0",
+		"@sveltejs/adapter-cloudflare": "^4.4.0",
 		"@sveltejs/kit": "^1.27.4",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
@@ -35,12 +37,14 @@
 	"dependencies": {
 		"@auth/sveltekit": "^1.0.0",
 		"@aws-sdk/client-s3": "^3.556.0",
+		"@midudev/tailwind-animations": "^0.0.7",
 		"bits-ui": "^0.11.8",
 		"clsx": "^2.0.0",
 		"radix-icons-svelte": "^1.2.1",
 		"svelte-dnd-action": "^0.9.42",
 		"svelte-french-toast": "^1.2.0",
 		"tailwind-merge": "^2.2.0",
-		"tailwind-variants": "^0.1.19"
+		"tailwind-variants": "^0.1.19",
+		"wrangler": "^3.52.0"
 	}
 }

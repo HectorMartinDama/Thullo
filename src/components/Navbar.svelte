@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import GoogleIcon from './icons/GoogleIcon.svelte';
 	import { signIn } from '@auth/sveltekit/client';
-	import GithubStart from './GithubStart.svelte';
+	import GithubStar from './GithubStar.svelte';
 	import Search from './Search.svelte';
 
 	export let boardTitle = '';
@@ -51,7 +51,7 @@
 		</div>
 	{:else}
 		<div class="flex flex-row gap-8">
-			<GithubStart />
+			<GithubStar />
 			<button
 				class="flex flex-row items-center gap-4 rounded-[4px] py-2 px-2 border border-gray-300 transition-colors duration-150 hover:bg-[#e7e7f5]"
 				on:click={() => signIn('google', { callbackUrl: '/boards' })}

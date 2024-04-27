@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	const repositoryUrl = 'https://api.github.com/repos/HectorMartinDama/Thullo';
-	let startCounter: number;
+	let starCounter: number;
 
 	const getStartCounter = async () => {
 		return await fetch(repositoryUrl)
@@ -11,7 +11,7 @@
 	};
 
 	onMount(async () => {
-		startCounter = await getStartCounter();
+		starCounter = await getStartCounter();
 	});
 </script>
 
@@ -19,6 +19,7 @@
 	href="https://github.com/HectorMartinDama/Thullo"
 	target="_blank"
 	class="flex hover:scale-105 group transition font-medium"
+	rel="noopener noreferrer"
 >
 	<div class="flex h-10 w-10 items-center justify-center space-x-2 rounded-[4px] border">
 		<svg fill="currentColor" viewBox="0 0 24 24" class="h-6 w-6">
@@ -35,7 +36,10 @@
 			class="overflow-hidden flex flex-col h-10 items-center rounded-[4px] bg-gray-100 px-4 py-4 font-medium text-sm justify-center group-hover:bg-[#7289f4] transition w-36 relative"
 		>
 			<span class="absolute group-hover:animate-fade-out-up text-sm" id="starts"
-				>{`${startCounter} starts in GitHub`}</span
+				>{`${starCounter} stars in GitHub`}</span
+			>
+			<span class="absolute opacity-0 -translate-y-5 group-hover:animate-fade-in-up"
+				>Give it a star!</span
 			>
 		</div>
 	</div>

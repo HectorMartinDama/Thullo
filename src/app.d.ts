@@ -17,7 +17,15 @@ declare global {
 			theme: Theme;
 			sessionToken: string | undefined;
 		}
-		// interface Platform {}
+		interface Platform {
+			env: {
+				COUNTER: DurableObjectNamespace;
+			};
+			context: {
+				waitUntil(promise: Promise<any>): void;
+			};
+			caches: CacheStorage & { default: Cache };
+		}
 	}
 }
 
