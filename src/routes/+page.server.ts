@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const session = await event.locals.auth();
-	if (session?.user) throw redirect(303, '/boards');
+	if (session?.user) redirect(303, '/boards');
 	return { session: session, theme: event.locals.theme, token: event.locals.sessionToken };
 };
 

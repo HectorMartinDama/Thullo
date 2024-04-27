@@ -8,7 +8,7 @@ import { isValidTheme } from '../../hooks.server';
 
 export const load = async (event) => {
 	const session = await event.locals.auth();
-	if (!session?.user) throw redirect(303, '/');
+	if (!session?.user) redirect(303, '/');
 	const authToken = event.cookies.get('AuthorizationToken');
 	return { boards: await getAllBoard(authToken) };
 };
@@ -40,6 +40,6 @@ export const actions: Actions = {
 
 		await saveBoard(authToken, board);
 
-		throw redirect(302, `/b/${board.id}/${addScript(title)}`);
+		redirect(302, `/b/${board.id}/${addScript(title)}`);
 	}
 };

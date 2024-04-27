@@ -18,6 +18,6 @@ export const actions: Actions = {
 		const authToken = cookies.get('AuthorizationToken');
 		const { email } = Object.fromEntries(await request.formData()) as addMemberParams;
 		if (email) await deleteAccount(authToken, email);
-		throw redirect(302, '/');
+		redirect(302, '/');
 	}
 };

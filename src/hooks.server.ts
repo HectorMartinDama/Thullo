@@ -28,7 +28,7 @@ const authorization = async ({ event, resolve }) => {
 	}
 
 	if (event.url.pathname.startsWith('/boards')) {
-		if (!session) throw redirect(303, '/');
+		if (!session) redirect(303, '/');
 	}
 	return resolve(event);
 };
