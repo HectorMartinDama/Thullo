@@ -1,8 +1,9 @@
+import { PUBLIC_URL_API } from '$env/static/public';
 import type { User } from '@auth/core/types';
 import type { Board, List, TaskItem } from './types';
 
 export const saveBoard = async (authToken: string | undefined, board: Board) => {
-	return await fetch(`http://localhost:4000/boards/${board.id}`, {
+	return await fetch(`${PUBLIC_URL_API}/boards/${board.id}`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
@@ -13,7 +14,7 @@ export const saveBoard = async (authToken: string | undefined, board: Board) => 
 };
 
 export const getAllBoard = async (authToken: string | undefined): Promise<Board[]> => {
-	return await fetch('http://localhost:4000/boards', {
+	return await fetch(`${PUBLIC_URL_API}/boards`, {
 		method: 'GET',
 		headers: {
 			Authorization: `Bearer ${authToken}`
@@ -24,7 +25,7 @@ export const getAllBoard = async (authToken: string | undefined): Promise<Board[
 //getAllBoardAny
 
 export const getAllBoardAny = async () => {
-	return await fetch('http://localhost:4000/boards', {
+	return await fetch(`${PUBLIC_URL_API}/boards`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json'
@@ -39,7 +40,7 @@ export const getAllBoardAny = async () => {
 };
 
 export const getBoardById = async (authToken: string | undefined, id: string) => {
-	return await fetch(`http://localhost:4000/boards/${id}`, {
+	return await fetch(`${PUBLIC_URL_API}/boards/${id}`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
@@ -51,7 +52,7 @@ export const getBoardById = async (authToken: string | undefined, id: string) =>
 };
 
 export const getTaskById = async (authToken: string | undefined, id: string) => {
-	return await fetch(`http://localhost:4000/tasks/${id}`, {
+	return await fetch(`${PUBLIC_URL_API}/tasks/${id}`, {
 		method: 'GET',
 		headers: {
 			Authorization: `Bearer ${authToken}`
@@ -62,7 +63,7 @@ export const getTaskById = async (authToken: string | undefined, id: string) => 
 };
 
 export const saveUser = async (user: User) => {
-	fetch('http://localhost:4000/users', {
+	fetch(`${PUBLIC_URL_API}/users`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -77,7 +78,7 @@ export const saveUser = async (user: User) => {
 };
 
 export const loginUser = async (email: string) => {
-	return await fetch(`http://localhost:4000/users/login/${email}`, {
+	return await fetch(`${PUBLIC_URL_API}/users/login/${email}`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json'
@@ -88,7 +89,7 @@ export const loginUser = async (email: string) => {
 };
 
 export const createList = async (authToken: string | undefined, boardId: string, list: List) => {
-	return await fetch(`http://localhost:4000/lists/${boardId}`, {
+	return await fetch(`${PUBLIC_URL_API}/lists/${boardId}`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
@@ -104,7 +105,7 @@ export const createTask = async (
 	boardId: string,
 	task: TaskItem
 ) => {
-	return await fetch(`http://localhost:4000/tasks/${boardId}/${listId}`, {
+	return await fetch(`${PUBLIC_URL_API}/tasks/${boardId}/${listId}`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
@@ -115,7 +116,7 @@ export const createTask = async (
 };
 
 export const deleteBoard = async (authToken: string | undefined, id: string) => {
-	fetch(`http://localhost:4000/boards/${id}`, {
+	fetch(`${PUBLIC_URL_API}/boards/${id}`, {
 		method: 'DELETE',
 		headers: {
 			Authorization: `Bearer ${authToken}`
@@ -124,7 +125,7 @@ export const deleteBoard = async (authToken: string | undefined, id: string) => 
 };
 
 export const deleteList = async (authToken: string | undefined, id: string) => {
-	fetch(`http://localhost:4000/lists/${id}`, {
+	fetch(`${PUBLIC_URL_API}/lists/${id}`, {
 		method: 'DELETE',
 		headers: {
 			Authorization: `Bearer ${authToken}`
@@ -133,7 +134,7 @@ export const deleteList = async (authToken: string | undefined, id: string) => {
 };
 
 export const addCoverTask = async (authToken: string | undefined, id: string, cover: string) => {
-	return await fetch(`http://localhost:4000/tasks/addCover/${id}`, {
+	return await fetch(`${PUBLIC_URL_API}/tasks/addCover/${id}`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
@@ -149,7 +150,7 @@ export const addLabelTask = async (
 	title: string,
 	color: string
 ) => {
-	fetch(`http://localhost:4000/tasks/addLabel/${id}`, {
+	fetch(`${PUBLIC_URL_API}/tasks/addLabel/${id}`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
@@ -164,7 +165,7 @@ export const updateOrderList = (
 	boardId: string,
 	listsId: Array<string>
 ) => {
-	fetch(`http://localhost:4000/lists/updateOrder/${boardId}`, {
+	fetch(`${PUBLIC_URL_API}/lists/updateOrder/${boardId}`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
@@ -180,7 +181,7 @@ export const updatePositionTask = (
 	id: string,
 	tasksId: Array<string>
 ) => {
-	fetch(`http://localhost:4000/tasks/${id}/updatePosition/${listId}`, {
+	fetch(`${PUBLIC_URL_API}/tasks/${id}/updatePosition/${listId}`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
@@ -191,7 +192,7 @@ export const updatePositionTask = (
 };
 
 export const addMember = async (authToken: string | undefined, boardId: string, email: string) => {
-	return await fetch(`http://localhost:4000/boards/${boardId}/addMember`, {
+	return await fetch(`${PUBLIC_URL_API}/boards/${boardId}/addMember`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
@@ -210,7 +211,7 @@ export const addAttachment = async (
 	key: string,
 	url: string
 ) => {
-	return await fetch(`http://localhost:4000/tasks/addAttachment/${id}`, {
+	return await fetch(`${PUBLIC_URL_API}/tasks/addAttachment/${id}`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
@@ -227,7 +228,7 @@ export const changeVisibility = async (
 	boardId: string,
 	visibility: string
 ) => {
-	return await fetch(`http://localhost:4000/boards/${boardId}/changeVisibility`, {
+	return await fetch(`${PUBLIC_URL_API}/boards/${boardId}/changeVisibility`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
@@ -242,7 +243,7 @@ export const changeBackgroundRequest = async (
 	boardId: string,
 	background: string
 ) => {
-	return await fetch(`http://localhost:4000/boards/${boardId}/changeBackground`, {
+	return await fetch(`${PUBLIC_URL_API}/boards/${boardId}/changeBackground`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
@@ -253,7 +254,7 @@ export const changeBackgroundRequest = async (
 };
 
 export const deleteAccount = async (authToken: string | undefined, email: string) => {
-	return await fetch(`http://localhost:4000/users/${email}`, {
+	return await fetch(`${PUBLIC_URL_API}/users/${email}`, {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json',
