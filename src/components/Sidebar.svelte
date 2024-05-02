@@ -12,9 +12,7 @@
 	import BackIcon from './icons/BackIcon.svelte';
 	import ChangeBackground from './ChangeBackground.svelte';
 	import DeleteBoard from './DeleteBoard.svelte';
-	import { createEventDispatcher, onMount } from 'svelte';
-	import { getBoardById } from '$lib/requestsBackend';
-	import { page } from '$app/stores';
+	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -22,6 +20,7 @@
 	let descriptionValue: string;
 	let isOpen = false;
 	let isSubMenuOpen = false;
+	let subsubMenu = false;
 	let showSelectBackgroundColors = false;
 	let componentActive: string;
 
@@ -37,11 +36,7 @@
 	};
 
 	const back = () => {
-		if (showSelectBackgroundColors) {
-			showSelectBackgroundColors = false;
-		} else {
-			isSubMenuOpen = false;
-		}
+		isSubMenuOpen = false;
 	};
 </script>
 
@@ -82,17 +77,17 @@
 			</header>
 			<hr class="my-[10px]" />
 			{#if !isSubMenuOpen}
-				<ul class="text-[#172B4D]">
+				<ul class="text-[#172B4D] dark:text-[#B6C2CF]">
 					<li
 						on:click={() => showComponent('About this board')}
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] text-sm font-medium mb-2 cursor-pointer"
+						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2 cursor-pointer"
 					>
 						<InfoIcon />
 						About this board
 					</li>
 					<li
 						on:click={() => showComponent('Change background')}
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] text-sm font-medium mb-2 cursor-pointer"
+						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2 cursor-pointer"
 					>
 						<div
 							class="h-[20px] w-[20px] rounded-[4px] bg-center object-cover"
@@ -101,20 +96,20 @@
 						Change Background
 					</li>
 					<li
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] text-sm font-medium mb-2"
+						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2"
 					>
 						<ActivityIcon />
 						Activity
 					</li>
 					<li
 						on:click={() => showComponent('Delete')}
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] text-sm font-medium mb-2 cursor-pointer"
+						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2 cursor-pointer"
 					>
 						<TrashIcon />
 						Delete board
 					</li>
 					<li
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] text-sm font-medium"
+						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium"
 					>
 						<NoteIcon />
 						Archived items
