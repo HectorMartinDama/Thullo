@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { addScript } from '$lib';
 	import type { Board } from '$lib/types';
 	import { quintInOut } from 'svelte/easing';
 	import StarIcon from './icons/StarIcon.svelte';
-	import { fade, slide } from 'svelte/transition';
-	import StarBoard from './StarBoard.svelte';
+	import { slide } from 'svelte/transition';
 	export let board: Board;
 	let isHovered = false;
 	let buttonStarVisible = false;
