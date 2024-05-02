@@ -7,14 +7,6 @@
 	export let board: Board;
 	let isHovered = false;
 	let buttonStarVisible = false;
-
-	const showButton = () => {
-		buttonStarVisible = true;
-	};
-
-	const hideButton = () => {
-		buttonStarVisible = false;
-	};
 </script>
 
 <a
@@ -30,7 +22,7 @@
 		class:hidden={!isHovered}
 	></div>
 	<header class="z-10">
-		<h3 class="font-bold text-[16px] text-[white]">{board.title}</h3>
+		<h3 class="font-bold text-[16px] text-[white] dark:text-[white]">{board.title}</h3>
 	</header>
 
 	<footer class="flex flex-row items-center min-h-[28px]">
