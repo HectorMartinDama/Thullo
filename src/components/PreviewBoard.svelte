@@ -2,12 +2,20 @@
 	import { goto } from '$app/navigation';
 	import { addScript } from '$lib';
 	import type { Board } from '$lib/types';
+	import { quintInOut } from 'svelte/easing';
+	import StarIcon from './icons/StarIcon.svelte';
+	import { fade, slide } from 'svelte/transition';
+	import StarBoard from './StarBoard.svelte';
 	export let board: Board;
 	let isHovered = false;
+	let buttonStarVisible = false;
 
-	const navigateToBoard = async (board: Board) => {
-		const titleToScript = await addScript(board.title);
-		goto(`b/${board.id}/${titleToScript}`);
+	const showButton = () => {
+		buttonStarVisible = true;
+	};
+
+	const hideButton = () => {
+		buttonStarVisible = false;
 	};
 </script>
 
@@ -16,7 +24,7 @@
 	data-sveltekit-preload-data="hover"
 	on:mouseenter={() => (isHovered = true)}
 	on:mouseleave={() => (isHovered = false)}
-	class="relative flex flex-col justify-between w-[193px] h-[112px] rounded-[5px] py-[5px] px-[5px] cursor-pointer bg-cover bg-center bg-no-repeat transition-opacity duration-300"
+	class="relative overflow-hidden flex flex-col justify-between w-[193px] h-[112px] rounded-[5px] py-[5px] px-[5px] cursor-pointer bg-cover bg-center bg-no-repeat transition-opacity duration-300"
 	style="background-image: url({board.background})"
 >
 	<div
@@ -27,7 +35,7 @@
 		<h3 class="font-bold text-[16px] text-[white]">{board.title}</h3>
 	</header>
 
-	<footer class="flex flex-row">
+	<footer class="flex flex-row items-center min-h-[28px]">
 		{#if board.members}
 			{#each board.members as member}
 				<img
@@ -37,7 +45,30 @@
 				/>
 			{/each}
 		{/if}
+		{#if isHovered}
+			<button
+				type="button"
+				class="boton"
+				transition:slide={{ delay: 150, duration: 150, easing: quintInOut, axis: 'x' }}
+			>
+				<StarIcon />
+			</button>
+		{/if}
 	</footer>
 </a>
 
-<style lang="css"></style>
+<style lang="css">
+	.boton {
+		position: absolute;
+		right: -60px;
+		opacity: 0;
+		transition:
+			right 0.3s ease-in-out,
+			opacity 0.3s ease-in-out;
+	}
+
+	a:hover .boton {
+		right: 15px; /* Posición final dentro del div */
+		opacity: 1;
+	}
+</style>
