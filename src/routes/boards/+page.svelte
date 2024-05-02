@@ -27,15 +27,13 @@
 				d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"
 			/><path d="M12 7v5l3 3" /></svg
 		>
-		<h3 class="font-bold text-[#172B4D] dark:text-[#B6C2CF] text-[16px]">Visto recientemente</h3>
+		<h3 class="font-bold text-[#172B4D] dark:text-[#B6C2CF] text-[16px]">Starred boards</h3>
 	</header>
 </section>
 
 <section class="w-[825px] mx-[180px]">
 	<header class="flex justify-between items-center my-[25px]">
-		<h3 class="text-[#44546F] dark:text-[#9FADBC] font-bold text-[16px] uppercase">
-			tus espacios de trabajo
-		</h3>
+		<h3 class="text-[#44546F] dark:text-[#9FADBC] font-bold text-[16px] uppercase">your boards</h3>
 		<CreateBoard />
 	</header>
 	{#if boards}
