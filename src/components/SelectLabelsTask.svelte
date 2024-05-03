@@ -63,7 +63,7 @@
 			<div class="gap-2 mt-[15px] grid grid-cols-4 h-[100px]">
 				{#if labelColors}
 					{#each labelColors as color}
-						<button type="button" on:click={() => selectLabel(labelTitle, color)}>
+						<button type="button" on:click={() => (colorSelected = color)}>
 							<div class="rounded-[4px] w-[50px] h-[27px]" style="background-color: {color};"></div>
 						</button>
 					{/each}
@@ -72,6 +72,7 @@
 
 			<footer class="flex justify-center">
 				<button
+					on:click={() => selectLabel(colorSelected, labelTitle)}
 					type="submit"
 					disabled={!colorSelected || labelTitle === ''}
 					class="bg-[#2F80ED] text-white rounded-[8px] h-[30px] w-[74px]">Add</button
