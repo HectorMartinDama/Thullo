@@ -21,6 +21,7 @@
 			</h3>
 			<CreateBoard />
 		</header>
+
 		{#if boards}
 			<div class="grid grid-cols-4 gap-[16.5px]">
 				{#each boards as board}

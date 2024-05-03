@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import CloseIcon from './icons/CloseIcon.svelte';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import { enhance } from '$app/forms';
 
 	export let notAllowModify: boolean;
+	let button: HTMLButtonElement;
 	let inputTitleDom: HTMLElement; // $ a dom element
 	let showForm: boolean = false;
 
@@ -15,6 +19,8 @@
 {#if !notAllowModify}
 	<div class="relative">
 		<button
+			bind:this={button}
+			id="btn"
 			on:click={() => (showForm = true)}
 			class="w-[272px] h-[44px] rounded-xl bg-[#ffffff5d] text-white text-[14px] flex items-center justify-around shadow-xl font-medium text-sm transition-colors duration-150 hover:bg-[#00000026]"
 		>

@@ -1,28 +1,29 @@
 <script lang="ts">
 	import { labelColors } from '$lib';
-	import { list } from 'postcss';
 	import TagIcon from '../components/icons/TagIcon.svelte';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import { enhance } from '$app/forms';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import { addLabelTask } from '$lib/requestsBackend';
 
 	export let taskId: string;
 	let isOpen = false;
+	let sessionToken: string | undefined;
+
 	let labelTitle: string = '';
 	let colorSelected: string;
 	const dispatch = createEventDispatcher();
 
-	const submitCreateLabel: SubmitFunction = ({ formData }) => {
-		formData.append('color', colorSelected);
-		return async ({ result, update }) => {
-			dispatch('addTask');
-			await update(); // no hay que ponerlo porque se va a redirigir al usuario al tablero
-		};
+	const selectLabel = async (color: string, title: string) => {
+		await addLabelTask(sessionToken, taskId, title, color);
+		dispatch('addTask');
 	};
 
-	const selectLabel = (color: string) => {
-		colorSelected = color;
-	};
+	onMount(() => {
+		const unsubcribe = page.subscribe((value) => {
+			sessionToken = value.data.token;
+		});
+		return unsubcribe;
+	});
 </script>
 
 <div class="relative">
@@ -49,30 +50,25 @@
 				<span class="text-[#828282] text-sm">Select a name and a color</span>
 			</header>
 
-			<form action="?/addLabelTask" method="post" use:enhance={submitCreateLabel}>
-				<input
-					type="text"
-					class="w-full text-sm h-[32px] outline-none rounded-[8px] text-[#BDBDBD] border border-[#E0E0E0] pl-[10px]"
-					placeholder="Label..."
-					bind:value={labelTitle}
-					name="title"
-				/>
+			<input
+				type="text"
+				class="w-full text-sm h-[32px] outline-none rounded-[8px] text-[#BDBDBD] border border-[#E0E0E0] pl-[10px]"
+				placeholder="Label..."
+				bind:value={labelTitle}
+				name="title"
+			/>
 
-				<input type="hidden" name="id" value={taskId} />
+			<input type="hidden" name="id" value={taskId} />
 
-				<div class="gap-2 mt-[15px] grid grid-cols-4 h-[100px]">
-					{#if labelColors}
-						{#each labelColors as color}
-							<button type="button" on:click={() => selectLabel(color)}>
-								<div
-									class="rounded-[4px] w-[50px] h-[27px]"
-									style="background-color: {color};"
-								></div>
-							</button>
-						{/each}
-					{/if}
-				</div>
-			</form>
+			<div class="gap-2 mt-[15px] grid grid-cols-4 h-[100px]">
+				{#if labelColors}
+					{#each labelColors as color}
+						<button type="button" on:click={() => selectLabel(labelTitle, color)}>
+							<div class="rounded-[4px] w-[50px] h-[27px]" style="background-color: {color};"></div>
+						</button>
+					{/each}
+				{/if}
+			</div>
 
 			<footer class="flex justify-center">
 				<button

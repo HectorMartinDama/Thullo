@@ -60,7 +60,7 @@
 ></div>
 
 <section class="flex items-center justify-center" id="bentor">
-	<main class="w-[1300px] h-[600px] flex justify-center items-center">
+	<main class="w-[1300px] flex justify-center items-center">
 		<div class="container">
 			<div class="row-1">
 				<div
@@ -143,6 +143,16 @@
 	</main>
 </section>
 
+<footer class="flex items-center justify-center w-full h-[45px] mt-4 border">
+	<p>
+		Made with ❤️ by <a
+			href="https://github.com/HectorMartinDama"
+			target="_blank"
+			class="transition duration-150 hover:underline">HectorMartinDama</a
+		>
+	</p>
+</footer>
+
 <style lang="css">
 	#prueba2 {
 		height: calc(100% - 28px);
@@ -171,7 +181,7 @@
 		font-family: 'Satoshi';
 	}
 	#bentor {
-		height: calc(100vh - 68px);
+		height: calc(100vh);
 	}
 	.container {
 		display: flex;
