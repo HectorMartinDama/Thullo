@@ -1,12 +1,17 @@
 <script lang="ts">
 	import PreviewBackgroundBoard from './PreviewBackgroundBoard.svelte';
+	import type { Image } from '$lib/types';
 	import { initialBackgroundsSmall, initialBackgrounds } from '$lib';
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import SelectBackgroundUnsplash from './SelectBackgroundUnsplash.svelte';
 	import CloseIcon from './icons/CloseIcon.svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import Spinner from './SpinnerButton.svelte';
+	import SearchIcon from './icons/SearchIcon.svelte';
+	import { getPhotoByQuery } from '$lib/unsplashService';
+
+	let searchUnsplashValue: string;
+	let backgroundsUnsplash: Image[] = [];
 
 	let active_step = 1;
 	let selectedBackground: string;
@@ -23,8 +28,18 @@
 		selectedBackground = initialBackgrounds[index];
 	};
 
+	const search = async (name: string) => {
+		let response = await getPhotoByQuery(name);
+		if (response) backgroundsUnsplash = response;
+	};
+
+	const handleBackgroundSelectedUnsplash = (image: string) => {
+		selectedBackground = image;
+	};
+
 	const submitCreateBoard: SubmitFunction = ({ formData, cancel }) => {
 		if (!titleValue) cancel();
+
 		formData.append('background', selectedBackground);
 		formData.append('title', titleValue.trim());
 		formData.append('visibility', visibilityValue);
@@ -36,9 +51,27 @@
 			await update(); // no hay que ponerlo porque se va a redirigir al usuario al tablero
 		};
 	};
+
+	onMount(() => {
+		const form = document.getElementById('form');
+		const handleFormSubmit = (event) => {
+			if (event.key === 'Enter') {
+				event.preventDefault(); // Evitar el envío del formulario al presionar "Enter"
+			}
+		};
+
+		// Agregar un event listener al documento para capturar el evento keydown
+		form.addEventListener('keydown', handleFormSubmit);
+
+		// Limpiar el event listener cuando el componente se desmonta
+		return () => {
+			form.removeEventListener('keydown', handleFormSubmit);
+		};
+	});
 </script>
 
 <form
+	id="form"
 	method="POST"
 	action="?/createBoard"
 	use:enhance={submitCreateBoard}
@@ -89,9 +122,6 @@
 			</div>
 			<div class="" id="background-picker">
 				<div class="grid grid-rows-1 grid-flow-col gap-[5px] justify-center">
-					<button class="w-[64px] h-[40px]">Hoal</button>
-				</div>
-				<div class="grid grid-rows-1 grid-flow-col gap-[5px] justify-center">
 					{#each initialBackgroundsSmall as background, index}
 						<button
 							class="relative backHover cursor-pointer h-[32px] w-[40px] rounded-[3px]"
@@ -111,15 +141,67 @@
 							/>
 						</button>
 					{/each}
-					<button type="button" on:click={() => (active_step += 1)}>Abrir</button>
-					<SelectBackgroundUnsplash
-						on:selectBackgroundUnsplash={(e) => (selectedBackground = e.detail)}
-						on:openUnsplash={() => (unsplashService = true)}
-					/>
+					<button
+						type="button"
+						on:click={() => (active_step += 1)}
+						class="h-[32px] w-[50px] rounded-[8px] bg-[#f0f1f4] flex items-center justify-center transition-colors duration-150 hover:bg-[#dcdfe4]"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="icon icon-tabler icons-tabler-outline icon-tabler-brand-unsplash"
+							><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path
+								d="M4 11h5v4h6v-4h5v9h-16zm5 -7h6v4h-6z"
+							/></svg
+						>
+					</button>
 				</div>
 			</div>
 		</div>
-	{:else if active_step === 3}{/if}
+	{:else if active_step === 3}
+		<div class="flex flex-col justify-center gap-7 bg-grey-300">
+			<div class="flex flex-row justify-center items-center gap-2">
+				<div class="flex justify-center">
+					<PreviewBackgroundBoard image={selectedBackground} />
+				</div>
+				<div class="h-[170px] max-h-[170px] max-w-[264px] w-[264px] overflow-auto">
+					{#if backgroundsUnsplash}
+						{#each backgroundsUnsplash as background}
+							<button
+								class="gap-4"
+								type="button"
+								on:click={() => handleBackgroundSelectedUnsplash(background.urls.full)}
+							>
+								<img
+									class="h-[73px] w-[110px] rounded-[8px] object-cover ml-3"
+									src={background.urls.small}
+									alt={background.description}
+								/>
+							</button>
+						{/each}
+					{/if}
+				</div>
+			</div>
+			<div class="flex items-center justify-center">
+				<input
+					class="pl-4 outline-none w-[440px] h-[36px] py-[8px] rounded-[8px] border border-gray-300"
+					placeholder="Search photos..."
+					bind:value={searchUnsplashValue}
+					on:input={async () => await search(searchUnsplashValue)}
+					type="search"
+					name=""
+					id=""
+				/>
+			</div>
+		</div>
+	{/if}
 	<footer class="border-t bg-[#fafafa] dark:bg-[#282e33] dark:text-[#b6c2cf]">
 		<menu>
 			{#if active_step === 1}

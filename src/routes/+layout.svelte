@@ -36,7 +36,4 @@
 <Toaster />
 
 <style lang="css">
-	main {
-		height: calc(100vh - 68px);
-	}
 </style>
