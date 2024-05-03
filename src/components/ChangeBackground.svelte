@@ -1,28 +1,39 @@
 <script lang="ts">
-	import type { Board } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
 	import SelectBackgroundColors from './SelectBackgroundColors.svelte';
 	import SelectBackgroundPhotos from './SelectBackgroundPhotos.svelte';
 	import SelectBackgroundCustom from './SelectBackgroundCustom.svelte';
+	import UnsplashIcon from './icons/UnsplashIcon.svelte';
 	const dispatch = createEventDispatcher();
 
 	let isOpenColors = false;
 	let isOpenPhotos = false;
+
+	const openColors = () => {
+		isOpenColors = true;
+	};
+
+	const openPhotos = () => {
+		isOpenPhotos = true;
+	};
 </script>
 
 {#if !isOpenPhotos && !isOpenColors}
 	<div class="w-full flex justify-between flex-row gap-4">
 		<button
-			on:click={() => (isOpenColors = true)}
+			on:click={() => openColors()}
 			style="background-image: url(/colors.webp);"
 			class="w-[150px] h-[96px] rounded-[3px] bg-center bg-no-repeat bg-cover"
 		>
 		</button>
 
 		<button
-			on:click={() => (isOpenPhotos = true)}
-			class="w-[150px] h-[96px] rounded-[3px] bg-[#dadde2]"
+			on:click={() => openPhotos()}
+			class="flex justify-center w-[150px] h-[96px] rounded-[3px] bg-[#dadde2]"
 		>
+			<div class="h-[100px] w-[100px] flex items-center">
+				<UnsplashIcon />
+			</div>
 		</button>
 
 		<hr class="my-[10px] mb-9" />

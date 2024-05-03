@@ -1,14 +1,14 @@
 <script lang="ts">
+	import { PUBLIC_URL_API } from '$env/static/public';
+
 	import type { Board } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import Spinner from './Spinner.svelte';
 	import { ARROWS } from '$lib/types';
 	import CommandIcon from './icons/CommandIcon.svelte';
 	import LetterKIcon from './icons/LetterKIcon.svelte';
 	import SearchIcon from './icons/SearchIcon.svelte';
 	import { addScript } from '$lib';
-	import type { Keyboard } from 'radix-icons-svelte';
 	import { getAllBoard } from '$lib/requestsBackend';
 
 	let ctr: AbortController;
@@ -58,7 +58,7 @@
 	const searchBoards = () => {
 		const controller = new AbortController();
 		const query = (): Promise<Board[]> =>
-			fetch('http://localhost:4000/boards', {
+			fetch(`${PUBLIC_URL_API}/boards`, {
 				signal: controller.signal,
 				headers: { Authorization: `Bearer ${sessionToken}` }
 			}).then((res) => res.json());
@@ -173,11 +173,6 @@
 
 		<!-- Search Results  -->
 		<div class="w-[550px] min-h-[300px] max-h-[300px] rounded-b-[8px] overflow-y-scroll mt-5">
-			<!-- Cargo el spinner mientras se procesa la peticion -->
-			<div class="flex items-center justify-center">
-				<Spinner loading={loadingData} />
-			</div>
-
 			{#if boards}
 				<div class="divide-y divide-slate-200 dark:divide-[#4b505d] dark:bg-[#1d2125]">
 					{#each boards as board, index (board.id)}

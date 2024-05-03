@@ -1,6 +1,8 @@
 <script>
 	import CreateBoard from '../../components/CreateBoard.svelte';
 	import PreviewBoard from '../../components/PreviewBoard.svelte';
+	import BoardIcon from '../../components/icons/BoardIcon.svelte';
+	import StarredIcon from '../../components/icons/StarredIcon.svelte';
 	export let data;
 
 	const boards = data.boards;
@@ -10,30 +12,12 @@
 	<title>Boards | Thullo</title>
 </svelte:head>
 
-<section class="mx-[180px] my-[50px]">
-	<header class="flex flex-row items-center gap-3">
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			class="icon icon-tabler icon-tabler-clock"
-			width="24"
-			height="24"
-			viewBox="0 0 24 24"
-			stroke-width="2"
-			stroke="#44546f"
-			fill="none"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path
-				d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"
-			/><path d="M12 7v5l3 3" /></svg
-		>
-		<h3 class="font-bold text-[#172B4D] dark:text-[#B6C2CF] text-[16px]">Starred boards</h3>
-	</header>
-</section>
-
 <section class="w-[825px] mx-[180px]">
-	<header class="flex justify-between items-center my-[25px]">
-		<h3 class="text-[#44546F] dark:text-[#9FADBC] font-bold text-[16px] uppercase">your boards</h3>
+	<header class="flex justify-between items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">
+		<h3 class="flex flex-row gap-5 font-bold text-[16px]">
+			<BoardIcon />
+			Your boards
+		</h3>
 		<CreateBoard />
 	</header>
 	{#if boards}
@@ -41,6 +25,20 @@
 			{#each boards as board}
 				<PreviewBoard {board} />
 			{/each}
+		</div>
+	{/if}
+</section>
+
+<section class="mx-[180px] my-[50px]">
+	<header class="flex flex-row items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">
+		<h3 class="flex flex-row gap-5 font-bold text-[16px]">
+			<StarredIcon />
+			Starred boards
+		</h3>
+	</header>
+	{#if boards}
+		<div class="grid grid-cols-4 gap-[16.5px]">
+			<PreviewBoard board={boards[2]} />
 		</div>
 	{/if}
 </section>

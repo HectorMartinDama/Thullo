@@ -111,6 +111,7 @@
 							/>
 						</button>
 					{/each}
+					<button type="button" on:click={() => (active_step += 1)}>Abrir</button>
 					<SelectBackgroundUnsplash
 						on:selectBackgroundUnsplash={(e) => (selectedBackground = e.detail)}
 						on:openUnsplash={() => (unsplashService = true)}
@@ -118,18 +119,20 @@
 				</div>
 			</div>
 		</div>
-	{/if}
+	{:else if active_step === 3}{/if}
 	<footer class="border-t bg-[#fafafa] dark:bg-[#282e33] dark:text-[#b6c2cf]">
 		<menu>
 			{#if active_step === 1}
 				<button type="hidden"></button>
 				<button
+					type="button"
 					on:click={() => (active_step += 1)}
 					class="py-2 px-3 text-sm rounded-[8px] border dark:border-[#b6c2cf] transition-colors duration-150 dark:bg-[#323940] hover:bg-[#F0F1F4] font-normal dark:hover:bg-[#3d4750]"
 					disabled={!titleValue}>Next</button
 				>
 			{:else}
 				<button
+					type="button"
 					on:click={() => (active_step -= 1)}
 					class="py-2 px-3 text-sm rounded-[8px] border dark:border-[#b6c2cf] transition-colors duration-150 dark:bg-[#323940] hover:bg-[#F0F1F4] font-normal dark:hover:bg-[#3d4750]"
 					>Previous</button

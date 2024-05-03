@@ -29,6 +29,14 @@
 	<Navbar />
 {/if}
 
-<slot />
+<main class="flex flex-col items-center justify-center">
+	<slot />
+</main>
 
 <Toaster />
+
+<style lang="css">
+	main {
+		height: calc(100vh - 68px);
+	}
+</style>

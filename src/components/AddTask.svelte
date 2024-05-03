@@ -15,7 +15,7 @@
 	<div class="relative">
 		<button
 			on:click={() => (showForm = true)}
-			class="w-full h-[38px] rounded-xl bg-[#F1F2F4] dark:bg-[#101204] transition-colors duration-150 hover:bg-[#d0d4db] text-[#172B4D] text-[14px] flex items-center font-medium text-sm pl-4 gap-4"
+			class="w-full h-[38px] rounded-xl bg-[#F1F2F4] dark:bg-[#101204] dark:text-[#B6C2CF] transition-colors duration-150 hover:bg-[#d0d4db] dark:hover:bg-[#31393F] text-[#172B4D] text-[14px] flex items-center font-medium text-sm pl-4 gap-4"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +24,7 @@
 				height="16"
 				viewBox="0 0 24 24"
 				stroke-width="2"
-				stroke="#172B4D"
+				stroke="currentColor"
 				fill="none"
 				stroke-linecap="round"
 				stroke-linejoin="round"
