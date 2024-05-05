@@ -51,6 +51,7 @@ export type Board = {
 	description?: string;
 	user?: User;
 	members?: User[];
+	favourites?: User[];
 	lists?: List[];
 };
 

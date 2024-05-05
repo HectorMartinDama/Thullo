@@ -1,4 +1,5 @@
 <script>
+	import { page } from '$app/stores';
 	import CreateBoard from '../../components/CreateBoard.svelte';
 	import PreviewBoard from '../../components/PreviewBoard.svelte';
 	import BoardIcon from '../../components/icons/BoardIcon.svelte';
@@ -13,24 +14,6 @@
 </svelte:head>
 
 <main class="flex flex-col justify-center">
-	<section class="w-[825px] mx-[180px]">
-		<header class="flex justify-between items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">
-			<h3 class="flex flex-row gap-5 font-bold text-[16px]">
-				<BoardIcon />
-				Your boards
-			</h3>
-			<CreateBoard />
-		</header>
-
-		{#if boards}
-			<div class="grid grid-cols-4 gap-[16.5px]">
-				{#each boards as board}
-					<PreviewBoard {board} />
-				{/each}
-			</div>
-		{/if}
-	</section>
-
 	<section class="mx-[180px] my-[50px]">
 		<header class="flex flex-row items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">
 			<h3 class="flex flex-row gap-5 font-bold text-[16px]">
@@ -40,7 +23,30 @@
 		</header>
 		{#if boards}
 			<div class="grid grid-cols-4 gap-[16.5px]">
-				<PreviewBoard board={boards[2]} />
+				{#each boards as board}
+					{#if board.favourites
+						?.map((user) => user.email)
+						.includes($page.data.session?.user?.email)}
+						<PreviewBoard {board} />
+					{/if}
+				{/each}
+			</div>
+		{/if}
+	</section>
+
+	<section class="w-[825px] mx-[180px]">
+		<header class="flex justify-between items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">
+			<h3 class="flex flex-row gap-5 font-bold text-[16px]">
+				<BoardIcon />
+				Your boards
+			</h3>
+		</header>
+
+		{#if boards}
+			<div class="grid grid-cols-4 gap-[16.5px]">
+				{#each boards as board}
+					<PreviewBoard {board} />
+				{/each}
 			</div>
 		{/if}
 	</section>

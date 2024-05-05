@@ -7,6 +7,7 @@
 	import { signIn } from '@auth/sveltekit/client';
 	import GithubStar from './GithubStar.svelte';
 	import Search from './Search.svelte';
+	import CreateBoard from './CreateBoard.svelte';
 
 	export let boardTitle = '';
 	let isDropDownOpen = false;
@@ -46,6 +47,7 @@
 	</div>
 	{#if $page.data.session?.user}
 		<div class="flex flex-row gap-20 items-center">
+			<CreateBoard />
 			<Search />
 			<AccountDropdown />
 		</div>

@@ -4,9 +4,25 @@
 	import { quintInOut } from 'svelte/easing';
 	import StarIcon from './icons/StarIcon.svelte';
 	import { slide } from 'svelte/transition';
+	import { page } from '$app/stores';
+	import { addFavourite } from '$lib/requestsBackend';
+	import { onMount } from 'svelte';
+	import StarYellowIcon from './icons/StarYellowIcon.svelte';
 	export let board: Board;
 	let isHovered = false;
-	let buttonStarVisible = false;
+	let sessionToken: string | undefined;
+
+	const addToFavourites = async () => {
+		await addFavourite(sessionToken, board.id);
+		// evento para actualizar todos los boards
+	};
+
+	onMount(() => {
+		const unsubcribe = page.subscribe((value) => {
+			sessionToken = value.data.token;
+		});
+		return unsubcribe;
+	});
 </script>
 
 <a
@@ -35,13 +51,20 @@
 				/>
 			{/each}
 		{/if}
-		{#if isHovered}
+		{#if isHovered && !board.favourites
+				?.map((user) => user.email)
+				.includes($page.data.session?.user?.email)}
 			<button
+				on:click|preventDefault={() => addToFavourites()}
 				type="button"
 				class="boton"
 				transition:slide={{ delay: 150, duration: 150, easing: quintInOut, axis: 'x' }}
 			>
 				<StarIcon />
+			</button>
+		{:else if board.favourites?.map((user) => user.email).includes($page.data.session?.user?.email)}
+			<button class="absolute right-4">
+				<StarYellowIcon />
 			</button>
 		{/if}
 	</footer>
@@ -52,6 +75,7 @@
 		position: absolute;
 		right: -60px;
 		opacity: 0;
+		z-index: 10;
 		transition:
 			right 0.3s ease-in-out,
 			opacity 0.3s ease-in-out;

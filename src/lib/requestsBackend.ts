@@ -51,6 +51,16 @@ export const getBoardById = async (authToken: string | undefined, id: string) =>
 	});
 };
 
+export const addFavourite = async (authToken: string | undefined, id: string) => {
+	return await fetch(`${PUBLIC_URL_API}/boards/${id}/addFavourite`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		}
+	});
+};
+
 export const getTaskById = async (authToken: string | undefined, id: string) => {
 	return await fetch(`${PUBLIC_URL_API}/tasks/${id}`, {
 		method: 'GET',
