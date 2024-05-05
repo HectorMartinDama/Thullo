@@ -16,6 +16,7 @@
 
 	const addToFavourites = async () => {
 		await addFavourite(sessionToken, board.id).then(() => {
+			console.log('dado');
 			dispatch('addToFavourite');
 		});
 	};
