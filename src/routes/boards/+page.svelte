@@ -41,7 +41,7 @@
 					{#if board.favourites
 						?.map((user) => user.email)
 						.includes($page.data.session?.user?.email)}
-						<PreviewBoard {board} on:addToFavourite={updateBoards} />
+						<PreviewBoard {board} />
 					{/if}
 				{/each}
 			</div>
@@ -59,7 +59,7 @@
 		{#if boards}
 			<div class="grid grid-cols-4 gap-[16.5px]">
 				{#each boards as board}
-					<PreviewBoard {board} />
+					<PreviewBoard {board} on:addToFavourite={updateBoards} />
 				{/each}
 			</div>
 		{/if}
