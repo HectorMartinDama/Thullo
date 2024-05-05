@@ -1,12 +1,25 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
-	import CreateBoard from '../../components/CreateBoard.svelte';
+	import { getAllBoard } from '$lib/requestsBackend';
+	import { onMount } from 'svelte';
 	import PreviewBoard from '../../components/PreviewBoard.svelte';
 	import BoardIcon from '../../components/icons/BoardIcon.svelte';
 	import StarredIcon from '../../components/icons/StarredIcon.svelte';
 	export let data;
 
-	const boards = data.boards;
+	let sessionToken: string | undefined;
+	let boards = data.boards;
+
+	const updateBoards = async () => {
+		boards = await getAllBoard(sessionToken);
+	};
+
+	onMount(() => {
+		const unsubcribe = page.subscribe((value) => {
+			sessionToken = value.data.token;
+		});
+		return unsubcribe;
+	});
 </script>
 
 <svelte:head>
@@ -27,7 +40,7 @@
 					{#if board.favourites
 						?.map((user) => user.email)
 						.includes($page.data.session?.user?.email)}
-						<PreviewBoard {board} />
+						<PreviewBoard {board} on:addToFavourite={() => updateBoards()} />
 					{/if}
 				{/each}
 			</div>

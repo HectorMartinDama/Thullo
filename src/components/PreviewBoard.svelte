@@ -6,15 +6,17 @@
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { addFavourite } from '$lib/requestsBackend';
-	import { onMount } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import StarYellowIcon from './icons/StarYellowIcon.svelte';
 	export let board: Board;
 	let isHovered = false;
 	let sessionToken: string | undefined;
 
+	const dispatch = createEventDispatcher();
+
 	const addToFavourites = async () => {
 		await addFavourite(sessionToken, board.id);
-		// evento para actualizar todos los boards
+		dispatch('addToFavourite');
 	};
 
 	onMount(() => {
