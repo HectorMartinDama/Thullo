@@ -15,8 +15,9 @@
 	const dispatch = createEventDispatcher();
 
 	const addToFavourites = async () => {
-		await addFavourite(sessionToken, board.id);
-		dispatch('addToFavourite');
+		await addFavourite(sessionToken, board.id).then(() => {
+			dispatch('addToFavourite');
+		});
 	};
 
 	onMount(() => {

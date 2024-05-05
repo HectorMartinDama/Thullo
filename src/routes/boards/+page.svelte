@@ -11,6 +11,7 @@
 	let boards = data.boards;
 
 	const updateBoards = async () => {
+		console.log('hola me tengo que actializaå');
 		boards = await getAllBoard(sessionToken);
 	};
 
