@@ -296,3 +296,14 @@ export const renameTitleBoard = async (
 		body: JSON.stringify({ title })
 	});
 };
+
+export const renameTitleList = async (authToken: string | undefined, id: string, title: string) => {
+	return await fetch(`${PUBLIC_URL_API}/lists/rename/${id}`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify({ title })
+	});
+};

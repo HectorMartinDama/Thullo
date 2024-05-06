@@ -35,8 +35,6 @@
 					<button type="submit">Delete this</button>
 				</form>
 			</div>
-			<hr />
-			<a href="" class="block px-4 py-2 text-[#828282] dark:text-[#B6C2CF] text-sm">Rename</a>
 		</div>
 	{/if}
 </div>

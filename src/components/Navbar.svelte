@@ -60,7 +60,7 @@
 			{#if !inputRename}
 				<div
 					on:click={() => (inputRename = true)}
-					class="h-[32px] hover:bg-[#F0F1F4] py-2 px-2 rounded-[4px] flex items-center ml-[130px]"
+					class="cursor-pointer h-[32px] transition-colors duration-150 ease-in-out hover:bg-[#F0F1F4] py-2 px-2 rounded-[4px] flex items-center ml-[130px]"
 				>
 					<h1 class="text-[#333333] dark:text-[#B6C2CF] justify-center text-lg font-semibold">
 						{boardTitle}

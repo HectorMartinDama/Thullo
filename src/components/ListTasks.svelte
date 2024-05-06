@@ -7,7 +7,7 @@
 	import DropDownMenuList from './DropDownMenuList.svelte';
 	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	import type { Board, List, User } from '$lib/types';
-	import { updatePositionTask } from '$lib/requestsBackend';
+	import { renameTitleList, updatePositionTask } from '$lib/requestsBackend';
 	import { page } from '$app/stores';
 	import AllBoardButton from './AllBoardButton.svelte';
 	import { fade } from 'svelte/transition';
@@ -19,6 +19,8 @@
 	export let board: Board;
 	const flipDurationMs = 300;
 	let sessionToken: string | undefined;
+	let newTitleValue = list.title;
+	let inputRename = false;
 
 	function handleDndConsiderCards(e) {
 		list.tasks = e.detail.items;
@@ -35,6 +37,16 @@
 		}
 	}
 
+	const handleKeyPress = async (event: KeyboardEvent) => {
+		if (
+			event.key === 'Enter' &&
+			newTitleValue.trim() != list.title.trim() &&
+			newTitleValue.trim().length > 0
+		) {
+			await renameTitleList(sessionToken, list.id, newTitleValue.trim());
+		}
+	};
+
 	onMount(() => {
 		const unsubcribe = page.subscribe((value) => {
 			sessionToken = value.data.token;
@@ -47,7 +59,21 @@
 	class="flex flex-col px-[15px] py-[15px] gap-[15px] max-h-[580px] w-[280px] max-w-[280px] bg-[#F1F2F4] dark:bg-[#101204] rounded-xl"
 >
 	<header class="h-[38px] flex justify-between">
-		<h2 class="text-[14px] text-[#172B4D] dark:text-[#B6C2CF] font-semibold">{list.title}</h2>
+		{#if !inputRename}
+			<div
+				class="cursor-pointer h-[20px] px-2 py-2 rounded-[4px] transition-colors duration-150 ease-in-out hover:bg-gray-300 flex items-center"
+				on:click={() => (inputRename = true)}
+			>
+				<h2 class="text-[14px] text-[#172B4D] dark:text-[#B6C2CF] font-semibold">{list.title}</h2>
+			</div>
+		{:else}
+			<input
+				type="text"
+				on:keypress={handleKeyPress}
+				bind:value={newTitleValue}
+				class="text-[14px] bg-[#F1F2F4] text-[#172B4D] dark:text-[#B6C2CF] font-semibold justify-center h-[20px] px-2 py-2"
+			/>
+		{/if}
 		{#if !notAllowModify}
 			<DropDownMenuList {list} />
 		{/if}
