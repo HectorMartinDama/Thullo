@@ -28,25 +28,28 @@
 </svelte:head>
 
 <main class="flex flex-col justify-center">
-	<section class="mx-[180px] my-[50px]">
-		<header class="flex flex-row items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">
-			<h3 class="flex flex-row gap-5 font-bold text-[16px]">
-				<StarredIcon />
-				Starred boards
-			</h3>
-		</header>
-		{#if boards}
+	{#if boards && boards.map((board) => board.favourites
+				?.map((user) => user.email)
+				.includes($page.data.session?.user?.email))}
+		<section class="mx-[180px] my-[50px]">
+			<header class="flex flex-row items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">
+				<h3 class="flex flex-row gap-5 font-bold text-[16px]">
+					<StarredIcon />
+					Starred boards
+				</h3>
+			</header>
+
 			<div class="grid grid-cols-4 gap-[16.5px]">
 				{#each boards as board}
 					{#if board.favourites
 						?.map((user) => user.email)
 						.includes($page.data.session?.user?.email)}
-						<PreviewBoard {board} />
+						<PreviewBoard {board} on:removeToFavourite={updateBoards} />
 					{/if}
 				{/each}
 			</div>
-		{/if}
-	</section>
+		</section>
+	{/if}
 
 	<section class="w-[825px] mx-[180px]">
 		<header class="flex justify-between items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">

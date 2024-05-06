@@ -5,7 +5,7 @@
 	import StarIcon from './icons/StarIcon.svelte';
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
-	import { addFavourite } from '$lib/requestsBackend';
+	import { addFavourite, removeFavourite } from '$lib/requestsBackend';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import StarYellowIcon from './icons/StarYellowIcon.svelte';
 	export let board: Board;
@@ -17,6 +17,12 @@
 	const addToFavourites = async () => {
 		await addFavourite(sessionToken, board.id).then(() => {
 			dispatch('addToFavourite');
+		});
+	};
+
+	const removeToFavourites = async () => {
+		await removeFavourite(sessionToken, board.id).then(() => {
+			dispatch('removeToFavourite');
 		});
 	};
 
@@ -66,7 +72,7 @@
 				<StarIcon />
 			</button>
 		{:else if board.favourites?.map((user) => user.email).includes($page.data.session?.user?.email)}
-			<button class="absolute right-4">
+			<button class="absolute right-4" on:click|preventDefault={() => removeToFavourites()}>
 				<StarYellowIcon />
 			</button>
 		{/if}

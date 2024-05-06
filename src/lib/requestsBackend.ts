@@ -61,6 +61,15 @@ export const addFavourite = async (authToken: string | undefined, id: string) =>
 	});
 };
 
+export const removeFavourite = async (authToken: string | undefined, id: string) => {
+	return await fetch(`${PUBLIC_URL_API}/boards/favourites/${id}`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${authToken}`
+		}
+	});
+};
+
 export const getTaskById = async (authToken: string | undefined, id: string) => {
 	return await fetch(`${PUBLIC_URL_API}/tasks/${id}`, {
 		method: 'GET',
