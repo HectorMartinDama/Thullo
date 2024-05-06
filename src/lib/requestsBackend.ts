@@ -281,3 +281,18 @@ export const deleteAccount = async (authToken: string | undefined, email: string
 		}
 	});
 };
+
+export const renameTitleBoard = async (
+	authToken: string | undefined,
+	id: string,
+	title: string
+) => {
+	return await fetch(`${PUBLIC_URL_API}/boards/rename/${id}`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify({ title })
+	});
+};

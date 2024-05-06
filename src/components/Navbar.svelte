@@ -8,9 +8,15 @@
 	import GithubStar from './GithubStar.svelte';
 	import Search from './Search.svelte';
 	import CreateBoard from './CreateBoard.svelte';
+	import { renameTitleBoard } from '$lib/requestsBackend';
+	import { onMount } from 'svelte';
 
 	export let boardTitle = '';
+
+	let sessionToken: string | undefined;
 	let isDropDownOpen = false;
+	let inputRename = false;
+	let newTitleValue = boardTitle;
 
 	// return the first letter
 	const firstLetter = (username: string) => {
@@ -20,6 +26,23 @@
 	const handleDropDownClick = () => {
 		isDropDownOpen = !isDropDownOpen;
 	};
+
+	const handleKeyPress = async (event: KeyboardEvent) => {
+		if (
+			event.key === 'Enter' &&
+			newTitleValue.trim() != boardTitle.trim() &&
+			newTitleValue.trim().length > 0
+		) {
+			await renameTitleBoard(sessionToken, $page.params.id, newTitleValue.trim());
+		}
+	};
+
+	onMount(() => {
+		const unsubcribe = page.subscribe((value) => {
+			sessionToken = value.data.token;
+		});
+		return unsubcribe;
+	});
 </script>
 
 <nav
@@ -33,11 +56,24 @@
 
 		{#if $page.data.session?.user}
 			<!-- BOARD TITLE -->
-			<h1
-				class="text-[#333333] dark:text-[#B6C2CF] justify-center text-lg font-semibold ml-[130px]"
-			>
-				{boardTitle}
-			</h1>
+
+			{#if !inputRename}
+				<div
+					on:click={() => (inputRename = true)}
+					class="h-[32px] hover:bg-[#F0F1F4] py-2 px-2 rounded-[4px] flex items-center ml-[130px]"
+				>
+					<h1 class="text-[#333333] dark:text-[#B6C2CF] justify-center text-lg font-semibold">
+						{boardTitle}
+					</h1>
+				</div>
+			{:else}
+				<input
+					on:keypress={handleKeyPress}
+					bind:value={newTitleValue}
+					type="text"
+					class="ml-[130px] bg-white text-[#333333] dark:text-[#B6C2CF] justify-center text-lg font-semibold h-[32px] px-2 py-2"
+				/>
+			{/if}
 
 			{#if boardTitle}
 				<div class="inline-block h-[35px] mx-[30px] border-[1px] border-[#E0E0E0]"></div>
