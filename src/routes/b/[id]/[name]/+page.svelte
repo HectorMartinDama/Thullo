@@ -121,7 +121,7 @@
 
 	#board {
 		height: calc(100vh - 124px);
-		transition: background-image 3s ease;
+		transition: background-image 0.5s ease;
 	}
 
 	.custom-shadow-item {
