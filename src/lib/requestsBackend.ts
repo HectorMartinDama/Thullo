@@ -1,6 +1,6 @@
 import { PUBLIC_URL_API } from '$env/static/public';
 import type { User } from '@auth/core/types';
-import type { Board, List, TaskItem } from './types';
+import type { AttachmentType, Board, List, TaskItem } from './types';
 
 export const saveBoard = async (authToken: string | undefined, board: Board) => {
 	return await fetch(`${PUBLIC_URL_API}/boards/${board.id}`, {
@@ -305,5 +305,19 @@ export const renameTitleList = async (authToken: string | undefined, id: string,
 			Authorization: `Bearer ${authToken}`
 		},
 		body: JSON.stringify({ title })
+	});
+};
+
+export const getAllAttachmentsBoard = async (
+	authToken: string | undefined,
+	id: string
+): Promise<AttachmentType[]> => {
+	return await fetch(`${PUBLIC_URL_API}/tasks/allAttachments/${id}`, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${authToken}`
+		}
+	}).then((res) => {
+		if (res.ok) return res.json();
 	});
 };

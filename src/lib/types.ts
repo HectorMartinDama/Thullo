@@ -17,12 +17,12 @@ export type TaskItem = {
 	id: string;
 	title: string;
 	description?: string;
-	attachments?: Attachment[];
+	attachments?: AttachmentType[];
 	cover?: string;
 	labels?: Label[];
 };
 
-export type Attachment = {
+export type AttachmentType = {
 	name: string;
 	url: string;
 	key: string;

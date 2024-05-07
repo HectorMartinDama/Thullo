@@ -13,6 +13,7 @@
 	import ChangeBackground from './ChangeBackground.svelte';
 	import DeleteBoard from './DeleteBoard.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import ArchivedItems from './ArchivedItems.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -109,7 +110,8 @@
 						Delete board
 					</li>
 					<li
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium"
+						on:click={() => showComponent('Archived Items')}
+						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium cursor-pointer"
 					>
 						<NoteIcon />
 						Archived items
@@ -123,6 +125,8 @@
 						<AboutThisBoard {board} />
 					{:else if componentActive === 'Activity'}{:else if componentActive === 'Delete'}
 						<DeleteBoard boardName={board.title} />
+					{:else if componentActive === 'Archived Items'}
+						<ArchivedItems />
 					{/if}
 				</div>
 			{/if}
