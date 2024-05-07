@@ -10,9 +10,11 @@ import {
 	createTask,
 	deleteBoard,
 	deleteList,
-	getBoardById
+	getBoardById,
+	saveBoard
 } from '$lib/requestsBackend';
 import type {
+	Board,
 	CreateListParams,
 	CreateTaskParams,
 	DeleteListParams,
@@ -25,6 +27,7 @@ import type {
 } from '$lib/types.js';
 import { error, type Actions, fail, redirect } from '@sveltejs/kit';
 import { isValidTheme } from '../../../../hooks.server';
+import { addScript } from '$lib';
 
 export const load = async ({ cookies, params }) => {
 	const authToken = cookies.get('AuthorizationToken');
@@ -111,5 +114,23 @@ export const actions: Actions = {
 		console.log(background);
 		if (params.id) await changeBackgroundRequest(authToken, params.id, background);
 		return { success: true };
+	},
+	createBoard: async ({ request, cookies }) => {
+		const authToken = cookies.get('AuthorizationToken');
+		const { title, visibility, background, description } = Object.fromEntries(
+			await request.formData()
+		) as Board;
+
+		const board: Board = {
+			id: crypto.randomUUID(),
+			title: title,
+			background: background,
+			visibility: visibility,
+			description: description
+		};
+
+		await saveBoard(authToken, board);
+
+		throw redirect(307, `./b/${board.id}/${addScript(title)}`);
 	}
 };

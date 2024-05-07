@@ -10,6 +10,7 @@
 	import CreateBoard from './CreateBoard.svelte';
 	import { renameTitleBoard } from '$lib/requestsBackend';
 	import { onMount } from 'svelte';
+	import StarYellowIcon from './icons/StarYellowIcon.svelte';
 
 	export let boardTitle = '';
 
@@ -83,7 +84,6 @@
 	</div>
 	{#if $page.data.session?.user}
 		<div class="flex flex-row gap-20 items-center">
-			<CreateBoard />
 			<Search />
 			<AccountDropdown />
 		</div>

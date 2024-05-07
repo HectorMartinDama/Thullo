@@ -37,7 +37,7 @@
 
 		{#if showForm}
 			<div
-				class="bg-[white] dark:bg-[#2b2a33] w-[272px] h-[88px] rounded-xl flex items-center absolute top-0 left-0"
+				class="bg-[white] dark:bg-[#2b2a33] w-[280px] h-[140px] py-2 rounded-xl flex items-center justify-center absolute top-0 left-0"
 			>
 				<form method="POST" action="?/createTask" class="px-[10px]">
 					<textarea

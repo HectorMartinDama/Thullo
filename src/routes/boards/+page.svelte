@@ -5,6 +5,7 @@
 	import PreviewBoard from '../../components/PreviewBoard.svelte';
 	import BoardIcon from '../../components/icons/BoardIcon.svelte';
 	import StarredIcon from '../../components/icons/StarredIcon.svelte';
+	import CreateBoard from '../../components/CreateBoard.svelte';
 	export let data;
 
 	let sessionToken: string | undefined;
@@ -32,11 +33,16 @@
 				?.map((user) => user.email)
 				.includes($page.data.session?.user?.email))}
 		<section class="mx-[180px] my-[50px]">
-			<header class="flex flex-row items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">
+			<header
+				class="w-full flex flex-row justify-between items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]"
+			>
 				<h3 class="flex flex-row gap-5 font-bold text-[16px]">
 					<StarredIcon />
 					Starred boards
 				</h3>
+				<div>
+					<CreateBoard />
+				</div>
 			</header>
 
 			<div class="grid grid-cols-4 gap-[16.5px]">

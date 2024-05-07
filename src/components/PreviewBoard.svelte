@@ -73,7 +73,7 @@
 			</button>
 		{:else if board.favourites?.map((user) => user.email).includes($page.data.session?.user?.email)}
 			<button class="absolute right-4" on:click|preventDefault={() => removeToFavourites()}>
-				<StarYellowIcon />
+				<StarYellowIcon size={16} />
 			</button>
 		{/if}
 	</footer>
