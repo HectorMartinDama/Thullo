@@ -9,7 +9,7 @@
 	import SelectLabelsTask from './SelectLabelsTask.svelte';
 	import SelectMembersTask from './SelectMembersTask.svelte';
 	import Label from './Label.svelte';
-	import { getTaskById } from '$lib/requestsBackend';
+	import { addTaskDescription, getTaskById } from '$lib/requestsBackend';
 	import { onMount } from 'svelte';
 	import AddAttachments from './AddAttachments.svelte';
 
@@ -18,10 +18,15 @@
 	export let task: TaskItem;
 	export let members: User[] | undefined;
 	export let board: Board;
+	let description = task.description || '';
 
 	const refresh = async () => {
 		task = await getTaskById(sessionToken, task.id);
 		console.log(task.id, 'despues del refresh');
+	};
+
+	const saveDescription = async () => {
+		await addTaskDescription(sessionToken, task.id, description);
 	};
 
 	onMount(() => {
@@ -89,23 +94,17 @@
 					<NoteIcon />
 					<p class="text-[#BDBDBD] font-semibold">Description</p>
 				</div>
-				<button
-					class="py-1 px-3 rounded-[8px] border border-[#BDBDBD] text-[#828282] flex justify-center items-center gap-[7px]"
-				>
-					<EditIcon />
-					Edit
-				</button>
 			</section>
 
 			<section class="w-[440px]">
-				<form action="" method="post">
-					<textarea
-						name="description"
-						id="description"
-						class="max-h-[220px] min-h-[220px] w-full resize-none rounded-[8px] px-[15px] py-[15px]"
-						placeholder="Add description"
-					></textarea>
-				</form>
+				<textarea
+					on:keyup={() => saveDescription()}
+					bind:value={description}
+					name="description"
+					id="description"
+					class="max-h-[220px] min-h-[220px] w-full resize-none rounded-[8px] px-[15px] py-[15px]"
+					placeholder="Add description"
+				></textarea>
 			</section>
 
 			<section class="flex flex-row gap-[40px] mb-5">

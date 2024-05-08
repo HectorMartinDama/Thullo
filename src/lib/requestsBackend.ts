@@ -321,3 +321,20 @@ export const getAllAttachmentsBoard = async (
 		if (res.ok) return res.json();
 	});
 };
+
+export const addTaskDescription = async (
+	authToken: string | undefined,
+	id: string,
+	description: string
+) => {
+	return await fetch(`${PUBLIC_URL_API}/tasks/addDescription/${id}`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify({ description })
+	}).then((res) => {
+		if (!res.ok) throw new Error('fetch failed');
+	});
+};
