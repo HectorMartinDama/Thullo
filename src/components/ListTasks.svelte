@@ -9,9 +9,6 @@
 	import type { Board, List, User } from '$lib/types';
 	import { renameTitleList, updatePositionTask } from '$lib/requestsBackend';
 	import { page } from '$app/stores';
-	import AllBoardButton from './AllBoardButton.svelte';
-	import { fade } from 'svelte/transition';
-	import { cubicIn } from 'svelte/easing';
 
 	export let notAllowModify: boolean;
 	export let list: List;

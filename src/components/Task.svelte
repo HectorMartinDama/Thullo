@@ -9,7 +9,7 @@
 	import SelectLabelsTask from './SelectLabelsTask.svelte';
 	import SelectMembersTask from './SelectMembersTask.svelte';
 	import Label from './Label.svelte';
-	import { addTaskDescription, getTaskById } from '$lib/requestsBackend';
+	import { addTaskDescription, getTaskById, renameTitleTask } from '$lib/requestsBackend';
 	import { onMount } from 'svelte';
 	import AddAttachments from './AddAttachments.svelte';
 
@@ -18,11 +18,22 @@
 	export let task: TaskItem;
 	export let members: User[] | undefined;
 	export let board: Board;
+	let inputRename = false;
+	let newTitleValue = task.title;
 	let description = task.description || '';
 
 	const refresh = async () => {
 		task = await getTaskById(sessionToken, task.id);
-		console.log(task.id, 'despues del refresh');
+	};
+
+	const handleKeyPress = async (event: KeyboardEvent) => {
+		if (
+			event.key === 'Enter' &&
+			newTitleValue.trim() != task.title.trim() &&
+			newTitleValue.trim().length > 0
+		) {
+			await renameTitleTask(sessionToken, task.id, newTitleValue.trim());
+		}
 	};
 
 	const saveDescription = async () => {
@@ -88,7 +99,21 @@
 	<section class="flex flex-row">
 		<!-- Content 1  -->
 		<div>
-			<h1 class="mt-[20px] mb-[35px] text-xl font-semibold">{task.title}</h1>
+			{#if !inputRename}
+				<div
+					on:click={() => (inputRename = true)}
+					class="max-w-[400px] mt-[20px] mb-[35px] cursor-pointer rounded-[4px] h-[35px] pl-2 transition-colors duration-150 ease-in-out hover:bg-gray-300 flex items-center"
+				>
+					<h1 class="text-xl font-semibold">{task.title}</h1>
+				</div>
+			{:else}
+				<input
+					type="text"
+					on:keypress={handleKeyPress}
+					bind:value={newTitleValue}
+					class="max-w-[400px] text-xl font-semibold h-[35px] mt-[20px] mb-[35px] pl-2"
+				/>
+			{/if}
 			<section class="flex flex-row gap-[40px] mb-[15px]">
 				<div class="flex gap-[7px]">
 					<NoteIcon />
@@ -96,13 +121,13 @@
 				</div>
 			</section>
 
-			<section class="w-[440px]">
+			<section class="w-[400px] mb-5">
 				<textarea
 					on:keyup={() => saveDescription()}
 					bind:value={description}
 					name="description"
 					id="description"
-					class="max-h-[220px] min-h-[220px] w-full resize-none rounded-[8px] px-[15px] py-[15px]"
+					class="max-h-[220px] min-h-[220px] w-full resize-none rounded-[8px] px-[15px] py-[15px] outline-none border"
 					placeholder="Add description"
 				></textarea>
 			</section>
@@ -150,7 +175,9 @@
 						/>
 					</div>
 
-					<button type="submit" class="bg-[#2F80ED] h-[26px] w-[70px] text-white rounded-[8px]"
+					<button
+						type="submit"
+						class="text-sm px-2 py-2 bg-[#0C66E4] hover:bg-[#0055CC] rounded-[8px] text-white"
 						>Comment</button
 					>
 				</form>

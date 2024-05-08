@@ -308,6 +308,17 @@ export const renameTitleList = async (authToken: string | undefined, id: string,
 	});
 };
 
+export const renameTitleTask = async (authToken: string | undefined, id: string, title: string) => {
+	return await fetch(`${PUBLIC_URL_API}/tasks/rename/${id}`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify({ title })
+	});
+};
+
 export const getAllAttachmentsBoard = async (
 	authToken: string | undefined,
 	id: string
