@@ -14,6 +14,7 @@
 
 	export let boardTitle = '';
 
+	let inputRenameDom: HTMLInputElement;
 	let sessionToken: string | undefined;
 	let isDropDownOpen = false;
 	let inputRename = false;
@@ -26,6 +27,10 @@
 
 	const handleDropDownClick = () => {
 		isDropDownOpen = !isDropDownOpen;
+	};
+
+	const renameTitle = async () => {
+		inputRename = true;
 	};
 
 	const handleKeyPress = async (event: KeyboardEvent) => {
@@ -60,7 +65,7 @@
 
 			{#if !inputRename}
 				<div
-					on:click={() => (inputRename = true)}
+					on:click={() => renameTitle()}
 					class="cursor-pointer h-[32px] transition-colors duration-150 ease-in-out hover:bg-[#F0F1F4] py-2 px-2 rounded-[4px] flex items-center ml-[130px]"
 				>
 					<h1 class="text-[#333333] dark:text-[#B6C2CF] justify-center text-lg font-semibold">

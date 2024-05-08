@@ -156,13 +156,14 @@
 						<object
 							data={$page.data.session.user?.image}
 							type="image/jpg"
-							class="-z-1 h-[30px] w-[30px] rounded-full"
+							class="-z-1 h-[35px] w-[35px] rounded-full"
 							title="profile picture"
 						>
 							<div
 								class="h-[30px] w-[30px] rounded-full bg-[#BDBDBD] flex items-center justify-center"
 							>
-								<span class=" text-md">hola</span>
+								<span class="text-md uppercase">{$page.data.session?.user?.name?.split('')[0]}</span
+								>
 							</div>
 						</object>
 
@@ -171,13 +172,13 @@
 							name="comment"
 							id="comment"
 							placeholder="Write a comment..."
-							class="outline-none"
+							class="outline-none w-full"
 						/>
 					</div>
 
 					<button
 						type="submit"
-						class="text-sm px-2 py-2 bg-[#0C66E4] hover:bg-[#0055CC] rounded-[8px] text-white"
+						class="mt-3 flex items-end text-sm px-2 py-2 bg-[#0C66E4] hover:bg-[#0055CC] rounded-[8px] text-white"
 						>Comment</button
 					>
 				</form>
