@@ -38,7 +38,7 @@
 			<span class="absolute group-hover:animate-fade-out-up text-sm" id="starts"
 				>{`${starCounter} stars in GitHub`}</span
 			>
-			<span class="absolute opacity-0 -translate-y-5 group-hover:animate-fade-in-up"
+			<span class="absolute opacity-0 -translate-y-5 group-hover:animate-fade-in-up text-sm"
 				>Give it a star!</span
 			>
 		</div>
