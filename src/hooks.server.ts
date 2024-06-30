@@ -5,15 +5,20 @@ import { handle as authenticationHandle } from './auth';
 
 export type Theme = 'light' | 'dark' | 'auto';
 
+const saveAndLoginUser = async (session: { user: { email: string } }) => {
+	await saveUser(session.user);
+	const loginUserResult = await loginUser(session.user.email);
+	const { token } = loginUserResult;
+	return token;
+};
+
 export const isValidTheme = (theme: FormDataEntryValue | null): theme is Theme =>
 	!!theme && (theme === 'light' || theme === 'dark' || theme === 'auto');
 
 const authorization = async ({ event, resolve }) => {
-	const session = await event.locals.auth(); // get the
+	const session = await event.locals.auth(); // get the token
 	if (session) {
-		await saveUser(session.user);
-		const { token } = await loginUser(session.user.email);
-
+		const token = await saveAndLoginUser(session);
 		// save the token
 		if (token) {
 			event.locals.sessionToken = token; // save the token in the frontend
