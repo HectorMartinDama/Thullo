@@ -34,6 +34,3 @@
 </main>
 
 <Toaster />
-
-<style lang="css">
-</style>
