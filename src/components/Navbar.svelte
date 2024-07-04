@@ -50,7 +50,7 @@
 </script>
 
 <nav
-	class="flex px-[35px] justify-between items-center border-b-2 border-[#D9DDE2] text-black dark:border-[#32383D] h-[68px] w-full bg-[white] dark:bg-[#1D2125]"
+	class="flex px-9 sticky top-0 z-10 justify-between items-center border-b border-[#D9DDE2] text-black dark:border-[#32383D] h-[68px] w-full bg-[white] dark:bg-[#1D2125]"
 >
 	<!-- FIRST GROUP -->
 	<div class="flex flex-row">
@@ -91,7 +91,7 @@
 			<AccountDropdown />
 		</div>
 	{:else}
-		<div class="flex flex-row gap-8">
+		<div class="flex-row gap-8 hidden md:flex">
 			<GithubStar />
 			<button
 				class="flex flex-row items-center gap-4 rounded-[4px] text-sm py-2 px-2 border border-gray-300 transition-colors duration-150 hover:bg-[#e7e7f5]"
