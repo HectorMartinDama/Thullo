@@ -28,7 +28,7 @@
 		<div class="mb-8 md:mb-0">
 			<h1 class="font-extrabold text-3xl md:text-6xl text-[#1C1E21] inline">
 				<span
-					class="bg-clip-text text-transparent bg-gradient-to-r to-[#7877c6] via-[#1080CF] from-[#afabff]"
+					style="background: linear-gradient(to right, #afabff, #1080CF, #7877c6); color: transparent; background-clip: text;"
 					>Thullo</span
 				>
 				organize your lists in full screen board
