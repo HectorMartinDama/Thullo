@@ -41,6 +41,7 @@
 		"@midudev/tailwind-animations": "^0.0.7",
 		"bits-ui": "^0.11.8",
 		"clsx": "^2.0.0",
+		"motion": "^10.18.0",
 		"radix-icons-svelte": "^1.2.1",
 		"svelte-dnd-action": "^0.9.42",
 		"svelte-french-toast": "^1.2.0",
