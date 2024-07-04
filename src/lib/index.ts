@@ -2,6 +2,52 @@
 
 import type { List } from './types';
 
+export const exampleBoard = [
+	{
+		id: 1,
+		name: 'Todo',
+		items: [
+			{ id: 1, name: 'Welcome to Tullo!' },
+			{ id: 2, name: 'This is a demo board' },
+			{ id: 3, name: 'I am a task' }
+		]
+	},
+	{
+		id: 2,
+		name: 'Doing',
+		items: [
+			{ id: 4, name: 'You can drag me anywhere in this list' },
+			{ id: 5, name: 'And also to another list' }
+		]
+	},
+	{
+		id: 3,
+		name: 'Done',
+		items: [
+			{ id: 46, name: 'Share the board' },
+			{ id: 47, name: 'Login in Tullo' }
+		]
+	}
+];
+
+export const cards = [
+	{
+		icon: '🚀',
+		title: 'Collaborative Boards',
+		content: 'Share your Board and Lists in real-time with your team.'
+	},
+	{
+		icon: '🖼️',
+		title: 'Integrate with Unplash',
+		content: 'Select your background image from millions of images.'
+	},
+	{
+		icon: '⌨️',
+		title: 'No title',
+		content: 'Conasndsndnsdnsdnsd'
+	}
+];
+
 export const initialBackgrounds = [
 	'/background-peach.svg',
 	'/background-ice.svg',
