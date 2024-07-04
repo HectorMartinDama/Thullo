@@ -2,6 +2,12 @@ import type { Label } from 'bits-ui';
 
 export const ARROWS = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
 
+export type Card = {
+	icon: string;
+	title: string;
+	content: string;
+};
+
 export type Image = {
 	urls: typeImage;
 	description: string;
