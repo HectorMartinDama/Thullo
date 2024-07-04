@@ -30,6 +30,7 @@
 		// lista destino
 		if (e.detail.items.filter((task) => !list.tasks.includes(task)).length > 0) {
 			const taskMove = e.detail.items.filter((task) => !list.tasks.includes(task));
+			console.log('moviendo la lista');
 			updatePositionTask(sessionToken, listId, taskMove[0].id, tasksId);
 		}
 	}
