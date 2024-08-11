@@ -28,6 +28,16 @@ export type TaskItem = {
 	labels?: Label[];
 };
 
+export type Activity = {
+	title: string;
+	occured_on: string;
+	user: {
+		name: string;
+		email: string;
+		image: string;
+	};
+};
+
 export type AttachmentType = {
 	name: string;
 	url: string;

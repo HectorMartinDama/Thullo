@@ -54,7 +54,7 @@
 </script>
 
 <section
-	class="flex flex-col px-[15px] py-[15px] gap-[15px] max-h-[580px] w-[280px] max-w-[280px] bg-[#F1F2F4] dark:bg-[#101204] rounded-xl"
+	class="flex flex-col px-[15px] py-[15px] gap-[15px] max-h-[580px] w-[280px] bg-[#F1F2F4] dark:bg-[#101204] rounded-xl"
 >
 	<header class="h-[38px] flex justify-between">
 		{#if !inputRename}
@@ -77,19 +77,21 @@
 		{/if}
 	</header>
 
-	<div
-		class="flex flex-col items-center gap-3 overflow-auto overflow-y-auto max-h-[500px] w-full"
-		use:dndzone={{ items: list.tasks, flipDurationMs, dragDisabled: notAllowModify }}
-		on:consider={(e) => handleDndConsiderCards(e)}
-		on:finalize={(e) => handleDndFinalizeCards(list.id, e)}
-	>
-		{#each list.tasks as task (task.id)}
-			<div animate:flip={{ duration: 300 }} class="relative">
-				<Task {task} {members} {board} />
-			</div>
-		{/each}
-	</div>
-	<AddTask listId={list.id} {notAllowModify} />
+	{#if list.tasks}
+		<div
+			class="flex flex-col items-center gap-3 overflow-auto overflow-y-auto max-h-[500px] w-full h-full"
+			use:dndzone={{ items: list.tasks, flipDurationMs, dragDisabled: notAllowModify }}
+			on:consider={(e) => handleDndConsiderCards(e)}
+			on:finalize={(e) => handleDndFinalizeCards(list.id, e)}
+		>
+			{#each list.tasks as task (task.id)}
+				<div animate:flip={{ duration: 300 }} class="relative">
+					<Task {task} {members} {board} />
+				</div>
+			{/each}
+		</div>
+		<AddTask listId={list.id} {notAllowModify} />
+	{/if}
 </section>
 
 <style>

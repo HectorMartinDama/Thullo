@@ -2,8 +2,8 @@
 	import type { Board } from '$lib/types';
 
 	// moock de datos. Se remplaza por consulta en la base de datos.
-	import ListTasks from '../../../../components/ListTasks.svelte';
 	import AddAnotherList from '../../../../components/AddAnotherList.svelte';
+	import ListTasks from '../../../../components/ListTasks.svelte';
 	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import { getBoardById, updateOrderList } from '$lib/requestsBackend';
@@ -83,7 +83,6 @@
 	</header>
 
 	<!-- ADMIN BOARD -->
-
 	<section
 		use:dndzone={{
 			items: board.lists,
@@ -93,20 +92,18 @@
 		}}
 		on:consider={handleDndConsiderColumns}
 		on:finalize={handleDndFinalizeColumns}
-		class="px-[25px] flex flex-row bg-center bg-no-repeat gap-[20px] pt-[50px] overflow-x-auto bg-[#f8f9fd]"
+		class="px-[25px] flex flex-row bg-center bg-no-repeat gap-[20px] pt-[50px] overflow-x-auto"
 		id="board"
 		style="background-image: url({board.background});"
 	>
 		{#each board.lists as list (list.id)}
 			<div animate:flip={{ duration: flipDurationMs }} class="{getClasses(list)} relative h-min">
 				<ListTasks {list} {notAllowModify} members={board.members} {board} />
-
 				{#if list[SHADOW_ITEM_MARKER_PROPERTY_NAME]}
 					<div in:fade={{ duration: 200, easing: cubicIn }} class="custom-shadow-item"></div>
 				{/if}
 			</div>
 		{/each}
-
 		<AddAnotherList {notAllowModify} />
 	</section>
 {/if}

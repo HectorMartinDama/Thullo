@@ -68,14 +68,14 @@
 		>
 			<a
 				href="/settings"
-				class="flex items-center gap-3 px-4 py-2 mb-[5px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] rounded-[8px]"
+				class="flex items-center text-sm gap-3 px-4 py-2 mb-[5px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] rounded-[8px]"
 			>
-				<SettingsIcon />
+				<SettingsIcon className="w-5 h-5" />
 				Settings
 			</a>
 
 			<div
-				class="block items-center px-4 py-2 transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] rounded-[8px]"
+				class="block items-center text-sm px-4 py-2 transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] rounded-[8px]"
 			>
 				<form
 					method="POST"
@@ -89,8 +89,8 @@
 				>
 					<input type="hidden" name="theme" value={nextTheme} />
 					<button class="w-full h-full flex flex-row items-center gap-3">
-						<div class="w-5 h-5">
-							<ThemeIcon />
+						<div>
+							<ThemeIcon className="w-4 h-5" />
 						</div>
 						{#if nextTheme === 'light'}
 							Light
@@ -106,10 +106,10 @@
 			<hr class="py-[5px]" />
 
 			<div
-				class="block px-4 py-2 transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] rounded-[8px]"
+				class="block px-4 text-sm py-2 transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] rounded-[8px]"
 			>
 				<button on:click={() => signOut({ callbackUrl: '/' })} class="flex items-center gap-3">
-					<LogoutIcon />
+					<LogoutIcon className="w-5 h-5" />
 					Log out
 				</button>
 			</div>

@@ -55,7 +55,7 @@
 	on:click={() => {
 		dialog?.showModal();
 	}}
-	class=" bg-[white] dark:bg-[#22272B] text-[14px] dark:text-[#B6C2CF] max-w-[250px] w-[250px] px-[10px] py-[10px] rounded-xl border-2 dark:border-[#22272B] hover:border-[#0055CC] cursor-pointer"
+	class="z-20 bg-[white] dark:bg-[#22272B] text-[14px] dark:text-[#B6C2CF] max-w-[250px] w-[250px] px-[10px] py-[10px] rounded-xl border-2 dark:border-[#22272B] hover:border-[#0055CC] cursor-pointer"
 >
 	<!-- Cover  -->
 	{#if task.cover}

@@ -43,8 +43,8 @@ export const cards = [
 	},
 	{
 		icon: '⌨️',
-		title: 'No title',
-		content: 'Conasndsndnsdnsdnsd'
+		title: 'Increase your productivity',
+		content: 'Organize your projects in a unique way'
 	}
 ];
 
@@ -64,17 +64,6 @@ export const allInitialsBackgrounds = [
 	'/background-raimbow.svg',
 	'/background-flower.svg',
 	'/background-earth.svg'
-];
-
-const unsplash = [
-	'https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1701962541409-e2c1256a8574',
-	'https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1545472956-3ebf777846cc',
-	'https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1699775292727-06fabf36730d',
-	'https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1701364406051-156d47df2477',
-	'https://images.unsplash.com/photo-1701962541409-e2c1256a8574',
-	'https://images.unsplash.com/photo-1545472956-3ebf777846cc',
-	'https://images.unsplash.com/photo-1699775292727-06fabf36730d',
-	'https://images.unsplash.com/photo-1701364406051-156d47df2477'
 ];
 
 export const initialBackgroundsSmall = [

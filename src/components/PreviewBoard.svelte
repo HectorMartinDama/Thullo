@@ -39,7 +39,7 @@
 	data-sveltekit-preload-data="hover"
 	on:mouseenter={() => (isHovered = true)}
 	on:mouseleave={() => (isHovered = false)}
-	class="relative overflow-hidden flex flex-col justify-between w-[193px] h-[112px] rounded-[5px] py-[5px] px-[5px] cursor-pointer bg-cover bg-center bg-no-repeat transition-opacity duration-300"
+	class="relative z-10 flex flex-col justify-between w-[193px] h-[112px] rounded-[5px] py-[5px] px-[5px] cursor-pointer bg-cover bg-center bg-no-repeat transition-opacity"
 	style="background-image: url({board.background})"
 >
 	<div
@@ -50,7 +50,7 @@
 		<h3 class="font-bold text-[16px] text-[white] dark:text-[white]">{board.title}</h3>
 	</header>
 
-	<footer class="flex flex-row items-center min-h-[28px]">
+	<footer class="flex flex-row items-center h-[28px]">
 		{#if board.members}
 			{#each board.members as member}
 				<img

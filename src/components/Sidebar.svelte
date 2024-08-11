@@ -14,6 +14,7 @@
 	import DeleteBoard from './DeleteBoard.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import ArchivedItems from './ArchivedItems.svelte';
+	import BoardActivity from './BoardActivity.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -97,7 +98,8 @@
 						Change Background
 					</li>
 					<li
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2"
+						on:click={() => showComponent('Activity')}
+						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2 cursor-pointer"
 					>
 						<ActivityIcon />
 						Activity
@@ -118,12 +120,14 @@
 					</li>
 				</ul>
 			{:else}
-				<div class="mt-8">
+				<div class="mt-8 h-full content">
 					{#if componentActive === 'Change background'}
 						<ChangeBackground on:changeBackground={() => dispatch('updateBackground')} />
 					{:else if componentActive === 'About this board'}
 						<AboutThisBoard {board} />
-					{:else if componentActive === 'Activity'}{:else if componentActive === 'Delete'}
+					{:else if componentActive === 'Activity'}
+						<BoardActivity />
+					{:else if componentActive === 'Delete'}
 						<DeleteBoard boardName={board.title} />
 					{:else if componentActive === 'Archived Items'}
 						<ArchivedItems />
@@ -133,3 +137,9 @@
 		</div>
 	</aside>
 {/if}
+
+<style>
+	.content {
+		height: calc(100% - 68px);
+	}
+</style>
