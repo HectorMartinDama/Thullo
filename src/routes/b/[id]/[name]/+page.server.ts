@@ -49,17 +49,17 @@ export const actions: Actions = {
 	},
 	createList: async ({ request, cookies, params }) => {
 		const authToken = cookies.get('AuthorizationToken');
+		const boardId = params.id;
 		const { title } = Object.fromEntries(await request.formData()) as CreateListParams;
 
-		const boardId = params.id;
+		if (!boardId) return fail(400, { boardId, missing: true });
 
-		if (boardId) {
-			const list: List = {
-				id: crypto.randomUUID(),
-				title: title.trim()
-			};
-			await createList(authToken, boardId, list);
-		}
+		const list: List = {
+			id: crypto.randomUUID(),
+			title: title.trim()
+		};
+		await createList(authToken, boardId, list);
+		return { success: true };
 	},
 	deleteList: async ({ request, cookies, params }) => {
 		const authToken = cookies.get('AuthorizationToken');

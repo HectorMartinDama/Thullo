@@ -46,7 +46,6 @@
 	};
 
 	const getClasses = (item) => {
-		console.log(item);
 		return item[SHADOW_ITEM_MARKER_PROPERTY_NAME] ? 'dragging' : '';
 	};
 
@@ -59,6 +58,12 @@
 
 	const updateBoard = async () => {
 		board = await getBoardById(sessionToken, board.id);
+		EndContainer();
+	};
+
+	const EndContainer = () => {
+		const container = document.getElementById('board');
+		if (container) container.scrollLeft = container?.scrollWidth;
 	};
 </script>
 
@@ -104,7 +109,7 @@
 				{/if}
 			</div>
 		{/each}
-		<AddAnotherList {notAllowModify} />
+		<AddAnotherList {notAllowModify} on:successAddList={updateBoard} />
 	</section>
 {/if}
 

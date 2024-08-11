@@ -82,7 +82,7 @@
 
 <dialog
 	bind:this={dialog}
-	class="w-[660px] h-[1000px] rounded-[8px] px-[25px] py-[25px] cursor-default dark:bg-[#282e33] dark:text-[#B6C2CF]"
+	class="w-[660px] h-[1000px] text-sm rounded-[8px] px-[25px] py-[25px] cursor-default dark:bg-[#282e33] dark:text-[#B6C2CF]"
 >
 	<header class="flex justify-end">
 		<button on:click={() => dialog?.close()}>

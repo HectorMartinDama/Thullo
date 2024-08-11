@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import CloseIcon from './icons/CloseIcon.svelte';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { enhance } from '$app/forms';
-
+	import CloseIcon from './icons/CloseIcon.svelte';
+	import PlusIcon from './icons/PlusIcon.svelte';
+	import { applyAction, enhance } from '$app/forms';
+	import { createEventDispatcher } from 'svelte';
 	export let notAllowModify: boolean;
 	let button: HTMLButtonElement;
 	let inputTitleDom: HTMLElement; // $ a dom element
@@ -13,6 +13,16 @@
 
 	const focusInputTitle = () => {
 		inputTitleDom.focus();
+	};
+
+	const dispatch = createEventDispatcher();
+
+	const submitAddList: SubmitFunction = ({ formData, action, cancel }) => {
+		return async ({ result, update }) => {
+			if (result.type === 'success') {
+				dispatch('successAddList');
+			}
+		};
 	};
 </script>
 
@@ -25,28 +35,14 @@
 			class="w-[272px] h-[44px] rounded-xl bg-[#ffffff5d] text-white text-[14px] flex items-center justify-around shadow-xl font-medium text-sm transition-colors duration-150 hover:bg-[#00000026]"
 		>
 			Add another list
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="icon icon-tabler icon-tabler-plus"
-				width="18"
-				height="18"
-				viewBox="0 0 24 24"
-				stroke-width="2"
-				stroke="white"
-				fill="none"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path
-					d="M5 12l14 0"
-				/></svg
-			>
+			<PlusIcon className="h-5 w-5 stroke-white" />
 		</button>
 
 		{#if showForm}
 			<div
 				class="bg-[white] dark:bg-[#2b2a33] w-[272px] h-[88px] rounded-xl flex items-center absolute top-0 left-0"
 			>
-				<form method="POST" action="?/createList" class="px-[10px]">
+				<form method="POST" action="?/createList" class="px-[10px]" use:enhance={submitAddList}>
 					<input
 						required
 						name="title"
