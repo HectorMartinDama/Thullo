@@ -6,11 +6,11 @@
 	import StarredIcon from '../../components/icons/StarredIcon.svelte';
 	import CreateBoard from '../../components/CreateBoard.svelte';
 	import GridBoards from '../../sections/GridBoards.svelte';
+	import SkeletonBoard from '../../components/SkeletonBoard.svelte';
+	import GridFavouritesBoards from '../../components/GridFavouritesBoards.svelte';
 	export let data;
 
 	let sessionToken: string | undefined;
-	let boards = data.boards;
-	let favorites = boards.filter((board) => board.favourites && board.favourites?.length > 0);
 
 	onMount(() => {
 		const unsubcribe = page.subscribe((value) => {
@@ -28,31 +28,21 @@
 	<section class="w-[825px] mx-[180px]">
 		<header class="flex justify-between items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]">
 			<h3 class="flex flex-row gap-5 font-bold text-[16px]">
-				<BoardIcon />
+				<BoardIcon className="h-6 w-6" />
 				Your boards
 			</h3>
 			<div>
 				<CreateBoard />
 			</div>
 		</header>
-		{#if boards}
-			<GridBoards {boards} />
-		{/if}
-	</section>
 
-	{#if favorites.length > 0}
-		<section class="w-[825px] mx-[180px]">
-			<header
-				class="flex justify-between items-center my-[25px] text-[#44546F] dark:text-[#9FADBC]"
-			>
-				<h3 class="flex flex-row gap-5 font-bold text-[16px]">
-					<StarredIcon />
-					Favorites
-				</h3>
-			</header>
+		{#await data.boards}
+			<SkeletonBoard />
+		{:then boards}
 			<GridBoards {boards} />
-		</section>
-	{/if}
+			<GridFavouritesBoards {boards} />
+		{/await}
+	</section>
 </main>
 
 <style>

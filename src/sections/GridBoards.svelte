@@ -20,7 +20,7 @@
 	});
 </script>
 
-<div class="grid grid-cols-4 gap-[16.5px]">
+<div class="grid grid-cols-4 gap-[16.5px] mb-10">
 	{#each boards as board}
 		<PreviewBoard {board} on:addToFavourite={updateBoards} />
 	{/each}

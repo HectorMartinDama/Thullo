@@ -1,47 +1,24 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { initialBackgrounds } from '$lib';
-	import { enhance } from '$app/forms';
+	import { onDestroy, onMount } from 'svelte';
 	import type { SubmitFunction } from '@sveltejs/kit';
 
 	// Components
-	import SelectBackgroundUnsplash from './SelectBackgroundUnsplash.svelte';
-	import PreviewBackgroundBoard from './PreviewBackgroundBoard.svelte';
-	import CloseIcon from './icons/CloseIcon.svelte';
 	import MultiStepForm from './MultiStepForm.svelte';
 
 	let active_step: number = 1;
 	let loading = false; // spinner fetch put
 	let dialog: HTMLDialogElement;
-	let selectedBackground: string = 'https://images.unsplash.com/photo-1699775292727-06fabf36730d'; // default background
 
-	$: if (selectedBackground) console.log('', selectedBackground);
-
-	const handleBackgroundSelected = (background: string) => {
-		selectedBackground = background;
-	};
-
-	const submitCreateBoard: SubmitFunction = ({ formElement, formData, action, cancel }) => {
-		const { title } = Object.fromEntries(formData);
-		if (!title) cancel();
-		formData.append('background', selectedBackground);
-		loading = true;
-
-		return async ({ result, update }) => {
-			loading = false;
-			await update(); // no hay que ponerlo porque se va a redirigir al usuario al tablero
-		};
-	};
-
-	const closeDialog = () => {
-		active_step = 1;
-		dialog.close();
+	const handleOutsideClick = (event: MouseEvent) => {
+		if (event.target === dialog) dialog?.close();
 	};
 
 	onMount(() => {
-		// poner focus el input title al abrir el componente
-		const title = document.getElementById('title');
-		title?.focus();
+		dialog?.addEventListener('click', handleOutsideClick);
+	});
+
+	onDestroy(() => {
+		dialog?.removeEventListener('click', handleOutsideClick);
 	});
 </script>
 

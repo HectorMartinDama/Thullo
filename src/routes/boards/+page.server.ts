@@ -10,7 +10,7 @@ export const load = async (event) => {
 	const session = await event.locals.auth();
 	if (!session?.user) redirect(303, '/');
 	const authToken = event.cookies.get('AuthorizationToken');
-	return { boards: await getAllBoard(authToken) };
+	return { boards: getAllBoard(authToken) };
 };
 
 export const actions: Actions = {
