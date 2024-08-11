@@ -87,6 +87,7 @@
 		<div class="mx-[30px] card active">
 			<label for="title" class="text-sm">Add board title *</label>
 			<input
+				autofocus
 				type="text"
 				name="title"
 				id="title"

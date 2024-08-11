@@ -5,12 +5,6 @@
 	let showForm: boolean = false;
 	export let notAllowModify: boolean;
 	export let listId: string;
-
-	$: if (showForm && inputTitleDom) focusInputTitle();
-
-	const focusInputTitle = () => {
-		inputTitleDom.focus();
-	};
 </script>
 
 {#if !notAllowModify}
@@ -28,6 +22,7 @@
 		>
 			<form method="POST" action="?/createTask" class="px-[10px]">
 				<textarea
+					autofocus
 					required
 					name="title"
 					bind:this={inputTitleDom}

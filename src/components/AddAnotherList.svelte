@@ -9,12 +9,6 @@
 	let inputTitleDom: HTMLElement; // $ a dom element
 	let showForm: boolean = false;
 
-	$: if (showForm && inputTitleDom) focusInputTitle();
-
-	const focusInputTitle = () => {
-		inputTitleDom.focus();
-	};
-
 	const dispatch = createEventDispatcher();
 
 	const submitAddList: SubmitFunction = ({ formData, action, cancel }) => {
@@ -46,6 +40,7 @@
 			>
 				<form method="POST" action="?/createList" class="px-[10px]" use:enhance={submitAddList}>
 					<input
+						autofocus
 						required
 						name="title"
 						bind:this={inputTitleDom}

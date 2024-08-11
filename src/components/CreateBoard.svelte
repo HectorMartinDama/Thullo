@@ -1,12 +1,8 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import type { SubmitFunction } from '@sveltejs/kit';
 
 	// Components
 	import MultiStepForm from './MultiStepForm.svelte';
-
-	let active_step: number = 1;
-	let loading = false; // spinner fetch put
 	let dialog: HTMLDialogElement;
 
 	const handleOutsideClick = (event: MouseEvent) => {
