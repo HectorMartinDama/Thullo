@@ -63,7 +63,7 @@
 
 	const EndContainer = () => {
 		const container = document.getElementById('board');
-		if (container) container.scrollLeft = container?.scrollWidth;
+		if (container) container.scrollLeft = container.scrollWidth;
 	};
 </script>
 

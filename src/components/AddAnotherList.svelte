@@ -22,6 +22,7 @@
 			if (result.type === 'success') {
 				dispatch('successAddList');
 				await update(); // reset form values
+				inputTitleDom.focus(); // focus in the input
 			}
 		};
 	};

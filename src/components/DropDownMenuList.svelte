@@ -1,20 +1,12 @@
 <script lang="ts">
 	import type { List } from '$lib/types';
-	import type { SubmitFunction } from '@sveltejs/kit';
 	import OptionsIcon from './icons/OptionsIcon.svelte';
 
 	export let list: List;
 	let isOpen = false;
-
-	const prueba: SubmitFunction = ({ formElement, formData, action, cancel }) => {
-		formData.append('id', list.id);
-		return async ({ result, update }) => {
-			await update();
-		};
-	};
 </script>
 
-<div class="relative z-10">
+<div class="relative z-20">
 	<button on:click={() => (isOpen = !isOpen)}>
 		<OptionsIcon />
 	</button>
