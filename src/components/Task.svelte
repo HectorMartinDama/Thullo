@@ -10,10 +10,11 @@
 	import SelectMembersTask from './SelectMembersTask.svelte';
 	import Label from './Label.svelte';
 	import { addTaskDescription, getTaskById, renameTitleTask } from '$lib/requestsBackend';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import AddAttachments from './AddAttachments.svelte';
 
-	let dialog: HTMLDialogElement | null;
+	let dialog: HTMLDialogElement | null = null;
+	let isClosing = false;
 	let sessionToken: string | undefined;
 	export let task: TaskItem;
 	export let members: User[] | undefined;
@@ -40,22 +41,30 @@
 		await addTaskDescription(sessionToken, task.id, description);
 	};
 
+	const handleOutsideClick = (event: MouseEvent) => {
+		if (event.target === dialog) dialog?.close();
+	};
+
 	onMount(() => {
+		dialog?.addEventListener('click', handleOutsideClick);
 		const unsubcribe = page.subscribe((value) => {
 			sessionToken = value.data.token;
 		});
 		return unsubcribe;
 	});
+
+	onDestroy(() => {
+		dialog?.removeEventListener('click', handleOutsideClick);
+	});
 </script>
 
-<div
-	role="region"
+<button
 	draggable="true"
 	id={task.id}
 	on:click={() => {
 		dialog?.showModal();
 	}}
-	class="z-20 bg-[white] dark:bg-[#22272B] text-[14px] dark:text-[#B6C2CF] max-w-[250px] w-[250px] px-[10px] py-[10px] rounded-xl border-2 dark:border-[#22272B] hover:border-[#0055CC] cursor-pointer"
+	class="z-20 bg-[white] dark:bg-[#22272B] text-[14px] dark:text-[#B6C2CF] max-w-[250px] w-[250px] px-[10px] py-[10px] rounded-xl border-2 dark:border-[#22272B] hover:border-[#0055CC]"
 >
 	<!-- Cover  -->
 	{#if task.cover}
@@ -68,7 +77,7 @@
 		</div>
 	{/if}
 	<!-- Content  -->
-	<h1 class="text-sm font-normal">{task.title}</h1>
+	<h1 class="flex justify-start text-sm font-normal">{task.title}</h1>
 
 	<!-- Labels -->
 	{#if task.labels}
@@ -78,11 +87,11 @@
 			{/each}
 		</div>
 	{/if}
-</div>
+</button>
 
 <dialog
 	bind:this={dialog}
-	class="w-[660px] h-[1000px] text-sm rounded-[8px] px-[25px] py-[25px] cursor-default dark:bg-[#282e33] dark:text-[#B6C2CF]"
+	class=" w-[660px] h-[1000px] text-sm rounded-[8px] px-[25px] py-[25px] cursor-default dark:bg-[#282e33] dark:text-[#B6C2CF]"
 >
 	<header class="flex justify-end">
 		<button on:click={() => dialog?.close()}>
