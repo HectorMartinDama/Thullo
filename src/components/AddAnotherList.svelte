@@ -21,6 +21,7 @@
 		return async ({ result, update }) => {
 			if (result.type === 'success') {
 				dispatch('successAddList');
+				await update(); // reset form values
 			}
 		};
 	};
