@@ -4,6 +4,7 @@
 	import { getPhotoByQuery, getRandomImages } from '$lib/unsplashService';
 	import { page } from '$app/stores';
 	import { createEventDispatcher, onMount } from 'svelte';
+	import { Input } from '$lib/components/ui/input';
 
 	let searchValue: string;
 	let initialsBackground: Array<Image>;
@@ -36,12 +37,12 @@
 	});
 </script>
 
-<input
+<Input
 	type="search"
-	placeholder="Photos"
+	placeholder="Search photos"
 	bind:value={searchValue}
 	on:input={async () => await search(searchValue)}
-	class="w-full h-[36px] pl-4 border rounded-[8px] outline-none"
+	class="w-full h-[32px] text-xs pl-4 border rounded-[8px] outline-none text-[#202020] border-[#E0E0E0]"
 />
 
 <div class="mt-5 h-[570px] w-full grid grid-cols-2 gap-3 overflow-auto">

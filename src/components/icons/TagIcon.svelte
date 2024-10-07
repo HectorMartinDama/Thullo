@@ -1,3 +1,7 @@
+<script lang="ts">
+	export let className = '';
+</script>
+
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	width="20"
@@ -8,7 +12,7 @@
 	stroke-width="2"
 	stroke-linecap="round"
 	stroke-linejoin="round"
-	class="icon icon-tabler icons-tabler-outline icon-tabler-tag"
+	class="icon icon-tabler icons-tabler-outline icon-tabler-tag {className}"
 	><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path
 		d="M7.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"
 	/><path

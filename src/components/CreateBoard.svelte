@@ -19,7 +19,7 @@
 </script>
 
 <button
-	class="text-sm px-2 py-2 bg-[#0C66E4] hover:bg-[#0055CC] rounded-[8px] text-white"
+	class="text-[13px] px-2 py-2 bg-[#0C66E4] hover:bg-[#0055CC] rounded-[8px] text-white"
 	on:click={() => dialog.showModal()}>Create board</button
 >
 

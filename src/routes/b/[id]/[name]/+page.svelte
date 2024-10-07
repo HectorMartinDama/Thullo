@@ -78,7 +78,7 @@
 		class="flex justify-between h-[56px] bg-[white] dark:bg-[#1D2125] w-full items-center px-[25px] gap-4"
 	>
 		<div class="flex flex-row gap-4">
-			<TypeBoardButton visibility={board.visibility} {board} on:changeVisibility={updateBoard} />
+			<TypeBoardButton {board} on:changeVisibility={updateBoard} />
 			{#if $page.data.session?.user?.email === board.user.email}
 				<!-- Si es el creador, podra invitar a gente  -->
 				<InviteBoard {board} />

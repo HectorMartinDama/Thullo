@@ -2,6 +2,16 @@ import type { Label } from 'bits-ui';
 
 export const ARROWS = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
 
+export const MESSAGE_TYPE_BOARD = {
+	public: {
+		value: 'The board is public, anyone on the Internet can see it via the link.'
+	},
+	private: {
+		value:
+			'The board is private, but can be shared via a link. By sharing this board, all your lists and tasks will be visible.'
+	}
+};
+
 export type Card = {
 	icon: string;
 	title: string;
@@ -13,6 +23,8 @@ export type Image = {
 	description: string;
 };
 
+export type Priority = 1 | 2 | 3 | 4;
+
 export type List = {
 	id: string;
 	title: string;
@@ -22,6 +34,8 @@ export type List = {
 export type TaskItem = {
 	id: string;
 	title: string;
+	priority: Priority;
+	createdAt: string;
 	description?: string;
 	attachments?: AttachmentType[];
 	cover?: string;
@@ -46,8 +60,8 @@ export type AttachmentType = {
 };
 
 export type Label = {
+	_id: string;
 	title: string;
-	color: string;
 };
 
 export type typeImage = {
@@ -78,11 +92,7 @@ export type User = {
 	image: string;
 };
 
-export type Visibility = {
-	private: string;
-	public: string;
-	workSpace: string;
-};
+export type Visibility = 'public' | 'private';
 
 export type CreateListParams = {
 	title: string;
@@ -93,6 +103,7 @@ export type DeleteListParams = {
 };
 
 export type CreateTaskParams = {
+	id: string;
 	title: string;
 	listId: string;
 };
@@ -110,6 +121,10 @@ export type addLabelTaskParams = {
 
 export type addMemberParams = {
 	email: string;
+};
+
+export type changePriorityParams = {
+	priority: number;
 };
 
 export type changeVisibilityParams = {

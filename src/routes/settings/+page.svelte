@@ -2,6 +2,10 @@
 	import { onMount } from 'svelte';
 	import CloseIcon from '../../components/icons/CloseIcon.svelte';
 	import { page } from '$app/stores';
+	import * as Card from '$lib/components/ui/card/index.js';
+
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { Switch } from '$lib/components/ui/switch';
 
 	let enableViewTransitions: boolean;
 	let deleteAccountDialog: HTMLDialogElement;
@@ -43,12 +47,12 @@
 
 <section class="my-[50px] mx-[60px]">
 	<header>
-		<h1 class="text-3xl font-semibold pb-[60px]">Account Settings</h1>
+		<h1 class="text-2xl font-semibold mb-10">Account Settings</h1>
 		<hr />
 	</header>
 
 	<div class="flex flex-row gap-12">
-		<div class="w-[240px] h-[240px] mt-[40px]">
+		<div class="w-[240px] h-[240px] mt-10">
 			<ul class="">
 				<li
 					class="flex items-center text-sm h-[40px] rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#31393F] pl-4 mb-2 cursor-pointer"
@@ -62,33 +66,35 @@
 				</li>
 			</ul>
 		</div>
-		<div class="flex flex-col items-center justify-center mt-[40px] gap-10">
-			<div
-				class="h-[200px] w-[900px] bg-[#FAFAFA] dark:bg-[#282e33] rounded-[8px] px-[30px] py-[30px]"
-			>
-				<h1 class="text-xl mb-3">Delete Account</h1>
-				<p class="text-sm mb-3">
-					Permanently remove your Personal Account and all of its contents from the Tullo platform.
-					This action is not reversible, so please continue with caution.
-				</p>
-				<div class="flex justify-end">
-					<button
-						on:click={() => deleteAccountDialog.showModal()}
-						class="py-2 px-2 rounded-[4px] text-sm bg-red-600 transition-colors duration-150 hover:bg-[#AE292E] text-white"
-						>Delete Account</button
+
+		<div class="flex flex-col gap-5 mt-10">
+			<Card.Root class="w-[630px] flex flex-row items-center justify-between">
+				<Card.Header>
+					<Card.Title class="text-md font-medium">Delete Account</Card.Title>
+					<Card.Description
+						>Permanently remove your Personal Account and all of its contents from the Tullo
+						platform. This action is not reversible, so please continue with caution.</Card.Description
 					>
-				</div>
-			</div>
-			<div
-				class="flex flex-row items-center justify-between w-[900px] bg-[#FAFAFA] dark:bg-[#282e33] rounded-[8px] px-[30px] py-[30px]"
-			>
-				<h1 class="text-xl">View transitions / Animations</h1>
-				{#if enableViewTransitions}
-					<span class="text-sm text-green-600">Support</span>
-				{:else}
-					<span class="text-sm text-red-600">Not Support</span>
-				{/if}
-			</div>
+				</Card.Header>
+				<Card.Content>
+					<Button
+						variant="destructive"
+						on:click={() => deleteAccountDialog.showModal()}
+						class=" bg-[#dc4c3e] text-[13px] h-8 hover:bg-[#c3392c] transition-colors duration-150"
+						>Delete Account</Button
+					>
+				</Card.Content>
+			</Card.Root>
+
+			<Card.Root class="w-[630px] flex flex-row items-center justify-between">
+				<Card.Header>
+					<Card.Title class="text-md font-medium">View transitions</Card.Title>
+					<Card.Description>Your browser support View transitions</Card.Description>
+				</Card.Header>
+				<Card.Content>
+					<Switch disabled bind:checked={enableViewTransitions} />
+				</Card.Content>
+			</Card.Root>
 		</div>
 	</div>
 </section>
@@ -97,7 +103,7 @@
 	<form action="?/deleteAccount" method="post">
 		<header>
 			<h3 class="font-semibold text-2xl">Delete Account</h3>
-			<button on:click={() => closeDialog()}>
+			<button type="reset" on:click={() => closeDialog()}>
 				<CloseIcon />
 			</button>
 		</header>

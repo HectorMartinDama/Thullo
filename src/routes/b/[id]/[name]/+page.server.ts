@@ -74,11 +74,11 @@ export const actions: Actions = {
 	},
 	createTask: async ({ request, cookies, params }) => {
 		const authToken = cookies.get('AuthorizationToken');
-		const { title, listId } = Object.fromEntries(await request.formData()) as CreateTaskParams;
-		console.log(title, listId, params.id);
+		const { title, id, listId } = Object.fromEntries(await request.formData()) as CreateTaskParams;
+		console.log(title, listId, params.id, 'id desde frontend', id);
 		if (listId) {
 			const task = {
-				id: crypto.randomUUID(),
+				id,
 				title: title.trim()
 			};
 			if (params.id) await createTask(authToken, listId, params.id, task);

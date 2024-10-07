@@ -4,7 +4,13 @@
 	import { getPhotoByQuery } from '$lib/unsplashService';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import ImageIcon from '../components/icons/ImageIcon.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import { Input } from '$lib/components/ui/input';
+
+	import * as Popover from '$lib/components/ui/popover/index.js';
+
 	import { page } from '$app/stores';
+	import PlusIcon from './icons/PlusIcon.svelte';
 	let isOpen = false;
 	let loading = true;
 	let covers: Image[] = [];
@@ -32,7 +38,44 @@
 	});
 </script>
 
-<div class="relative">
+<Popover.Root portal={null}>
+	<Popover.Trigger asChild let:builder>
+		<Button variant="ghost" builders={[builder]} class="w-full justify-between">
+			<span class="text-xs font-semibold text-[#666]">Cover</span>
+			<PlusIcon className="h-4 w-4 stroke-1" />
+		</Button>
+	</Popover.Trigger>
+	<Popover.Content class="w-[300px] rounded-xl">
+		<div class="grid gap-4">
+			<div class="grid gap-2">
+				<Input
+					type="search"
+					class="text-sm rounded-[8px] h-[32px] text-[#202020] dark:bg-[#22272b]"
+					placeholder="Keywords...."
+					bind:value={searchValue}
+					on:input={async () => await search(searchValue)}
+				/>
+				<hr class="my-2" />
+
+				<div class="gap-2 grid grid-cols-4 overflow-y-auto h-[160px]">
+					{#if covers}
+						{#each covers as image}
+							<button on:click={() => selectCover(image.urls.regular)}>
+								<img
+									class="rounded-[4px] w-[50px] h-[50px] object-cover"
+									src={image.urls.small}
+									alt={image.description}
+								/>
+							</button>
+						{/each}
+					{/if}
+				</div>
+			</div>
+		</div>
+	</Popover.Content>
+</Popover.Root>
+
+<!-- <div class="relative">
 	<button
 		on:click={() => (isOpen = !isOpen)}
 		class="bg-[#f0f1f4] text-[#828282] dark:bg-[#323940] dark:text-[#B6C2CF] rounded-[8px] w-[150px] h-[32px] flex items-center pl-[15px] gap-[10px] transition-colors duration-150 dark:hover:bg-[#3d4750] hover:bg-[#dcdfe4]"
@@ -79,4 +122,4 @@
 			</div>
 		</div>
 	{/if}
-</div>
+</div> -->

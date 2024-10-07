@@ -1,25 +1,18 @@
 <script lang="ts">
 	import type { Board, TaskItem, User } from '$lib/types';
-	import CloseIcon from './icons/CloseIcon.svelte';
-	import EditIcon from './icons/EditIcon.svelte';
-	import NoteIcon from './icons/NoteIcon.svelte';
-	import Attachment from './Attachment.svelte';
+	import * as HoverCard from '$lib/components/ui/hover-card';
 	import { page } from '$app/stores';
-	import SelectTaskCover from './SelectTaskCover.svelte';
-	import SelectLabelsTask from './SelectLabelsTask.svelte';
-	import SelectMembersTask from './SelectMembersTask.svelte';
-	import Label from './Label.svelte';
 	import { addTaskDescription, getTaskById, renameTitleTask } from '$lib/requestsBackend';
-	import { onDestroy, onMount, tick } from 'svelte';
-	import AddAttachments from './AddAttachments.svelte';
+	import { onMount } from 'svelte';
+	import Label from './Label.svelte';
+	import PriorityTaskLevel from './PriorityTaskLevel.svelte';
+	import { Calendar } from 'lucide-svelte';
+	import { differenceDays, formatDate, getDayMonth } from '$lib/utils';
 
-	let dialog: HTMLDialogElement | null = null;
-	let isClosing = false;
 	let sessionToken: string | undefined;
 	export let task: TaskItem;
 	export let members: User[] | undefined;
 	export let board: Board;
-	let inputRename = false;
 	let newTitleValue = task.title;
 	let description = task.description || '';
 
@@ -41,188 +34,52 @@
 		await addTaskDescription(sessionToken, task.id, description);
 	};
 
-	const handleOutsideClick = (event: MouseEvent) => {
-		if (event.target === dialog) dialog?.close();
-	};
-
 	onMount(() => {
-		dialog?.addEventListener('click', handleOutsideClick);
 		const unsubcribe = page.subscribe((value) => {
 			sessionToken = value.data.token;
 		});
 		return unsubcribe;
 	});
-
-	onDestroy(() => {
-		dialog?.removeEventListener('click', handleOutsideClick);
-	});
 </script>
 
-<button
+<div
 	draggable="true"
-	id={task.id}
-	on:click={() => {
-		dialog?.showModal();
-	}}
-	class="z-20 bg-[white] dark:bg-[#22272B] text-[14px] dark:text-[#B6C2CF] max-w-[250px] w-[250px] px-[10px] py-[10px] rounded-xl border-2 dark:border-[#22272B] hover:border-[#0055CC]"
+	class="border rounded-xl px-3 py-2 max-w-[250px] w-[250px] z-20 transition-colors duration-150 hover:bg-[#EEEEEE]"
 >
-	<!-- Cover  -->
-	{#if task.cover}
-		<div class="flex justify-center mb-[10px]">
-			<img
-				src={task.cover}
-				alt="cover of task {task.id}"
-				class="w-full h-[130px] object-cover flex justify-center rounded-[12px]"
-			/>
-		</div>
-	{/if}
-	<!-- Content  -->
-	<h1 class="flex justify-start text-sm font-normal">{task.title}</h1>
-
-	<!-- Labels -->
-	{#if task.labels}
-		<div class="grid grid-cols-3 gap-[10px] mt-[10px]">
-			{#each task.labels as label}
-				<Label {label} />
-			{/each}
-		</div>
-	{/if}
-</button>
-
-<dialog
-	bind:this={dialog}
-	class=" w-[660px] h-[1000px] text-sm rounded-[8px] px-[25px] py-[25px] cursor-default dark:bg-[#282e33] dark:text-[#B6C2CF]"
->
-	<header class="flex justify-end">
-		<button on:click={() => dialog?.close()}>
-			<CloseIcon />
-		</button>
-	</header>
-
-	<!-- COVER -->
-	<div
-		class="w-full h-[130px] rounded-[12px] flex justify-center items-center bg-center bg-cover"
-		style={task.cover ? `background-image: url(${task.cover});` : 'background-color: #E0E0E0'}
-	></div>
-
-	<section class="flex flex-row">
-		<!-- Content 1  -->
-		<div>
-			{#if !inputRename}
-				<div
-					on:click={() => (inputRename = true)}
-					class="max-w-[400px] mt-[20px] mb-[35px] cursor-pointer rounded-[4px] h-[35px] pl-2 transition-colors duration-150 ease-in-out hover:bg-gray-300 flex items-center"
-				>
-					<h1 class="text-xl font-semibold">{task.title}</h1>
-				</div>
-			{:else}
-				<input
-					type="text"
-					on:keypress={handleKeyPress}
-					bind:value={newTitleValue}
-					class="max-w-[400px] text-xl font-semibold h-[35px] mt-[20px] mb-[35px] pl-2"
-				/>
-			{/if}
-			<section class="flex flex-row gap-[40px] mb-[15px]">
-				<div class="flex gap-[7px]">
-					<NoteIcon />
-					<p class="text-[#BDBDBD] font-semibold">Description</p>
-				</div>
-			</section>
-
-			<section class="w-[400px] mb-5">
-				<textarea
-					on:keyup={() => saveDescription()}
-					bind:value={description}
-					name="description"
-					id="description"
-					class="max-h-[220px] min-h-[220px] w-full resize-none rounded-[8px] px-[15px] py-[15px] outline-none border"
-					placeholder="Add description"
-				></textarea>
-			</section>
-
-			<section class="flex flex-row gap-[40px] mb-5">
-				<div class="flex gap-[7px]">
-					<NoteIcon />
-					<p class="text-[#BDBDBD] font-semibold">Attachments</p>
-				</div>
-				<AddAttachments taskId={task.id} on:addedAttachment={refresh} />
-			</section>
-
-			{#if task.attachments}
-				<div class="overflow-auto h-[170px]">
-					{#each task.attachments as attachment}
-						<Attachment {attachment} />
-					{/each}
-				</div>
-			{/if}
-
-			<section
-				class="border border-[#E0E0E0] rounded-[12px] h-[104px] w-[440px] px-[15px] py-[15px]"
-			>
-				<form action="" method="post" class="">
-					<div class="flex flex-row gap-[20px]">
-						<object
-							data={$page.data.session.user?.image}
-							type="image/jpg"
-							class="-z-1 h-[35px] w-[35px] rounded-full"
-							title="profile picture"
-						>
-							<div
-								class="h-[30px] w-[30px] rounded-full bg-[#BDBDBD] flex items-center justify-center"
-							>
-								<span class="text-md uppercase">{$page.data.session?.user?.name?.split('')[0]}</span
-								>
-							</div>
-						</object>
-
-						<input
-							type="text"
-							name="comment"
-							id="comment"
-							placeholder="Write a comment..."
-							class="outline-none w-full"
-						/>
-					</div>
-
-					<button
-						type="submit"
-						class="mt-3 flex items-end text-sm px-2 py-2 bg-[#0C66E4] hover:bg-[#0055CC] rounded-[8px] text-white"
-						>Comment</button
+	<a
+		class="w-full text-sm text-[#202020] dark:text-white leading-5"
+		href="/task/{board.id}/{task.id}"
+	>
+		<div class="flex flex-col gap-2">
+			<div class="flex flex-row items-center gap-2">
+				<PriorityTaskLevel priority={task.priority} />
+				<h1 class=" overflow-hidden font-medium truncate text-sm">{task.title}</h1>
+			</div>
+			<div class="flex flex-row flex-wrap w-full gap-3">
+				<HoverCard.Root>
+					<HoverCard.Trigger
+						class="text-xs text-[#808080] flex flex-row gap-1 items-center justify-center"
 					>
-				</form>
-			</section>
+						<Calendar class="h-3 w-3 stroke-[#808080]" />
+						{getDayMonth(task.createdAt)}
+					</HoverCard.Trigger>
+					<HoverCard.Content
+						class="flex flex-col border-none text-white  w-[170px] text-xs bg-[#282828]"
+					>
+						{formatDate(task.createdAt)}
+						<hr class="my-2" />
+						<span class="text-xs">{differenceDays(task.createdAt)} days left</span>
+					</HoverCard.Content>
+				</HoverCard.Root>
+				<!-- Labels -->
+				{#if task.labels}
+					<div class="flex flex-wrap gap-3">
+						{#each task.labels as label}
+							<Label {label} />
+						{/each}
+					</div>
+				{/if}
+			</div>
 		</div>
-
-		<!-- Content 2 - Actions  -->
-		<div class="flex flex-col w-[150px] mt-[20px] h-full gap-[10px]">
-			{#if $page.data.session?.user?.email === board.user?.email}
-				<SelectMembersTask {members} />
-				<SelectLabelsTask taskId={task.id} on:addTask={refresh} />
-				<SelectTaskCover taskId={task.id} on:updatedCover={refresh} />
-			{/if}
-		</div>
-	</section>
-</dialog>
-
-<style>
-	dialog[open] {
-		animation: fadeIn 0.2s ease-in-out forwards;
-	}
-
-	dialog::backdrop {
-		background-color: rgba(0, 0, 0, 0.8);
-	}
-
-	/* Animación de entrada */
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: scale(0.8);
-		}
-		to {
-			opacity: 1;
-			transform: scale(1);
-		}
-	}
-</style>
+	</a>
+</div>

@@ -14,6 +14,7 @@
 	export let list: List;
 	export let members: User[] | undefined;
 	export let board: Board;
+	let listEditorTitleInput: HTMLInputElement;
 	const flipDurationMs = 300;
 	let sessionToken: string | undefined;
 	let newTitleValue = list.title;
@@ -45,6 +46,13 @@
 		}
 	};
 
+	const focusListEditorTitleInput = () => {
+		inputRename = true;
+		setTimeout(() => {
+			if (listEditorTitleInput) listEditorTitleInput.focus();
+		}, 30);
+	};
+
 	onMount(() => {
 		const unsubcribe = page.subscribe((value) => {
 			sessionToken = value.data.token;
@@ -54,9 +62,9 @@
 </script>
 
 <section
-	class="flex flex-col px-[15px] py-[15px] gap-[15px] max-h-[580px] w-[280px] bg-[#F1F2F4] dark:bg-[#101204] rounded-xl"
+	class="flex flex-col px-[15px] py-[15px] gap-[15px] max-h-[580px] w-[280px] bg-white dark:bg-[#101204] rounded-xl"
 >
-	<header class="h-[38px] flex justify-between">
+	<header class="h-[38px] flex items-center justify-between">
 		{#if !inputRename}
 			<div
 				class="cursor-pointer h-[20px] px-2 py-2 rounded-[4px] transition-colors duration-150 ease-in-out hover:bg-gray-300 flex items-center"
@@ -66,20 +74,21 @@
 			</div>
 		{:else}
 			<input
+				bind:this={listEditorTitleInput}
 				type="text"
 				on:keypress={handleKeyPress}
 				bind:value={newTitleValue}
-				class="text-[14px] bg-[#F1F2F4] text-[#172B4D] dark:text-[#B6C2CF] font-semibold justify-center h-[20px] px-2 py-2"
+				class="text-[14px] text-[#172B4D] dark:text-[#B6C2CF] font-semibold justify-center h-[20px] px-2 py-3 rounded-lg"
 			/>
 		{/if}
 		{#if !notAllowModify}
-			<DropDownMenuList {list} />
+			<DropDownMenuList {list} on:editListTitle={focusListEditorTitleInput} />
 		{/if}
 	</header>
 
 	{#if list.tasks}
 		<div
-			class="flex flex-col items-center gap-3 overflow-auto overflow-y-auto max-h-[500px] w-full h-full"
+			class="flex flex-col items-center gap-3 overflow-auto overflow-y-auto min-h-[60px] max-h-[500px] w-full h-full"
 			use:dndzone={{ items: list.tasks, flipDurationMs, dragDisabled: notAllowModify }}
 			on:consider={(e) => handleDndConsiderCards(e)}
 			on:finalize={(e) => handleDndFinalizeCards(list.id, e)}

@@ -164,5 +164,5 @@ export const Lists: List[] = [
 ];
 
 export const addScript = (phrase: string): string => {
-	return phrase.split(' ').join('-');
+	return phrase.toLowerCase().split(' ').join('-');
 };

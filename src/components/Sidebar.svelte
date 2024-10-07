@@ -1,20 +1,15 @@
 <script lang="ts">
-	import { fade, slide } from 'svelte/transition';
-	import CloseIcon from './icons/CloseIcon.svelte';
-	import { quintInOut } from 'svelte/easing';
 	import type { Board } from '$lib/types';
-	import NoteIcon from './icons/NoteIcon.svelte';
-	import OptionsIcon from './icons/OptionsIcon.svelte';
-	import InfoIcon from './icons/InfoIcon.svelte';
-	import ActivityIcon from './icons/ActivityIcon.svelte';
-	import TrashIcon from './icons/TrashIcon.svelte';
 	import AboutThisBoard from './AboutThisBoard.svelte';
 	import BackIcon from './icons/BackIcon.svelte';
 	import ChangeBackground from './ChangeBackground.svelte';
 	import DeleteBoard from './DeleteBoard.svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import ArchivedItems from './ArchivedItems.svelte';
 	import BoardActivity from './BoardActivity.svelte';
+	import * as Sheet from '$lib/components/ui/sheet';
+	import { buttonVariants } from '$lib/components/ui/button';
+	import { TrashIcon, InfoIcon, ActivityIcon, FolderIcon } from 'lucide-svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -40,103 +35,92 @@
 	const back = () => {
 		isSubMenuOpen = false;
 	};
+
+	const resetSubMenu = () => {
+		isSubMenuOpen = false;
+	};
 </script>
 
-<button
-	on:click={() => toggleSidebar()}
-	class="flex items-center justify-center text-center bg-[#F2F2F2] dark:bg-[#323940] h-[36px] w-[117px] rounded-[8px] text-sm gap-2 hover:bg-[#d0d4db] dark:hover:bg-[#3d4750] duration-150 transition-colors font-medium text-[#828282] dark:text-[#B6C2CF]"
->
-	<OptionsIcon />
-	Show Menu
-</button>
+<Sheet.Root onOpenChange={resetSubMenu}>
+	<Sheet.Trigger class={buttonVariants({ variant: 'outline' })}>Show menu</Sheet.Trigger>
+	<Sheet.Content class="w-[350px]">
+		<Sheet.Header class="flex flex-row justify-between items-center mb-5 ">
+			{#if isSubMenuOpen}
+				<button on:click={back}>
+					<BackIcon />
+				</button>
 
-{#if isOpen}
-	<aside
-		transition:slide={{ delay: 150, duration: 150, easing: quintInOut, axis: 'x' }}
-		id="default-sidebar"
-		class="fixed top-[68px] right-0 z-40 w-[377px] h-screen transition-transform -translate-x-full sm:translate-x-0 dark:text-[#B6C2CF]"
-		aria-label="Sidebar"
-	>
-		<div class="h-full px-[35px] py-4 overflow-y-auto bg-[white] dark:bg-[#282E33] shadow-xl">
-			<header class="flex flex-row justify-between items-center">
-				{#if isSubMenuOpen}
-					<button on:click={back}><BackIcon /></button>
-					<h3 class="text-[#333333] dark:text-[#B6C2CF] font-semibold text-base">
-						{componentActive}
-					</h3>
-				{:else}
-					<h3 class="text-[#333333] dark:text-[#B6C2CF] font-semibold text-base">Menu</h3>
-				{/if}
+				<h3 class="text-[#333333] dark:text-[#B6C2CF] font-semibold text-sm">
+					{componentActive}
+				</h3>
+			{:else}
+				<Sheet.Title class="text-sm">Menu</Sheet.Title>
+			{/if}
+			<hr />
+		</Sheet.Header>
+		{#if !isSubMenuOpen}
+			<ul class="w-full gap-2">
+				<button
+					on:click={() => showComponent('About this board')}
+					class="flex items-center px-3 font-medium text-[13px] h-[35.5px] w-full hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
+				>
+					<InfoIcon class="mr-2 h-4 w-4" />
+					About this board
+					<button />
+				</button>
 
 				<button
-					on:click={() => {
-						isOpen = false;
-						isSubMenuOpen = false;
-					}}
+					on:click={() => showComponent('Change background')}
+					class="flex items-center px-3 font-medium text-[13px] w-full h-[35.5px] hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
 				>
-					<CloseIcon />
+					<div
+						class="mr-2 h-4 w-4 rounded-[4px] bg-center object-cover"
+						style="background-image: url({board.background});"
+					></div>
+					Change background
+					<button />
 				</button>
-			</header>
-			<hr class="my-[10px]" />
-			{#if !isSubMenuOpen}
-				<ul class="text-[#172B4D] dark:text-[#B6C2CF]">
-					<li
-						on:click={() => showComponent('About this board')}
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2 cursor-pointer"
-					>
-						<InfoIcon />
-						About this board
-					</li>
-					<li
-						on:click={() => showComponent('Change background')}
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2 cursor-pointer"
-					>
-						<div
-							class="h-[20px] w-[20px] rounded-[4px] bg-center object-cover"
-							style="background-image: url({board.background});"
-						></div>
-						Change Background
-					</li>
-					<li
-						on:click={() => showComponent('Activity')}
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2 cursor-pointer"
-					>
-						<ActivityIcon />
-						Activity
-					</li>
-					<li
-						on:click={() => showComponent('Delete')}
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium mb-2 cursor-pointer"
-					>
-						<TrashIcon />
-						Delete board
-					</li>
-					<li
-						on:click={() => showComponent('Archived Items')}
-						class="flex items-center pl-4 gap-3 h-[35px] w-full rounded-[8px] transition-colors duration-150 hover:bg-[#f0f1f4] dark:hover:bg-[#323940] text-sm font-medium cursor-pointer"
-					>
-						<NoteIcon />
-						Archived items
-					</li>
-				</ul>
-			{:else}
-				<div class="mt-8 h-full content">
-					{#if componentActive === 'Change background'}
-						<ChangeBackground on:changeBackground={() => dispatch('updateBackground')} />
-					{:else if componentActive === 'About this board'}
-						<AboutThisBoard {board} />
-					{:else if componentActive === 'Activity'}
-						<BoardActivity />
-					{:else if componentActive === 'Delete'}
-						<DeleteBoard boardName={board.title} />
-					{:else if componentActive === 'Archived Items'}
-						<ArchivedItems />
-					{/if}
-				</div>
-			{/if}
-		</div>
-	</aside>
-{/if}
+
+				<button
+					on:click={() => showComponent('Activity')}
+					class="flex items-center px-3 font-medium text-[13px] h-[35.5px] w-full hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
+				>
+					<ActivityIcon class="mr-2 h-4 w-4" />
+					Activity
+					<button />
+				</button>
+
+				<button
+					on:click={() => showComponent('Delete')}
+					class="flex items-center px-3 font-medium text-[13px] w-full h-[35.5px] hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
+				>
+					<TrashIcon class="mr-2 h-4 w-4 stroke-[#b03d32]" />
+					Delete Board
+					<button />
+				</button>
+
+				<button
+					on:click={() => showComponent('Archived Items')}
+					class="flex items-center px-3 font-medium text-[13px] w-full h-[35.5px] hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
+				>
+					<FolderIcon class="mr-2 h-4 w-4 " />
+					Archived items
+					<button />
+				</button>
+			</ul>
+		{:else if componentActive === 'Change background'}
+			<ChangeBackground on:changeBackground={() => dispatch('updateBackground')} />
+		{:else if componentActive === 'About this board'}
+			<AboutThisBoard {board} />
+		{:else if componentActive === 'Activity'}
+			<BoardActivity />
+		{:else if componentActive === 'Delete'}
+			<DeleteBoard boardName={board.title} />
+		{:else if componentActive === 'Archived Items'}
+			<ArchivedItems />
+		{/if}
+	</Sheet.Content>
+</Sheet.Root>
 
 <style>
 	.content {

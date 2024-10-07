@@ -1,32 +1,40 @@
 <script lang="ts">
 	import type { List } from '$lib/types';
 	import OptionsIcon from './icons/OptionsIcon.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { createEventDispatcher } from 'svelte';
+	import { EditIcon } from 'lucide-svelte';
+	import DeleteList from './DeleteList.svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let list: List;
-	let isOpen = false;
 </script>
 
-<div class="relative z-20">
-	<button on:click={() => (isOpen = !isOpen)}>
-		<OptionsIcon />
-	</button>
-	{#if isOpen}
-		<button
-			on:click={() => (isOpen = false)}
-			tabindex="-1"
-			class="fixed inset-0 h-full w-full cursor-default"
-		></button>
-	{/if}
-	{#if isOpen}
-		<div
-			class="absolute right-0 mt-2 py-2 w-44 bg-white dark:bg-[#282E33] dark:text-[#B6C2CF] rounded-[12px] shadow-xl border border-[#E0E0E0]"
-		>
-			<div class="block px-4 py-2 text-[#828282] dark:text-[#B6C2CF] -tracking-[3.5%] text-sm">
-				<form method="POST" action="?/deleteList">
-					<input type="hidden" name="id" id="id" value={list.id} />
-					<button type="submit">Delete this</button>
-				</form>
-			</div>
-		</div>
-	{/if}
-</div>
+<DropdownMenu.Root>
+	<DropdownMenu.Trigger>
+		<Button variant="ghost" size="icon">
+			<Button variant="ghost" size="icon">
+				<OptionsIcon className="h-4 w-4 stroke-1" />
+			</Button>
+		</Button>
+	</DropdownMenu.Trigger>
+	<DropdownMenu.Content class="w-[235px] rounded-2xl" align="start">
+		<DropdownMenu.Group>
+			<DropdownMenu.Label>Actions</DropdownMenu.Label>
+			<DropdownMenu.Item class="py-2 rounded-md ">
+				<button
+					class="flex items-center gap-1 w-full"
+					on:click={() => {
+						dispatch('editListTitle');
+					}}
+				>
+					<EditIcon class="mr-2 w-4 h-4" />
+					<span class="text-[13px]">Edit</span>
+				</button>
+			</DropdownMenu.Item>
+			<DeleteList listId={list.id} listTitle={list.title} />
+		</DropdownMenu.Group>
+	</DropdownMenu.Content>
+</DropdownMenu.Root>

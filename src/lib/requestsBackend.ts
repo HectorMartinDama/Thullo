@@ -134,6 +134,21 @@ export const createTask = async (
 	});
 };
 
+export const duplicateTaskRequest = (
+	authToken: string | undefined,
+	id: string,
+	boardId: string
+) => {
+	fetch(`${PUBLIC_URL_API}/${boardId}/tasks/duplicate/${id}`, {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${authToken}`
+		}
+	}).then((res) => {
+		if (!res.ok) throw new Error('fetch failed');
+	});
+};
+
 export const deleteBoard = async (authToken: string | undefined, id: string) => {
 	fetch(`${PUBLIC_URL_API}/boards/${id}`, {
 		method: 'DELETE',
@@ -152,6 +167,19 @@ export const deleteList = async (authToken: string | undefined, id: string) => {
 	});
 };
 
+export const deleteTaskRequest = async (
+	authToken: string | undefined,
+	id: string,
+	boardId: string
+) => {
+	fetch(`${PUBLIC_URL_API}/${boardId}/tasks/${id}`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${authToken}`
+		}
+	});
+};
+
 export const addCoverTask = async (authToken: string | undefined, id: string, cover: string) => {
 	return await fetch(`${PUBLIC_URL_API}/tasks/addCover/${id}`, {
 		method: 'PATCH',
@@ -163,19 +191,27 @@ export const addCoverTask = async (authToken: string | undefined, id: string, co
 	});
 };
 
-export const addLabelTask = async (
-	authToken: string | undefined,
-	id: string,
-	title: string,
-	color: string
-) => {
+export const addLabelTask = async (authToken: string | undefined, id: string, title: string) => {
 	fetch(`${PUBLIC_URL_API}/tasks/addLabel/${id}`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${authToken}`
 		},
-		body: JSON.stringify({ title, color })
+		body: JSON.stringify({ title })
+	});
+};
+
+export const deleteLabelTask = async (
+	authToken: string | undefined,
+	id: string,
+	labelId: string
+) => {
+	fetch(`${PUBLIC_URL_API}/tasks/${id}/deleteLabel/${labelId}`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${authToken}`
+		}
 	});
 };
 
@@ -207,6 +243,19 @@ export const updatePositionTask = (
 			Authorization: `Bearer ${authToken}`
 		},
 		body: JSON.stringify({ tasksId })
+	});
+};
+
+export const changePriorityTask = (authToken: string | undefined, id: string, priority: number) => {
+	fetch(`${PUBLIC_URL_API}/tasks/${id}/changePriority`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify({ priority })
+	}).then((res) => {
+		if (!res.ok) throw new Error('fetch failed');
 	});
 };
 

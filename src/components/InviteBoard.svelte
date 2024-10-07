@@ -6,6 +6,7 @@
 	import LinkIcon from './icons/LinkIcon.svelte';
 	import SharedIcon from './icons/SharedIcon.svelte';
 	import toast from 'svelte-french-toast';
+	import { onDestroy, onMount } from 'svelte';
 
 	export let board: Board;
 	let dialog: HTMLDialogElement | null;
@@ -22,6 +23,18 @@
 			}
 		};
 	};
+
+	const handleOutsideClick = (event: MouseEvent) => {
+		if (event.target === dialog) dialog?.close();
+	};
+
+	onMount(() => {
+		dialog?.addEventListener('click', handleOutsideClick);
+	});
+
+	onDestroy(() => {
+		dialog?.removeEventListener('click', handleOutsideClick);
+	});
 </script>
 
 <button
@@ -80,7 +93,7 @@
 				</div>
 			</div>
 			<div
-				class="h-[32px] px-[15px] font-medium dark:bg-[#323940] bg-[#f0f1f4] transition-colors duration-150 dark:hover:bg-[#3d4750] flex justify-center items-center rounded-[8px]"
+				class="h-[32px] px-[15px] font-medium text-sm dark:bg-[#323940] bg-[#f0f1f4] transition-colors duration-150 dark:hover:bg-[#3d4750] flex justify-center items-center rounded-[8px]"
 			>
 				Admin
 			</div>
@@ -101,7 +114,7 @@
 				</div>
 			</div>
 			<div
-				class="h-[32px] px-[15px] font-medium dark:bg-[#323940] bg-[#f0f1f4] flex justify-center items-center rounded-[8px]"
+				class="h-[32px] px-[15px] font-medium text-sm dark:bg-[#323940] bg-[#f0f1f4] flex justify-center items-center rounded-[8px]"
 			>
 				Can join has member
 			</div>

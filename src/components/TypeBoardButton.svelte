@@ -1,107 +1,123 @@
 <script lang="ts">
 	import type { Board, Visibility } from '$lib/types';
-	import { slide } from 'svelte/transition';
-	import PrivateVisibilityIcon from './icons/PrivateVisibilityIcon.svelte';
-	import PublicVisibilityIcon from './icons/PublicVisibilityIcon.svelte';
+	import { Switch } from '$lib/components/ui/switch';
+	import { MESSAGE_TYPE_BOARD } from '$lib/types';
+
 	import { page } from '$app/stores';
-	import toast from 'svelte-french-toast';
+	import { toast } from 'svelte-sonner';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import * as Dialog from '$lib/components/ui/dialog';
 
 	import type { SubmitFunction } from '@sveltejs/kit';
 
 	import { createEventDispatcher } from 'svelte';
+	import { enhance } from '$app/forms';
+	import { Link, Check, Globe, Lock } from 'lucide-svelte';
+	import { buttonVariants } from '$lib/components/ui/button';
 	const dispatch = createEventDispatcher();
 
-	export let visibility: Visibility;
+	let isAnimating = false;
+	let isCopied = false;
 	export let board: Board;
-	let isOpen = false;
+	let prueba: HTMLDivElement;
+	$: currentTaskUrl = $page.url;
 
 	const submitChangeVisibility: SubmitFunction = () => {
-		return async ({ result, formData, update }) => {
+		return async ({ result, formData }) => {
 			const visibility = formData.get('visibility');
 			if (result.type === 'success') {
 				dispatch('changeVisibility');
-				isOpen = false;
 				toast.success(`The board has changed to ${visibility}`, {
 					position: 'bottom-right',
-					duration: 8000
+					duration: 4000
 				});
 			}
 		};
 	};
+
+	const copyToClipboard = () => {
+		navigator.clipboard.writeText(currentTaskUrl.toString()).then(() => {
+			isCopied = true;
+			isAnimating = true;
+			setTimeout(() => {
+				isCopied = false;
+				isAnimating = false;
+			}, 1500);
+		});
+	};
+
+	const capitalizeFirstLetter = (text: string) => {
+		return text.charAt(0).toUpperCase() + text.slice(1);
+	};
+
+	const changeVisibility = () => {
+		if (board.visibility === 'public') {
+			board.visibility = 'private';
+		} else {
+			board.visibility = 'public';
+		}
+	};
 </script>
 
-<div class="relative">
-	<button
-		disabled={$page.data.session?.user?.email === board.user.email ? false : true}
-		on:click={() => (isOpen = !isOpen)}
-		class="flex items-center justify-center text-center bg-[#F2F2F2] dark:bg-[#323940] h-[36px] w-[108px] rounded-[8px] text-sm gap-2 hover:bg-[#d0d4db] dark:hover:bg-[#3d4750] duration-150 transition-colors font-medium text-[#828282] dark:text-[#B6C2CF]"
-	>
-		{#if visibility === 'private'}
-			<PrivateVisibilityIcon />
-		{:else if visibility === 'public'}
-			<PublicVisibilityIcon />
+<Dialog.Root>
+	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>
+		{#if board.visibility === 'public'}
+			<Globe class="mr-2 h-4 w-4" />
+		{:else if board.visibility === 'private'}
+			<Lock class="mr-2 h-4 w-4" />
 		{/if}
+		<span>{capitalizeFirstLetter(board.visibility)}</span>
+	</Dialog.Trigger>
+	<Dialog.Content class="w-[540px]">
+		<Dialog.Header>
+			<Dialog.Title class="mb-2">Share Chat</Dialog.Title>
+			<Dialog.Description class="dark:text-white">
+				{#if board.visibility === 'public'}
+					{MESSAGE_TYPE_BOARD.public.value}
+				{:else if board.visibility === 'private'}
+					{MESSAGE_TYPE_BOARD.private.value}
+				{/if}
+			</Dialog.Description>
+		</Dialog.Header>
 
-		{visibility}
-	</button>
-	{#if isOpen}
-		<button
-			on:click={() => (isOpen = false)}
-			tabindex="-1"
-			class="fixed inset-0 h-full w-full cursor-default"
-		></button>
-	{/if}
-	{#if isOpen}
-		<div
-			transition:slide={{ duration: 250 }}
-			class="absolute flex flex-col justify-between z-10 left-0 mt-3 py-2 w-[256px] h-[200px] bg-white dark:bg-[#282E33] dark:text-[#B6C2CF] rounded-[12px] shadow-xl px-[12px]"
-		>
-			<header class="pb-[15px] pl-[5px]">
-				<h3 class="font-semibold text-[#4F4F4F]">Visibility</h3>
-				<span class="text-[#828282] font-normal text-sm">Choose who can see to this board.</span>
-			</header>
-
-			<form action="?/changeVisibility" method="post" use:enhance={submitChangeVisibility}>
-				<input
-					type="hidden"
-					name="visibility"
-					value={visibility === 'public' ? 'private' : 'public'}
+		<form action="?/changeVisibility" method="post" use:enhance={submitChangeVisibility}>
+			<div
+				class="flex flex-row w-full justify-between items-center gap-3 border rounded-md p-2 mb-6"
+			>
+				<div>
+					<h1 class="text-sm font-medium mb-1 dark:text-white">Public with link</h1>
+					<p class="text-sm text-gray-500 dark:text-[#9CA3AF]">
+						Anyone with the link can view the board
+					</p>
+				</div>
+				<Switch
+					checked={board.visibility === 'public'}
+					onCheckedChange={changeVisibility}
+					class="h-4 w-9 data-[state=checked]:bg-[#2463eb] ring-blue-600 border "
 				/>
+			</div>
 
-				<!-- Public Visibility -->
-				<button
-					type="submit"
-					disabled={visibility === 'public'}
-					class="pl-[15px] h-[58px] w-full mb-[10px] rounded-[8px] hover:bg-[#F2F2F2] dark:hover:bg-[#323940] duration-150 transition-colors"
-				>
-					<header class="flex flex-col items-start gap-2">
-						<h3
-							class="font-medium text-[#4F4F4F] dark:text-[#B6C2CF] flex flex-row gap-2 text-normal"
-						>
-							<PublicVisibilityIcon />
-							Public
-						</h3>
-						<span class="text-xs text-[#828282]">Anyone on the internet can see this.</span>
-					</header>
-				</button>
+			<input type="hidden" name="visibility" value={board.visibility} />
 
-				<!-- Private Visibility -->
-				<button
-					type="submit"
-					disabled={visibility === 'private'}
-					class="pl-[15px] h-[58px] w-full mb-[10px] rounded-[8px] hover:bg-[#F2F2F2] dark:hover:bg-[#323940] duration-150 transition-colors"
+			<Dialog.Footer>
+				<Button
+					on:click={copyToClipboard}
+					type="button"
+					variant="outline"
+					class="h-[32px] transition-all duration-300 ease-in-out {isAnimating
+						? 'animate-pulse'
+						: ''}"
+					disabled={board.visibility === 'private'}
 				>
-					<header class="flex flex-col items-start gap-2">
-						<h3
-							class="font-medium text-[#4F4F4F] dark:text-[#B6C2CF] flex flex-row gap-2 text-normal"
-						>
-							<PrivateVisibilityIcon />
-							Private
-						</h3>
-						<span class="text-[#828282] text-xs">Only board members can see this.</span>
-					</header>
-				</button>
-			</form>
-		</div>
-	{/if}
-</div>
+					{#if isCopied}
+						<Check class="mr-2 h-4 w-4 stroke-green-500" />
+					{:else}
+						<Link class="mr-2 h-4 w-4" />
+					{/if}
+					Copy Link
+				</Button>
+				<Button type="submit" variant="default" class="h-[32px]">Done</Button>
+			</Dialog.Footer>
+		</form>
+	</Dialog.Content>
+</Dialog.Root>

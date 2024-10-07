@@ -1,6 +1,10 @@
+<script lang="ts">
+	export let className = '';
+</script>
+
 <svg
 	xmlns="http://www.w3.org/2000/svg"
-	class="icon icon-tabler icon-tabler-dots dark:text-[#B6C2CF]"
+	class="icon icon-tabler icon-tabler-dots dark:text-[#B6C2CF] {className}"
 	width="16"
 	height="16"
 	viewBox="0 0 24 24"

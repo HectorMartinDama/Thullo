@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getAllBoard } from '$lib/requestsBackend';
+
 	import { onMount } from 'svelte';
 	import BoardIcon from '../../components/icons/BoardIcon.svelte';
-	import StarredIcon from '../../components/icons/StarredIcon.svelte';
 	import CreateBoard from '../../components/CreateBoard.svelte';
 	import GridBoards from '../../sections/GridBoards.svelte';
 	import SkeletonBoard from '../../components/SkeletonBoard.svelte';

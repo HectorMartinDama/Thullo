@@ -39,7 +39,7 @@
 		<hr class="my-[10px] mb-9" />
 	</div>
 
-	<h2 class="text-xl font-semibold mt-9 dark:text-[#b6c2cf] mb-2">Custom</h2>
+	<h2 class="text-sm font-semibold mt-9 dark:text-[#b6c2cf] mb-2">Custom</h2>
 	<SelectBackgroundCustom on:changeBackgroundCustom={() => dispatch('changeBackground')} />
 {/if}
 
