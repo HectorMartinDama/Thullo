@@ -6,7 +6,6 @@
 	import GoogleIcon from './icons/GoogleIcon.svelte';
 	import { signIn } from '@auth/sveltekit/client';
 	import GithubStar from './GithubStar.svelte';
-	import Search from './Search.svelte';
 	import { renameTitleBoard } from '$lib/requestsBackend';
 	import { onMount } from 'svelte';
 	import SearchNewVersion from './SearchNewVersion.svelte';
