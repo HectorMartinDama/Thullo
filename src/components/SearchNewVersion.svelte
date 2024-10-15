@@ -8,6 +8,7 @@
 	import { getAllBoard } from '$lib/requestsBackend';
 	import { addScript } from '$lib';
 	import { goto } from '$app/navigation';
+	import Button from '$lib/components/ui/button/button.svelte';
 
 	let boardLink: HTMLAnchorElement;
 	let loading = false;
@@ -40,7 +41,11 @@
 	});
 </script>
 
-<Command.Dialog bind:open class="h-[300px]">
+<Button variant="outline" class="w-[256px] h-[36px] rounded-md relative">
+	<span>Search...</span>
+</Button>
+
+<Command.Dialog bind:open class="h-[300px] outline-none">
 	<Command.Input placeholder="Type a command or search..." />
 	<Command.List>
 		<Command.Empty>No results found.</Command.Empty>

@@ -8,21 +8,26 @@
 	import { addFavourite, removeFavourite } from '$lib/requestsBackend';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import StarYellowIcon from './icons/StarYellowIcon.svelte';
+	import { writable } from 'svelte/store';
+	import updateFavoriteBoard from '$lib/stores/updateFavoriteBoard';
+
 	export let board: Board;
 	let isHovered = false;
 	let sessionToken: string | undefined;
 
-	const dispatch = createEventDispatcher();
+	//const dispatch = createEventDispatcher();
 
 	const addToFavourites = async () => {
 		await addFavourite(sessionToken, board.id).then(() => {
-			dispatch('addToFavourite');
+			//dispatch('addToFavourite');
+			updateFavoriteBoard.set(true);
 		});
 	};
 
 	const removeToFavourites = async () => {
 		await removeFavourite(sessionToken, board.id).then(() => {
-			dispatch('removeToFavourite');
+			updateFavoriteBoard.set(true);
+			//dispatch('removeToFavourite');
 		});
 	};
 
