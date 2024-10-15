@@ -5,7 +5,7 @@
 
 	import { flip } from 'svelte/animate';
 	import DropDownMenuList from './DropDownMenuList.svelte';
-	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
+	import { dndzone } from 'svelte-dnd-action';
 	import type { Board, List, User } from '$lib/types';
 	import { renameTitleList, updatePositionTask } from '$lib/requestsBackend';
 	import { page } from '$app/stores';
@@ -68,7 +68,9 @@
 		{#if !inputRename}
 			<div
 				class="cursor-pointer h-[20px] px-2 py-2 rounded-[4px] transition-colors duration-150 ease-in-out hover:bg-gray-300 flex items-center"
-				on:click={() => (inputRename = true)}
+				on:click={() => {
+					focusListEditorTitleInput();
+				}}
 			>
 				<h2 class="text-[14px] text-[#172B4D] dark:text-[#B6C2CF] font-semibold">{list.title}</h2>
 			</div>

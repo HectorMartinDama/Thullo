@@ -3,6 +3,7 @@
 
 	// Components
 	import MultiStepForm from './MultiStepForm.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 	let dialog: HTMLDialogElement;
 
 	const handleOutsideClick = (event: MouseEvent) => {
@@ -18,9 +19,11 @@
 	});
 </script>
 
-<button
-	class="text-[13px] px-2 py-2 bg-[#0C66E4] hover:bg-[#0055CC] rounded-[8px] text-white"
-	on:click={() => dialog.showModal()}>Create board</button
+<Button
+	size="sm"
+	variant="outline"
+	class="bg-[#0C66E4] hover:bg-[#0055CC] text-white !text-white text-[13px] "
+	on:click={() => dialog.showModal()}>Create board</Button
 >
 
 <section class="flex flex-row">

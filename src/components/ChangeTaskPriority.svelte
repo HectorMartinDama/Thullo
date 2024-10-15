@@ -22,7 +22,7 @@
 
 	const changePriority = async (priority: number | undefined) => {
 		if (priority === undefined) return;
-		changePriorityTask(sessionToken, taskId, priority);
+		changePriorityTask(sessionToken, $page.params.boardId, taskId, priority);
 		dispatch('changePriority');
 	};
 
@@ -54,6 +54,5 @@
 				{/each}
 			</Select.Group>
 		</Select.Content>
-		<Select.Input name="favoriteFruit" />
 	</Select.Root>
 </div>

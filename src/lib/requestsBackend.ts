@@ -246,8 +246,13 @@ export const updatePositionTask = (
 	});
 };
 
-export const changePriorityTask = (authToken: string | undefined, id: string, priority: number) => {
-	fetch(`${PUBLIC_URL_API}/tasks/${id}/changePriority`, {
+export const changePriorityTask = (
+	authToken: string | undefined,
+	boardId: string,
+	id: string,
+	priority: number
+) => {
+	fetch(`${PUBLIC_URL_API}/${boardId}/tasks/${id}/changePriority`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',

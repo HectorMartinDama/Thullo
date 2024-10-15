@@ -9,12 +9,13 @@
 	import Spinner from './SpinnerButton.svelte';
 	import SearchIcon from './icons/SearchIcon.svelte';
 	import { getPhotoByQuery } from '$lib/unsplashService';
+	import Button from '$lib/components/ui/button/button.svelte';
 
 	let searchUnsplashValue: string;
 	let backgroundsUnsplash: Image[] = [];
 
 	let active_step = 1;
-	let selectedBackground: string;
+	let selectedBackground = initialBackgrounds[0];
 	let loading: boolean;
 	let titleValue: string;
 	let visibilityValue: string;
@@ -78,7 +79,7 @@
 	class="h-full dark:text-[#b6c2cf]"
 >
 	<header>
-		<h3 class="font-semibold text-2xl">Create Board</h3>
+		<h3 class="font-semibold text-lg -tracking-wider">Create Board</h3>
 		<button type="button" on:click={() => dispatch('closeDialog')}>
 			<CloseIcon />
 		</button>
@@ -207,25 +208,30 @@
 		<menu>
 			{#if active_step === 1}
 				<button type="hidden"></button>
-				<button
+				<Button
 					type="button"
+					size="sm"
+					variant="outline"
+					class="text-[13px]"
 					on:click={() => (active_step += 1)}
-					class="py-2 px-3 text-sm rounded-[8px] border dark:border-[#b6c2cf] transition-colors duration-150 dark:bg-[#323940] hover:bg-[#F0F1F4] font-normal dark:hover:bg-[#3d4750]"
-					disabled={!titleValue}>Next</button
+					disabled={!titleValue}>Next</Button
 				>
 			{:else}
-				<button
+				<Button
 					type="button"
-					on:click={() => (active_step -= 1)}
-					class="py-2 px-3 text-sm rounded-[8px] border dark:border-[#b6c2cf] transition-colors duration-150 dark:bg-[#323940] hover:bg-[#F0F1F4] font-normal dark:hover:bg-[#3d4750]"
-					>Previous</button
+					size="sm"
+					variant="outline"
+					class="text-[13px]"
+					on:click={() => (active_step -= 1)}>Previous</Button
 				>
 
 				{#if !loading}
-					<button
+					<Button
 						type="submit"
-						class="py-2 px-3 text-sm rounded-[8px] font-normal border dark:border-[#b6c2cf] transition-colors duration-150 hover:bg-[#F0F1F4]"
-						disabled={!selectedBackground}>Create</button
+						size="sm"
+						variant="outline"
+						class="text-[13px]"
+						disabled={!selectedBackground}>Create</Button
 					>
 				{:else}
 					<Spinner textContent="Creating..." />

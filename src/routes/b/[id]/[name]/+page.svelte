@@ -15,6 +15,7 @@
 	import Sidebar from '../../../../components/Sidebar.svelte';
 	import { cubicIn } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
+	import MembersGroupAvatar from '../../../../components/MembersGroupAvatar.svelte';
 
 	const boardId = $page.params.id;
 	const flipDurationMs = 200;
@@ -84,7 +85,10 @@
 				<InviteBoard {board} />
 			{/if}
 		</div>
-		<Sidebar {board} on:updateBackground={updateBoard} />
+		<div class="flex flex-row gap-8">
+			<MembersGroupAvatar members={board.members} admin={board.user} />
+			<Sidebar {board} on:updateBackground={updateBoard} />
+		</div>
 	</header>
 
 	<!-- ADMIN BOARD -->

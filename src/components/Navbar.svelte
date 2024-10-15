@@ -9,6 +9,7 @@
 	import Search from './Search.svelte';
 	import { renameTitleBoard } from '$lib/requestsBackend';
 	import { onMount } from 'svelte';
+	import SearchNewVersion from './SearchNewVersion.svelte';
 
 	export let boardTitle = '';
 
@@ -29,6 +30,9 @@
 
 	const renameTitle = async () => {
 		inputRename = true;
+		setTimeout(() => {
+			if (inputRenameDom) inputRenameDom.focus();
+		}, 30);
 	};
 
 	const handleKeyPress = async (event: KeyboardEvent) => {
@@ -72,6 +76,7 @@
 				</div>
 			{:else}
 				<input
+					bind:this={inputRenameDom}
 					on:keypress={handleKeyPress}
 					bind:value={newTitleValue}
 					type="text"
@@ -87,7 +92,7 @@
 	</div>
 	{#if $page.data.session?.user}
 		<div class="flex flex-row gap-20 items-center">
-			<Search />
+			<SearchNewVersion />
 			<AccountDropdown />
 		</div>
 	{:else}

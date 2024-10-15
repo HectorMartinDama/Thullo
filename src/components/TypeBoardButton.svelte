@@ -60,7 +60,7 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>
+	<Dialog.Trigger class={buttonVariants({ variant: 'outline', size: 'sm' })}>
 		{#if board.visibility === 'public'}
 			<Globe class="mr-2 h-4 w-4" />
 		{:else if board.visibility === 'private'}

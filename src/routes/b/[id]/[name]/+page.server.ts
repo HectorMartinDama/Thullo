@@ -31,7 +31,8 @@ import { addScript } from '$lib';
 
 export const load = async ({ cookies, params }) => {
 	const authToken = cookies.get('AuthorizationToken');
-	const board = await getBoardById(authToken, params.id);
+	const { id } = params;
+	const board = await getBoardById(authToken, id);
 
 	if (!board) error(404, 'Board not found');
 	return { board, pageTitle: board.title };

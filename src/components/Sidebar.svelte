@@ -9,7 +9,7 @@
 	import BoardActivity from './BoardActivity.svelte';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import { buttonVariants } from '$lib/components/ui/button';
-	import { TrashIcon, InfoIcon, ActivityIcon, FolderIcon } from 'lucide-svelte';
+	import { TrashIcon, InfoIcon, ActivityIcon, FolderIcon, Ellipsis } from 'lucide-svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -42,7 +42,9 @@
 </script>
 
 <Sheet.Root onOpenChange={resetSubMenu}>
-	<Sheet.Trigger class={buttonVariants({ variant: 'outline' })}>Show menu</Sheet.Trigger>
+	<Sheet.Trigger class={buttonVariants({ variant: 'ghost', size: 'icon' })}>
+		<Ellipsis class="h-4 w-4" />
+	</Sheet.Trigger>
 	<Sheet.Content class="w-[350px]">
 		<Sheet.Header class="flex flex-row justify-between items-center mb-5 ">
 			{#if isSubMenuOpen}
