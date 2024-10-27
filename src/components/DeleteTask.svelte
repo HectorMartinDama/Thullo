@@ -4,8 +4,6 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { Trash } from 'lucide-svelte';
 	import showDialogDeleteTask from '$lib/stores/showDeleteTask';
-	import type { deleteTaskRequest } from '$lib/requestsBackend';
-	import { onMount } from 'svelte';
 
 	export let taskTitle: string;
 	export let taskId: string;

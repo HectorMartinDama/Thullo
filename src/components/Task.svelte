@@ -1,13 +1,12 @@
 <script lang="ts">
 	import type { Board, TaskItem, User } from '$lib/types';
-	import * as HoverCard from '$lib/components/ui/hover-card';
 	import { page } from '$app/stores';
 	import { addTaskDescription, getTaskById, renameTitleTask } from '$lib/requestsBackend';
 	import { onMount } from 'svelte';
 	import Label from './Label.svelte';
 	import PriorityTaskLevel from './PriorityTaskLevel.svelte';
-	import { Calendar } from 'lucide-svelte';
-	import { differenceDays, formatDate, getDayMonth } from '$lib/utils';
+	import DueDate from './DueDate.svelte';
+	import { addScript } from '$lib';
 
 	let sessionToken: string | undefined;
 	export let task: TaskItem;
@@ -48,29 +47,18 @@
 >
 	<a
 		class="w-full text-sm text-[#202020] dark:text-white leading-5"
-		href="/task/{board.id}/{task.id}"
+		href="/b/{board.id}/{addScript(board.title)}/{task.id}"
 	>
 		<div class="flex flex-col gap-2">
 			<div class="flex flex-row items-center gap-2">
 				<PriorityTaskLevel priority={task.priority} />
-				<h1 class=" overflow-hidden font-medium truncate text-sm">{task.title}</h1>
+				<h1 class=" overflow-hidden font-medium truncate text-[13px]">{task.title}</h1>
 			</div>
 			<div class="flex flex-row flex-wrap w-full gap-3">
-				<HoverCard.Root>
-					<HoverCard.Trigger
-						class="text-xs text-[#808080] flex flex-row gap-1 items-center justify-center"
-					>
-						<Calendar class="h-3 w-3 stroke-[#808080]" />
-						{getDayMonth(task.createdAt)}
-					</HoverCard.Trigger>
-					<HoverCard.Content
-						class="flex flex-col border-none text-white  w-[170px] text-xs bg-[#282828]"
-					>
-						{formatDate(task.createdAt)}
-						<hr class="my-2" />
-						<span class="text-xs">{differenceDays(task.createdAt)} days left</span>
-					</HoverCard.Content>
-				</HoverCard.Root>
+				{#if task.dueDate}
+					<DueDate date={task.dueDate} />
+				{/if}
+
 				<!-- Labels -->
 				{#if task.labels}
 					<div class="flex flex-wrap gap-3">

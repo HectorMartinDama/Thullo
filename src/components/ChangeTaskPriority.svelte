@@ -2,14 +2,16 @@
 	import { page } from '$app/stores';
 	import * as Select from '$lib/components/ui/select/index';
 	import { changePriorityTask } from '$lib/requestsBackend';
-	import type { Priority } from '$lib/types';
+	import type { Priority, TaskItem } from '$lib/types';
 	import { createEventDispatcher, onMount } from 'svelte';
 
-	export let taskId: string;
+	export let task: TaskItem;
 	let sessionToken: string | undefined;
 	export let priority: Priority;
 
 	const dispatch = createEventDispatcher();
+
+	const isTheOwner: boolean = $page.data.session?.user?.email === task.user.email;
 
 	let selected = { value: priority.toString(), label: `Priority ${priority}` };
 
@@ -22,7 +24,7 @@
 
 	const changePriority = async (priority: number | undefined) => {
 		if (priority === undefined) return;
-		changePriorityTask(sessionToken, $page.params.boardId, taskId, priority);
+		await changePriorityTask(sessionToken, $page.params.id, task.id, priority);
 		dispatch('changePriority');
 	};
 
@@ -35,22 +37,29 @@
 </script>
 
 <div class="flex flex-col gap-2">
-	<p class="text-[13px] font-semibold text-[#666]">Priority</p>
+	<p class="text-xs font-semibold text-[#666]">Priority</p>
 
 	<Select.Root
+		disabled={!isTheOwner}
 		portal={null}
 		bind:selected
 		onSelectedChange={(v) => {
 			Number(v?.value) != priority && changePriority(Number(v?.value));
 		}}
 	>
-		<Select.Trigger class="w-full h-[36px] hover:bg-[#f5f5f5] transition-colors duration-150">
-			<Select.Value class="text-xs font-normal" />
+		<Select.Trigger
+			class="w-full h-[36px] bg-[#fcfaf8] border-none hover:bg-[#f5f5f5] transition-colors duration-150"
+		>
+			<Select.Value class="text-xs font-normal text-[#202020]" />
 		</Select.Trigger>
 		<Select.Content>
 			<Select.Group>
 				{#each priorities as priority}
-					<Select.Item value={priority.value} label={priority.label}>{priority.label}</Select.Item>
+					<Select.Item
+						class="text-[13px] text-[#202020]"
+						value={priority.value}
+						label={priority.label}>{priority.label}</Select.Item
+					>
 				{/each}
 			</Select.Group>
 		</Select.Content>

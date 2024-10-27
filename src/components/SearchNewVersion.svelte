@@ -41,8 +41,16 @@
 	});
 </script>
 
-<Button variant="outline" class="w-[256px] h-[36px] rounded-md relative">
-	<span>Search...</span>
+<Button variant="outline" class="flex justify-between w-[256px] h-[36px] rounded-md ">
+	<p class="text-sm text-[#18181b]">Search...</p>
+	<span class="text-muted-foreground text-[13px]">
+		<kbd
+			class="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100"
+		>
+			<span class="text-xs">Ctrl</span>K
+		</kbd>
+		<span />
+	</span>
 </Button>
 
 <Command.Dialog bind:open class="h-[300px] outline-none">
@@ -50,20 +58,20 @@
 	<Command.List>
 		<Command.Empty>No results found.</Command.Empty>
 		<Command.Group heading="Suggestions">
-			<Command.Item onSelect={() => goto('/settings')} class="cursor-pointer">
+			<Command.Item onSelect={() => goto('/settings')} class="cursor-pointer h-[42px]">
 				<Settings class="mr-2 w-5 h-5" />
 				<span class="text-[13px]">Settings</span>
 			</Command.Item>
 		</Command.Group>
 
 		{#if loading}
-			<Command.Loading progress={0.5} class="text-[13px] pl-4 text-gray-500"
+			<Command.Loading progress={0.5} class="text-sm pl-4 text-gray-500"
 				>Loading boards...</Command.Loading
 			>
 		{:else}
 			<Command.Group heading="Boards">
 				{#each boards as board}
-					<Command.Item value={board.title} onSelect={() => ir()} class="cursor-pointer">
+					<Command.Item value={board.title} onSelect={() => ir()} class="cursor-pointer h-[42px]">
 						<a
 							id={board.id}
 							class="flex items-center"
@@ -76,7 +84,7 @@
 								src={board.background}
 								alt="background of the {board.title} board"
 							/>
-							<span class="text-[13px]">{board.title}</span>
+							<span class="text-sm">{board.title}</span>
 						</a>
 					</Command.Item>
 				{/each}

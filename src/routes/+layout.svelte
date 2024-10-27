@@ -37,4 +37,4 @@
 	<slot></slot>
 </main>
 
-<Toaster></Toaster>
+<Toaster />

@@ -70,6 +70,17 @@ export const removeFavourite = async (authToken: string | undefined, id: string)
 	});
 };
 
+export const getListById = async (authToken: string | undefined, id: string) => {
+	return await fetch(`${PUBLIC_URL_API}/lists/${id}`, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${authToken}`
+		}
+	}).then((res) => {
+		if (res.ok) return res.json();
+	});
+};
+
 export const getTaskById = async (authToken: string | undefined, id: string) => {
 	return await fetch(`${PUBLIC_URL_API}/tasks/${id}`, {
 		method: 'GET',
@@ -192,7 +203,7 @@ export const addCoverTask = async (authToken: string | undefined, id: string, co
 };
 
 export const addLabelTask = async (authToken: string | undefined, id: string, title: string) => {
-	fetch(`${PUBLIC_URL_API}/tasks/addLabel/${id}`, {
+	await fetch(`${PUBLIC_URL_API}/tasks/addLabel/${id}`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
@@ -202,12 +213,36 @@ export const addLabelTask = async (authToken: string | undefined, id: string, ti
 	});
 };
 
+export const addDueDate = async (authToken: string | undefined, id: string, date: string) => {
+	await fetch(`${PUBLIC_URL_API}/tasks/addDueDate/${id}`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`
+		},
+		body: JSON.stringify({ date })
+	});
+};
+
 export const deleteLabelTask = async (
 	authToken: string | undefined,
 	id: string,
 	labelId: string
 ) => {
-	fetch(`${PUBLIC_URL_API}/tasks/${id}/deleteLabel/${labelId}`, {
+	await fetch(`${PUBLIC_URL_API}/tasks/${id}/deleteLabel/${labelId}`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${authToken}`
+		}
+	});
+};
+
+export const deleteAttachmentTaskRequest = async (
+	authToken: string | undefined,
+	id: string,
+	attachmentId: string
+) => {
+	return await fetch(`${PUBLIC_URL_API}/tasks/${id}/deleteAttachment/${attachmentId}`, {
 		method: 'DELETE',
 		headers: {
 			Authorization: `Bearer ${authToken}`
@@ -246,13 +281,13 @@ export const updatePositionTask = (
 	});
 };
 
-export const changePriorityTask = (
+export const changePriorityTask = async (
 	authToken: string | undefined,
 	boardId: string,
 	id: string,
 	priority: number
 ) => {
-	fetch(`${PUBLIC_URL_API}/${boardId}/tasks/${id}/changePriority`, {
+	await fetch(`${PUBLIC_URL_API}/${boardId}/tasks/${id}/changePriority`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',

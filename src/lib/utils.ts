@@ -3,8 +3,54 @@ import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
 import { toast } from 'svelte-sonner';
+import type { DateValue } from '@internationalized/date';
+import { parse, format } from 'date-fns';
 
 const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+export const CALENDAR_ITEMS = [
+	{ value: 0, label: 'Today' },
+	{ value: 1, label: 'Tomorrow' },
+	{ value: 3, label: 'In 3 days' },
+	{ value: 7, label: 'In a week' },
+	{ value: 30, label: 'In a month' }
+];
+
+export const isImage = (url: string) => {
+	return url.includes('jpg') || url.includes('png') || url.includes('jpeg') || url.includes('gif');
+};
+
+export const isArrayEmpty = (arr: any[]): boolean => {
+	return arr.every((obj) => Object.keys(obj).length === 0);
+};
+
+export const parseDate = (fechaStr: string): DateValue | undefined => {
+	// Validar el formato utilizando una expresión regular
+	const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+	const match = fechaStr.match(regex);
+
+	if (!match) {
+		console.error("Formato de fecha inválido. Usa el formato 'día/mes/año'.");
+		return undefined; // Si el formato es incorrecto, retorna undefined
+	}
+
+	// Extraer el día, mes y año del match
+	const day = parseInt(match[1], 10);
+	const month = parseInt(match[2], 10);
+	const year = parseInt(match[3], 10);
+
+	return {
+		year: year,
+		month: month,
+		day: day
+	};
+};
+
+export const formaDateToEuropean = (strDate: string): string => {
+	// yyyy-dd-mm to dd/mm/yyyy
+	const fecha: Date = parse(strDate, 'yyyy-MM-dd', new Date());
+	return format(fecha, 'dd/MM/yyyy');
+};
 
 export const getDayMonth = (strDate: string) => {
 	const date = new Date(strDate);
@@ -24,9 +70,17 @@ export const formatDate = (strDate: string) => {
 	return `${day} ${month} ${year} · ${hours}:${minutes}`;
 };
 
-export const differenceDays = (strDate: string) => {
+export const differenceDays = (strDate: string): number => {
 	const date = new Date(strDate);
-	return Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
+	const hoy = new Date();
+	hoy.setHours(0, 0, 0, 0);
+	const fechaLimite = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+	const diffTime = fechaLimite.getTime() - hoy.getTime();
+	if (diffTime < 0) {
+		return 0;
+	}
+	const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+	return diffDays;
 };
 
 export const replaceDashWithSpace = (text: string): string => {

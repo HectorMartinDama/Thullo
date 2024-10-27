@@ -7,7 +7,7 @@
 	import DropDownMenuList from './DropDownMenuList.svelte';
 	import { dndzone } from 'svelte-dnd-action';
 	import type { Board, List, User } from '$lib/types';
-	import { renameTitleList, updatePositionTask } from '$lib/requestsBackend';
+	import { getListById, renameTitleList, updatePositionTask } from '$lib/requestsBackend';
 	import { page } from '$app/stores';
 
 	export let notAllowModify: boolean;
@@ -19,6 +19,10 @@
 	let sessionToken: string | undefined;
 	let newTitleValue = list.title;
 	let inputRename = false;
+
+	const updateList = async () => {
+		list = await getListById(sessionToken, list.id);
+	};
 
 	function handleDndConsiderCards(e) {
 		list.tasks = e.detail.items;
@@ -101,7 +105,7 @@
 				</div>
 			{/each}
 		</div>
-		<AddTask listId={list.id} {notAllowModify} />
+		<AddTask listId={list.id} {notAllowModify} on:createTask={updateList} />
 	{/if}
 </section>
 

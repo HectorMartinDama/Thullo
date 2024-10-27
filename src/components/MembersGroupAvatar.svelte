@@ -10,7 +10,7 @@
 	{#if members.length > 0}
 		<Tooltip.Root>
 			<Tooltip.Trigger>
-				<Avatar.Root class="w-9 h-9  hover:z-10 transition-transform hover:scale-110">
+				<Avatar.Root class="w-8 h-8 hover:z-10 transition-transform hover:scale-110">
 					<Avatar.Image src={admin.image} alt={admin.name} />
 					<Avatar.Fallback>{admin.name.split('')[0]}</Avatar.Fallback>
 				</Avatar.Root>
@@ -22,7 +22,7 @@
 		{#each members.slice(0, 4) as member}
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Avatar.Root class="w-9 h-9  hover:z-10 transition-transform hover:scale-110">
+					<Avatar.Root class="w-8 h-8  hover:z-10 transition-transform hover:scale-110">
 						<Avatar.Image src={member.image} alt={member.name} />
 						<Avatar.Fallback>{member.name.split('')[0]}</Avatar.Fallback>
 					</Avatar.Root>

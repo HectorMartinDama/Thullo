@@ -31,12 +31,20 @@ export type List = {
 	tasks?: TaskItem[];
 };
 
+export type DateValue = {
+	day: number;
+	month: number;
+	year: number;
+};
+
 export type TaskItem = {
 	id: string;
 	title: string;
 	priority: Priority;
 	createdAt: string;
 	description?: string;
+	user: User;
+	dueDate?: string;
 	attachments?: AttachmentType[];
 	cover?: string;
 	labels?: Label[];
@@ -57,6 +65,7 @@ export type AttachmentType = {
 	url: string;
 	key: string;
 	createdAt: Date;
+	user: User;
 };
 
 export type Label = {

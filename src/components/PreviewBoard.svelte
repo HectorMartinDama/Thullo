@@ -6,10 +6,10 @@
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { addFavourite, removeFavourite } from '$lib/requestsBackend';
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import StarYellowIcon from './icons/StarYellowIcon.svelte';
-	import { writable } from 'svelte/store';
 	import updateFavoriteBoard from '$lib/stores/updateFavoriteBoard';
+	import * as Avatar from '$lib/components/ui/avatar/index.js';
 
 	export let board: Board;
 	let isHovered = false;
@@ -58,11 +58,10 @@
 	<footer class="flex flex-row items-center h-[28px]">
 		{#if board.members}
 			{#each board.members as member}
-				<img
-					src={member.image}
-					alt="image profile of {member.name}"
-					class="h-[28px] w-[28px] rounded-full"
-				/>
+				<Avatar.Root class="h-[28px] w-[28px] rounded-full">
+					<Avatar.Image src={member.image} alt="@{member.name}" />
+					<Avatar.Fallback>{member.name.charAt(0)}</Avatar.Fallback>
+				</Avatar.Root>
 			{/each}
 		{/if}
 		{#if isHovered && !board.favourites

@@ -1,27 +1,34 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import type { Board, TaskItem } from '$lib/types';
-	import { createEventDispatcher, getContext, onDestroy, onMount, setContext } from 'svelte';
-	import CloseIcon from '../../../../components/icons/CloseIcon.svelte';
-	import CommentInput from '../../../../components/CommentInput.svelte';
-	import SelectLabelsTask from '../../../../components/SelectLabelsTask.svelte';
-	import ChangeTaskPriority from '../../../../components/ChangeTaskPriority.svelte';
+	import { createEventDispatcher, getContext, onDestroy, onMount } from 'svelte';
+	import { animate, inView, timeline } from 'motion';
+	import * as Avatar from '$lib/components/ui/avatar/index.js';
+
+	import CommentInput from '../../../../../components/CommentInput.svelte';
+	import SelectLabelsTask from '../../../../../components/SelectLabelsTask.svelte';
+	import ChangeTaskPriority from '../../../../../components/ChangeTaskPriority.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 
 	import { page } from '$app/stores';
 	import { addTaskDescription, getTaskById, renameTitleTask } from '$lib/requestsBackend';
-	import ArrowUpIcon from '../../../../components/icons/ArrowUpIcon.svelte';
-	import ArrowDownIcon from '../../../../components/icons/ArrowDownIcon.svelte';
+	import ArrowUpIcon from '../../../../../components/icons/ArrowUpIcon.svelte';
+	import CloseIcon from '../../../../../components/icons/CloseIcon.svelte';
+	import ArrowDownIcon from '../../../../../components/icons/ArrowDownIcon.svelte';
+	import DescriptionIcon from '../../../../../components/icons/DescriptionIcon.svelte';
 	import { goto } from '$app/navigation';
 	import { addScript } from '$lib';
-	import DescriptionIcon from '../../../../components/icons/DescriptionIcon.svelte';
-	import SelectDueDateTask from '../../../../components/SelectDueDateTask.svelte';
-	import PriorityTaskLevel from '../../../../components/PriorityTaskLevel.svelte';
-	import LabelItem from '../../../../components/LabelItem.svelte';
-	import DropDownMenuTask from '../../../../components/DropDownMenuTask.svelte';
-	import DeleteTask from '../../../../components/DeleteTask.svelte';
+	import SelectDueDateTask from '../../../../../components/SelectDueDateTask.svelte';
+	import PriorityTaskLevel from '../../../../../components/PriorityTaskLevel.svelte';
+	import LabelItem from '../../../../../components/LabelItem.svelte';
+	import DropDownMenuTask from '../../../../../components/DropDownMenuTask.svelte';
+	import DeleteTask from '../../../../../components/DeleteTask.svelte';
 	import { writable } from 'svelte/store';
 	import showDialogDeleteTask from '$lib/stores/showDeleteTask';
+	import Attachment from '../../../../../components/Attachment.svelte';
+	import Attachments from '../../../../../components/Attachments.svelte';
+	import { isArrayEmpty } from '$lib/utils';
+	import { Toaster } from 'svelte-sonner';
 
 	export let data;
 	let show = false;
@@ -36,11 +43,15 @@
 	let taskEditor = false;
 	const tasks = board.lists?.flatMap((list) => list.tasks);
 
+	let titleDom: HTMLHeadingElement;
+	let headerTitleDom: HTMLHeadingElement;
+
+	console.log($page.data.session?.user?.email, 'id del usuario', task);
+
 	$: currentTaskId = $page.params.id;
 	$: currentIndex = tasks?.findIndex((task) => task?.id == currentTaskId);
 
 	const refresh = async () => {
-		console.log('refresh task', await getTaskById(sessionToken, task.id));
 		task = await getTaskById(sessionToken, task.id);
 	};
 
@@ -55,7 +66,7 @@
 	const nextTask = () => {
 		if (currentIndex < tasks.length - 1) {
 			currentIndex++;
-			goto(`/task/${board.id}/${tasks[currentIndex].id}`).then(() => {
+			goto(`/b/${board.id}/${addScript(board.title)}/${tasks[currentIndex].id}`).then(() => {
 				location.reload();
 			});
 		}
@@ -64,7 +75,9 @@
 	const previousTask = () => {
 		if (currentIndex > 0) {
 			currentIndex--;
-			goto(`/task/${board.id}/${tasks[currentIndex]?.id}`, { replaceState: true }).then(() => {
+			goto(`/b/${board.id}/${addScript(board.title)}/${tasks[currentIndex]?.id}`, {
+				replaceState: true
+			}).then(() => {
 				location.reload();
 			});
 		}
@@ -80,6 +93,8 @@
 		}
 	};
 
+	//animate('#headerTitle', { opacity: 0, y: 50 }, { duration: 0 });
+
 	onMount(() => {
 		if (dialog) dialog.showModal();
 		window.addEventListener('keydown', dispatchCommandDeleteTask);
@@ -88,6 +103,14 @@
 		const unsubcribe = page.subscribe((value) => {
 			sessionToken = value.data.token;
 		});
+
+		inView('#taskTitle', () => {
+			animate('#headerTaskTitle', { opacity: 0 }, { duration: 0.3 });
+			return () => {
+				animate('#headerTaskTitle', { opacity: [0, 1] }, { duration: 0.3 });
+			};
+		});
+
 		return () => {
 			unsubcribe;
 			window.removeEventListener('keydown', dispatchCommandDeleteTask);
@@ -167,37 +190,47 @@
 </script>
 
 <dialog bind:this={dialog} aria-modal="true" class="sm:max-w-[425px] min-w-[864px] rounded-xl">
-	<header class="flex items-center py-2 px-4 justify-end border-b gap-2">
-		<Button
-			variant="ghost"
-			size="icon"
-			on:click={previousTask}
-			disabled={currentIndex === 0}
-			autofocus={false}
-		>
-			<ArrowUpIcon />
-		</Button>
-
-		<Button
-			variant="ghost"
-			size="icon"
-			on:click={nextTask}
-			disabled={currentIndex === tasks.length - 1}
-			autofocus={false}
-		>
-			<ArrowDownIcon />
-		</Button>
-		<div class="flex flex-0">
-			<DropDownMenuTask {task} />
+	<header class="flex items-center py-2 px-4 justify-between border-b">
+		<div id="headerTaskTitle" class="flex items-center gap-3 opacity-0">
+			<PriorityTaskLevel priority={task.priority} inPreviewBoard={false} />
+			<h1 class="text-[#202020] font-semibold text-[13px] flex flex-col">
+				{task.title}
+				<span class="text-xs text-[#666] font-light">in {board.title}</span>
+			</h1>
 		</div>
-		<Button on:click={nav_back} variant="ghost" size="icon">
-			<CloseIcon />
-		</Button>
+
+		<div class="flex">
+			<Button
+				variant="ghost"
+				size="icon"
+				on:click={previousTask}
+				disabled={currentIndex === 0}
+				autofocus={false}
+			>
+				<ArrowUpIcon />
+			</Button>
+
+			<Button
+				variant="ghost"
+				size="icon"
+				on:click={nextTask}
+				disabled={currentIndex === tasks.length - 1}
+				autofocus={false}
+			>
+				<ArrowDownIcon />
+			</Button>
+			<div class="flex flex-0">
+				<DropDownMenuTask {task} />
+			</div>
+			<Button on:click={nav_back} variant="ghost" size="icon">
+				<CloseIcon className="h-4 w-4" />
+			</Button>
+		</div>
 	</header>
 
 	<div class="flex flex-row h-full">
-		<div class="max-w-[600px] min-w-[600px] h-[600px] p-4">
-			<div>
+		<div class="max-w-[600px] min-w-[600px] h-[600px] p-4 overflow-auto">
+			<div id="taskTitle">
 				{#if !taskEditor}
 					<button on:click={editTaskTitle} class="flex items-center gap-3">
 						<PriorityTaskLevel priority={task.priority} inPreviewBoard={false} />
@@ -266,22 +299,43 @@
 			</div>
 
 			<hr class="ml-7 my-6" />
-			<div class="ml-7">
-				<CommentInput />
-			</div>
+
+			<section class="ml-7">
+				{#if task.attachments && !isArrayEmpty(task.attachments)}
+					<Attachments attachments={task.attachments} on:removedAttachment={refresh} />
+				{/if}
+				<CommentInput on:addedAttachment={refresh} />
+			</section>
 		</div>
 
 		<div class="w-full h-[600px] p-4 gap-4 bg-[#fcfaf8]">
-			<p class="font-semibold text-[#666] text-[13px] mb-2">Proyecto</p>
-			<p class="w-full text-xs font-light h-[28px]">{board.title}</p>
+			<p class="font-semibold text-[#666] text-xs mb-2">Proyect</p>
+			<p class="w-full text-xs font-regular h-[28px]">{board.title}</p>
+
+			<hr class="mb-2" />
+
+			<p class="font-semibold text-[#666] text-xs mb-2">Created by</p>
+
+			<div class="flex flex-row items-center gap-2 mb-2">
+				<Avatar.Root class="h-6 w-6">
+					<Avatar.Image src={task.user.image} alt="@shadcn" />
+					<Avatar.Fallback>{task.user.name.charAt(0).toUpperCase()}</Avatar.Fallback>
+				</Avatar.Root>
+				<span class="text-xs font-regular">{task.user.name}</span>
+			</div>
+
 			<!-- {#if $page.data.session?.user?.email === board.user?.email} -->
 			<hr class="mb-2" />
-			<SelectDueDateTask />
+
+			<SelectDueDateTask {task} on:changeDueDate={refresh} />
+
 			<!-- <SelectMembersTask {members} /> -->
 			<hr class="my-2" />
-			<ChangeTaskPriority priority={task.priority} taskId={task.id} on:changePriority={refresh} />
+
+			<ChangeTaskPriority priority={task.priority} {task} on:changePriority={refresh} />
+
 			<hr class="my-2" />
-			<SelectLabelsTask taskId={task.id} on:addTask={refresh} />
+			<SelectLabelsTask {task} on:addTask={refresh} />
 			{#if task.labels}
 				<div class="ml-4 mt-2 flex flex-wrap w-full gap-2">
 					{#each task.labels as label}
@@ -294,6 +348,7 @@
 		</div>
 	</div>
 	<DeleteTask taskId={task.id} taskTitle={task.title} showButton={false} />
+	<Toaster />
 </dialog>
 
 <style>

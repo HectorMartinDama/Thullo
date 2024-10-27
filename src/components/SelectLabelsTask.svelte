@@ -6,15 +6,18 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import PlusIcon from './icons/PlusIcon.svelte';
 	import { Input } from '$lib/components/ui/input';
+	import type { TaskItem } from '$lib/types';
 
-	export let taskId: string;
+	export let task: TaskItem;
 	let sessionToken: string | undefined;
 	let labelTitle: string = '';
 
 	const dispatch = createEventDispatcher();
 
+	const isTheOwner: boolean = $page.data.session?.user?.email === task.user.email;
+
 	const selectLabel = async () => {
-		await addLabelTask(sessionToken, taskId, labelTitle);
+		await addLabelTask(sessionToken, task.id, labelTitle);
 		dispatch('addTask');
 	};
 
@@ -28,8 +31,13 @@
 
 <Popover.Root portal={null}>
 	<Popover.Trigger asChild let:builder>
-		<Button variant="ghost" builders={[builder]} class="w-full justify-between">
-			<span class="text-[13px] font-semibold text-[#666]">Labels</span>
+		<Button
+			disabled={!isTheOwner}
+			variant="ghost"
+			builders={[builder]}
+			class="w-full justify-between h-[36px]"
+		>
+			<span class="text-xs font-semibold text-[#666]">Labels</span>
 			<PlusIcon className="h-4 w-4 stroke-1" />
 		</Button>
 	</Popover.Trigger>

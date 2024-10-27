@@ -44,6 +44,7 @@
 		"@internationalized/date": "^3.5.5",
 		"@midudev/tailwind-animations": "^0.0.7",
 		"clsx": "^2.1.1",
+		"date-fns": "^4.1.0",
 		"formsnap": "^1.0.1",
 		"mode-watcher": "^0.4.1",
 		"motion": "^10.18.0",
