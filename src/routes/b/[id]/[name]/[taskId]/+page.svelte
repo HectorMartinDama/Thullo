@@ -24,11 +24,12 @@
 	import DropDownMenuTask from '../../../../../components/DropDownMenuTask.svelte';
 	import DeleteTask from '../../../../../components/DeleteTask.svelte';
 	import { writable } from 'svelte/store';
-	import showDialogDeleteTask from '$lib/stores/showDeleteTask';
 	import Attachment from '../../../../../components/Attachment.svelte';
 	import Attachments from '../../../../../components/Attachments.svelte';
 	import { isArrayEmpty } from '$lib/utils';
 	import { Toaster } from 'svelte-sonner';
+	import SelectMembersTask from '../../../../../components/SelectMembersTask.svelte';
+	import updateTask from '$lib/stores/updateTask';
 
 	export let data;
 	let show = false;
@@ -53,6 +54,7 @@
 
 	const refresh = async () => {
 		task = await getTaskById(sessionToken, task.id);
+		updateTask.set(true);
 	};
 
 	const handleKeyDown = (event: KeyboardEvent) => {
@@ -174,6 +176,7 @@
 			task.title = currentInputTitleValue;
 			task.description = currentInputDescriptionValue;
 			taskEditor = false;
+			refresh();
 		} else if (
 			task.description != currentInputDescriptionValue &&
 			currentInputDescriptionValue.length > 0
@@ -181,21 +184,27 @@
 			await addTaskDescription(sessionToken, task.id, currentInputDescriptionValue);
 			task.description = currentInputDescriptionValue;
 			taskEditor = false;
+			refresh();
 		} else if (task.title != currentInputTitleValue && currentInputTitleValue.length > 0) {
 			await renameTitleTask(sessionToken, task.id, currentInputTitleValue);
 			task.title = currentInputTitleValue;
 			taskEditor = false;
+			refresh();
 		}
 	};
 </script>
 
-<dialog bind:this={dialog} aria-modal="true" class="sm:max-w-[425px] min-w-[864px] rounded-xl">
+<dialog
+	bind:this={dialog}
+	aria-modal="true"
+	class="sm:max-w-[425px] min-w-[864px] rounded-xl dark:bg-[#121212]"
+>
 	<header class="flex items-center py-2 px-4 justify-between border-b">
 		<div id="headerTaskTitle" class="flex items-center gap-3 opacity-0">
 			<PriorityTaskLevel priority={task.priority} inPreviewBoard={false} />
 			<h1 class="text-[#202020] font-semibold text-[13px] flex flex-col">
 				{task.title}
-				<span class="text-xs text-[#666] font-light">in {board.title}</span>
+				<span class="text-xs text-[#666] dark:text-[#bfbfbf] font-light">in {board.title}</span>
 			</h1>
 		</div>
 
@@ -235,7 +244,7 @@
 					<button on:click={editTaskTitle} class="flex items-center gap-3">
 						<PriorityTaskLevel priority={task.priority} inPreviewBoard={false} />
 						<h1
-							class="flex items-center gap-3 text-xl font-semibold text-[#202020] truncate max-w-[510px] -tracking-wide"
+							class="flex items-center gap-3 text-xl font-semibold dark:text-white text-[#202020] truncate max-w-[510px] -tracking-wide"
 						>
 							{task.title}
 						</h1>
@@ -255,7 +264,7 @@
 					</button>
 				{:else}
 					<form action="" class="flex flex-col justify-between min-h-[160px] ml-6">
-						<div class="border border-[#e6e6e6] rounded-[10px] min-h-[115px] px-2 py-2 mb-2">
+						<div class="border rounded-[10px] min-h-[115px] px-2 py-2 mb-2">
 							<div
 								bind:this={taskEditorTitle}
 								on:input={handleTaskTitle}
@@ -268,7 +277,7 @@
 							<div
 								contenteditable="true"
 								data-placeholder="Escribe aquí..."
-								class="outline-none mt-4 text-sm text-[#202020]"
+								class="outline-none mt-4 text-sm text-[#999]"
 								bind:this={taskEditorDescription}
 								on:input={handleTaskDescription}
 							>
@@ -284,8 +293,10 @@
 						</div>
 
 						<div class="flex justify-end gap-4">
-							<Button variant="outline" class="h-8 text-xs bg-[#f5f5f5]" on:click={cancelOperation}
-								>Discard</Button
+							<Button
+								variant="outline"
+								class="h-8 text-xs dark:bg-[#2a3034] bg-[#f5f5f5]"
+								on:click={cancelOperation}>Discard</Button
 							>
 							<Button
 								variant="destructive"
@@ -308,13 +319,13 @@
 			</section>
 		</div>
 
-		<div class="w-full h-[600px] p-4 gap-4 bg-[#fcfaf8]">
-			<p class="font-semibold text-[#666] text-xs mb-2">Proyect</p>
+		<div class="w-full h-[600px] p-4 gap-4 bg-[#fcfaf8] dark:bg-[#1a1a1a]">
+			<p class="font-semibold text-[#666] dark:text-[#bfbfbf] text-xs mb-2">Proyect</p>
 			<p class="w-full text-xs font-regular h-[28px]">{board.title}</p>
 
 			<hr class="mb-2" />
 
-			<p class="font-semibold text-[#666] text-xs mb-2">Created by</p>
+			<p class="font-semibold text-[#666] dark:text-[#bfbfbf] text-xs mb-2">Created by</p>
 
 			<div class="flex flex-row items-center gap-2 mb-2">
 				<Avatar.Root class="h-6 w-6">
@@ -329,10 +340,11 @@
 
 			<SelectDueDateTask {task} on:changeDueDate={refresh} />
 
-			<!-- <SelectMembersTask {members} /> -->
 			<hr class="my-2" />
 
 			<ChangeTaskPriority priority={task.priority} {task} on:changePriority={refresh} />
+
+			<SelectMembersTask boardMembers={board.members} {task} />
 
 			<hr class="my-2" />
 			<SelectLabelsTask {task} on:addTask={refresh} />

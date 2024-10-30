@@ -56,7 +56,7 @@
 	class="flex px-9 sticky top-0 z-10 justify-between items-center border-b border-[#D9DDE2] text-black dark:border-[#32383D] h-[68px] w-full bg-[white] dark:bg-[#1D2125]"
 >
 	<!-- FIRST GROUP -->
-	<div class="flex flex-row">
+	<div class="flex flex-row items-center">
 		<a href="/boards">
 			<BrandIcon />
 		</a>
@@ -67,7 +67,7 @@
 			{#if !inputRename}
 				<div
 					on:click={() => renameTitle()}
-					class="cursor-pointer h-[32px] transition-colors duration-150 ease-in-out hover:bg-[#F0F1F4] py-2 px-2 rounded-[4px] flex items-center ml-[130px]"
+					class="cursor-pointer h-[32px] transition-colors duration-150 ease-in-out dark:hover:bg-[#2a3035] hover:bg-[#F0F1F4] py-2 px-2 rounded-[4px] flex items-center ml-[130px]"
 				>
 					<h1 class="text-[#333333] dark:text-[#B6C2CF] justify-center text-lg font-semibold">
 						{boardTitle}
@@ -84,7 +84,7 @@
 			{/if}
 
 			{#if boardTitle}
-				<div class="inline-block h-[35px] mx-[30px] border-[1px] border-[#E0E0E0]"></div>
+				<div class="inline-block h-[24px] mx-[20px] border border-[#E0E0E0]"></div>
 				<AllBoardButton />
 			{/if}
 		{/if}
@@ -96,14 +96,10 @@
 		</div>
 	{:else}
 		<div class="flex-row gap-8 hidden md:flex">
-			<GithubStar />
 			<button
-				class="flex flex-row items-center gap-4 rounded-[4px] text-sm py-2 px-2 border border-gray-300 transition-colors duration-150 hover:bg-[#e7e7f5]"
-				on:click={() => signIn('google', { callbackUrl: '/boards' })}
+				class="py-2 px-2 bg-[#6271bd] hover:bg-[#4e5b9a] rounded-lg font-semibold text-white text-sm"
+				on:click={() => signIn('google', { callbackUrl: '/boards' })}>Open Thullo</button
 			>
-				<GoogleIcon />
-				Sign in with Google
-			</button>
 		</div>
 	{/if}
 </nav>

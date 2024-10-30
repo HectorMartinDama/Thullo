@@ -68,7 +68,7 @@
 		</div>
 
 		<div class="flex flex-col gap-5 mt-10">
-			<Card.Root class="w-[630px] flex flex-row items-center justify-between">
+			<Card.Root class="w-[630px] flex flex-row items-center justify-between dark:bg-[#1a1a1a]">
 				<Card.Header>
 					<Card.Title class="text-md font-medium">Delete Account</Card.Title>
 					<Card.Description
@@ -86,7 +86,7 @@
 				</Card.Content>
 			</Card.Root>
 
-			<Card.Root class="w-[630px] flex flex-row items-center justify-between">
+			<Card.Root class="w-[630px] flex flex-row items-center justify-between dark:bg-[#1a1a1a]">
 				<Card.Header>
 					<Card.Title class="text-md font-medium">View transitions</Card.Title>
 					<Card.Description>Your browser support View transitions</Card.Description>

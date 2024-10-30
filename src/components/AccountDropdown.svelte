@@ -17,7 +17,9 @@
 	<DropdownMenu.Trigger>
 		<Avatar.Root class="h-9 w-9">
 			<Avatar.Image src={$page.data.session?.user?.image} alt="profile picture" />
-			<Avatar.Fallback>{$page.data.session?.user?.name?.split('')[0]}</Avatar.Fallback>
+			<Avatar.Fallback class="text-sm bg-[#d9d7d5]"
+				>{$page.data.session?.user?.name?.split('')[0]}</Avatar.Fallback
+			>
 		</Avatar.Root>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content class="w-56">

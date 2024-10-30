@@ -37,7 +37,7 @@
 </script>
 
 <div class="flex flex-col gap-2">
-	<p class="text-xs font-semibold text-[#666]">Priority</p>
+	<p class="text-xs font-semibold text-[#666] dark:text-[#bfbfbf]">Priority</p>
 
 	<Select.Root
 		disabled={!isTheOwner}
@@ -48,15 +48,15 @@
 		}}
 	>
 		<Select.Trigger
-			class="w-full h-[36px] bg-[#fcfaf8] border-none hover:bg-[#f5f5f5] transition-colors duration-150"
+			class="w-full h-[36px] bg-[#fcfaf8] dark:bg-[#1a1a1a] dark:hover:bg-[#262626] border-none hover:bg-[#f5f5f5] transition-colors duration-150"
 		>
-			<Select.Value class="text-xs font-normal text-[#202020]" />
+			<Select.Value class="text-xs font-normal text-[#202020] dark:text-white" />
 		</Select.Trigger>
 		<Select.Content>
 			<Select.Group>
 				{#each priorities as priority}
 					<Select.Item
-						class="text-[13px] text-[#202020]"
+						class="text-[13px] text-[#202020] dark:text-white"
 						value={priority.value}
 						label={priority.label}>{priority.label}</Select.Item
 					>

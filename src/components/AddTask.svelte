@@ -48,22 +48,27 @@
 {#if !notAllowModify}
 	<Popover.Root open={showForm} onOpenChange={() => (showForm = !showForm)}>
 		<Popover.Trigger
-			class="z-10 h-[35.5px] min-h-[35.5px]  rounded-xl bg-[#F1F2F4] dark:bg-[#101204] dark:text-[#B6C2CF] transition-colors duration-150 hover:bg-[#d0d4db] dark:hover:bg-[#31393F] text-[13px] flex items-center font-medium pl-4 gap-4 text-[#202020]"
+			class="z-10 h-[35.5px] min-h-[35.5px]  rounded-xl bg-[#F1F2F4] dark:bg-[#1a1a1a] dark:text-[#B6C2CF] transition-colors duration-150 hover:bg-[#d0d4db] dark:hover:bg-[#31393F] text-[13px] flex items-center font-medium pl-4 gap-4 text-[#202020]"
 		>
 			<PlusIcon className="w-4 h-4" />
 			Add task
 		</Popover.Trigger>
 		<Popover.Content
-			class=" mt-4 bg-[white] dark:bg-[#2b2a33] w-[280px] h-[140px] py-2 rounded-xl flex items-center justify-center"
+			class=" mt-4 bg-[white] dark:bg-[#121212] w-[280px] h-[140px] py-2 rounded-xl flex items-center justify-center"
 		>
-			<form method="POST" action="?/createTask" class="px-[10px]" use:enhance={submitCreateTask}>
+			<form
+				method="POST"
+				action="?/createTask"
+				class="px-[10px] dark:bg-[#121212]"
+				use:enhance={submitCreateTask}
+			>
 				<textarea
 					autofocus
 					required
 					name="title"
 					bind:this={inputTitleDom}
 					placeholder="Enter a title for this task...."
-					class="min-h-[74px] w-[256px] py-[8px] px-[12px] text-[13px] rounded-[5px] mb-[8px] resize-none"
+					class="min-h-[74px] w-[256px] py-[8px] px-[12px] text-[13px] rounded-[5px] mb-[8px] resize-none bg-[#F5F5F5] dark:bg-[#1a1a1a] outline-none"
 				/>
 				<input type="hidden" name="listId" value={listId} />
 				<div class="flex items-center gap-[15px]">

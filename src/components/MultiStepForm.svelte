@@ -76,7 +76,7 @@
 	method="POST"
 	action="?/createBoard"
 	use:enhance={submitCreateBoard}
-	class="h-full dark:text-[#b6c2cf]"
+	class="h-full dark:text-[#bfbfbf] dark:bg-[#121212]"
 >
 	<header>
 		<h3 class="font-semibold text-lg -tracking-wider">Create Board</h3>
@@ -204,7 +204,7 @@
 			</div>
 		</div>
 	{/if}
-	<footer class="border-t bg-[#fafafa] dark:bg-[#282e33] dark:text-[#b6c2cf]">
+	<footer class="border-t bg-[#fafafa] dark:bg-[#1a1a1a] dark:text-[#b6c2cf]">
 		<menu>
 			{#if active_step === 1}
 				<button type="hidden"></button>

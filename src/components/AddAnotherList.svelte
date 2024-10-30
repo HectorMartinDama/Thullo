@@ -43,7 +43,7 @@
 			bind:this={button}
 			id="btn"
 			on:click={() => (showForm = true)}
-			class="w-[272px] h-[35.5px] rounded-xl bg-[#ffffff5d] text-white text-[13px] flex items-center justify-around shadow-xl font-medium transition-colors duration-150 hover:bg-[#00000026]"
+			class="w-[272px] h-[35.5px] rounded-xl text-white text-[13px] flex items-center justify-around shadow-xl font-medium transition-colors duration-150 hover:bg-[#00000026]"
 		>
 			Add another list
 			<PlusIcon className="h-5 w-5 stroke-white" />
@@ -52,7 +52,7 @@
 		{#if showForm}
 			<div
 				bind:this={formContainer}
-				class="bg-[white] dark:bg-[#2b2a33] w-[272px] h-[88px] rounded-xl flex items-center absolute top-0 left-0"
+				class="bg-[white] dark:bg-[#121212] w-[272px] h-[88px] rounded-xl flex items-center absolute top-0 left-0"
 			>
 				<form method="POST" action="?/createList" class="px-[10px]" use:enhance={submitAddList}>
 					<input
@@ -62,7 +62,7 @@
 						bind:this={inputTitleDom}
 						type="text"
 						placeholder="Enter list title..."
-						class="min-h-[20px] w-[250px] py-[6px] px-[12px] rounded-[5px] mb-[8px] text-[13px]"
+						class="min-h-[20px] w-[250px] py-[6px] px-[12px] rounded-[5px] mb-[8px] text-[13px] bg-[#F5F5F5] dark:bg-[#1a1a1a] outline-none"
 					/>
 					<div class="flex items-center gap-[15px]">
 						<button

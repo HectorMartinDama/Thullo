@@ -36,7 +36,7 @@
 			deleteLabel();
 		}}
 		type="button"
-		class="inline-flex items-center p-1 ms-2 bg-transparent rounded-sm hover:bg-[#bebdbc] hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
+		class="inline-flex items-center p-1 ms-2 bg-transparent rounded-sm hover:bg-[#bebdbc]"
 		data-dismiss-target="#badge-dismiss-default"
 		aria-label="Remove"
 	>

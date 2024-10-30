@@ -59,10 +59,14 @@
 			unsubcribe;
 		};
 	});
+
+	const fromDate: Calendar.Props['fromDate'] = () => {
+		return new Date();
+	};
 </script>
 
 <div class="flex flex-col gap-2">
-	<p class="text-xs font-semibold text-[#666]">Due date</p>
+	<p class="text-xs font-semibold text-[#666] dark:text-[#bfbfbf]">Due date</p>
 
 	<Popover.Root
 		openFocus
@@ -75,7 +79,7 @@
 				disabled={!isTheOwner}
 				variant="outline"
 				class={cn(
-					'w-full h-[36px]  bg-[#fcfaf8] border-none text-xs text-[#202020] justify-start text-left font-normal',
+					'w-full h-[36px]  bg-[#fcfaf8] dark:text-white dark:bg-[#1a1a1a] dark:hover:bg-[#262626] border-none text-xs text-[#202020] justify-start text-left font-normal',
 					!value && 'text-muted-foreground'
 				)}
 				builders={[builder]}
@@ -107,6 +111,7 @@
 				<Calendar
 					class="text-xs"
 					bind:value
+					{fromDate}
 					onValueChange={(v) => {
 						if (!v) return;
 						value = today(getLocalTimeZone()).set({

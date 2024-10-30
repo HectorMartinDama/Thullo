@@ -41,8 +41,10 @@
 	});
 </script>
 
-<Button variant="outline" class="flex justify-between w-[256px] h-[36px] rounded-md ">
-	<p class="text-sm text-[#18181b]">Search...</p>
+<div
+	class="flex px-4 items-center justify-between w-[256px] h-[36px] rounded-md bg-[#F5F5F5] dark:bg-[#1a1a1a]"
+>
+	<p class="text-sm text-[#18181b] dark:text-[#bfbfbf]">Search...</p>
 	<span class="text-muted-foreground text-[13px]">
 		<kbd
 			class="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100"
@@ -51,7 +53,7 @@
 		</kbd>
 		<span />
 	</span>
-</Button>
+</div>
 
 <Command.Dialog bind:open class="h-[300px] outline-none">
 	<Command.Input placeholder="Type a command or search..." />

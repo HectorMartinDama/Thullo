@@ -84,7 +84,7 @@
 		<Input
 			type="text"
 			placeholder="Write a comment..."
-			class="max-w-xs outline-none focus-visible:ring-transparent w-[300px] text-xs rounded-[15px] h-8 hover:bg-[#f5f5f5] transition-colors duration-150"
+			class="max-w-xs outline-none focus-visible:ring-transparent w-[300px] text-xs rounded-[15px] h-8 transition-colors duration-150"
 			autocomplete="off"
 		/>
 

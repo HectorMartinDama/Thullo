@@ -42,7 +42,7 @@
 	</DropdownMenu.Trigger>
 
 	<DropdownMenu.Content class="w-[250px] rounded-2xl">
-		<DropdownMenu.Label class="font-normal text-xs text-[#666]"
+		<DropdownMenu.Label class="font-normal text-xs text-[#666] dark:text-[#bfbfbf]"
 			>Add {formatDate(task.createdAt)}</DropdownMenu.Label
 		>
 		<DropdownMenu.Separator />
@@ -50,14 +50,14 @@
 		<DropdownMenu.Group>
 			<DropdownMenu.Item
 				on:click={duplicateTask}
-				class="text-[13px]  py-2 cursor-pointer text-[#202020] gap-1"
+				class="text-[13px]  py-2 cursor-pointer text-[#202020] dark:text-white gap-1"
 			>
 				<CopyPlusIcon class="mr-2 h-4 w-4" />
 				<span>Duplicate</span>
 			</DropdownMenu.Item>
 
 			<DropdownMenu.Item
-				class="text-[13px] py-2 cursor-pointer text-[#202020] gap-1"
+				class="text-[13px] py-2 cursor-pointer text-[#202020] dark:text-white gap-1"
 				on:click={copyToClipboard}
 			>
 				<LinkIcon class="mr-2 h-4 w-4" />

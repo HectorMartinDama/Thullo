@@ -66,12 +66,12 @@
 </script>
 
 <section
-	class="flex flex-col px-[15px] py-[15px] gap-[15px] max-h-[580px] w-[280px] bg-white dark:bg-[#101204] rounded-xl"
+	class="flex flex-col px-[15px] py-[15px] gap-[15px] max-h-[580px] w-[280px] bg-white dark:bg-[#1a1a1a] rounded-xl"
 >
 	<header class="h-[38px] flex items-center justify-between">
 		{#if !inputRename}
 			<div
-				class="cursor-pointer h-[20px] px-2 py-2 rounded-[4px] transition-colors duration-150 ease-in-out hover:bg-gray-300 flex items-center"
+				class="cursor-pointer h-[20px] px-2 py-2 rounded-[4px] transition-colors duration-150 ease-in-out dark:hover:bg-[#2a3034] hover:bg-gray-300 flex items-center"
 				on:click={() => {
 					focusListEditorTitleInput();
 				}}

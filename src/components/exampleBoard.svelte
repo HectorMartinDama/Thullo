@@ -46,11 +46,11 @@
 	{#each board as column (column.id)}
 		<div
 			animate:flip={{ duration: 200 }}
-			class="w-[200px] h-[260px] bg-[white] rounded-[8px] text-sm font-normal px-4 py-4 relative"
+			class="w-[200px] h-[260px] bg-[white] dark:bg-[#1a1a1a] rounded-[8px] text-sm font-normal px-4 py-4 relative"
 		>
 			<div>
 				<header class=" h-9 flex justify-between">
-					<h3 class="text-sm font-semibold text-black">{column.name}</h3>
+					<h3 class="text-sm font-semibold text-black dark:text-[#bfbfbf]">{column.name}</h3>
 					<OptionsIcon />
 				</header>
 

@@ -82,9 +82,9 @@
 
 		<form action="?/changeVisibility" method="post" use:enhance={submitChangeVisibility}>
 			<div
-				class="flex flex-row w-full justify-between items-center gap-3 border rounded-md p-2 mb-6"
+				class=" dark:bg-[#1a1a1a] flex flex-row w-full justify-between items-center gap-3 border rounded-md p-2 mb-6"
 			>
-				<div>
+				<div class="">
 					<h1 class="text-sm font-medium mb-1 dark:text-white">Public with link</h1>
 					<p class="text-sm text-gray-500 dark:text-[#9CA3AF]">
 						Anyone with the link can view the board

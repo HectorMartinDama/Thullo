@@ -37,7 +37,7 @@
 			builders={[builder]}
 			class="w-full justify-between h-[36px]"
 		>
-			<span class="text-xs font-semibold text-[#666]">Labels</span>
+			<span class="text-xs font-semibold text-[#666] dark:text-[#bfbfbf]">Labels</span>
 			<PlusIcon className="h-4 w-4 stroke-1" />
 		</Button>
 	</Popover.Trigger>

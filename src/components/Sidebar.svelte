@@ -45,7 +45,7 @@
 	<Sheet.Trigger class={buttonVariants({ variant: 'ghost', size: 'icon' })}>
 		<Ellipsis class="h-4 w-4" />
 	</Sheet.Trigger>
-	<Sheet.Content class="w-[350px]">
+	<Sheet.Content class="w-[350px] dark:bg-[#1d2125]">
 		<Sheet.Header class="flex flex-row justify-between items-center mb-5 ">
 			{#if isSubMenuOpen}
 				<button on:click={back}>
@@ -64,7 +64,7 @@
 			<ul class="w-full gap-2">
 				<button
 					on:click={() => showComponent('About this board')}
-					class="flex items-center px-3 font-medium text-[13px] h-[35.5px] w-full hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
+					class="flex items-center px-3 font-medium text-[13px] h-[35.5px] w-full hover:bg-[#f5f5f5] dark:hover:bg-[#2a3035] rounded-lg mb-3 transition-colors duration-150 gap-1"
 				>
 					<InfoIcon class="mr-2 h-4 w-4" />
 					About this board
@@ -73,7 +73,7 @@
 
 				<button
 					on:click={() => showComponent('Change background')}
-					class="flex items-center px-3 font-medium text-[13px] w-full h-[35.5px] hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
+					class="flex items-center px-3 font-medium text-[13px] w-full h-[35.5px] hover:bg-[#f5f5f5] dark:hover:bg-[#2a3035] rounded-lg mb-3 transition-colors duration-150 gap-1"
 				>
 					<div
 						class="mr-2 h-4 w-4 rounded-[4px] bg-center object-cover"
@@ -85,7 +85,7 @@
 
 				<button
 					on:click={() => showComponent('Activity')}
-					class="flex items-center px-3 font-medium text-[13px] h-[35.5px] w-full hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
+					class="flex items-center px-3 font-medium text-[13px] h-[35.5px] w-full hover:bg-[#f5f5f5] dark:hover:bg-[#2a3035] rounded-lg mb-3 transition-colors duration-150 gap-1"
 				>
 					<ActivityIcon class="mr-2 h-4 w-4" />
 					Activity
@@ -94,7 +94,7 @@
 
 				<button
 					on:click={() => showComponent('Delete')}
-					class="flex items-center px-3 font-medium text-[13px] w-full h-[35.5px] hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
+					class="flex items-center px-3 font-medium text-[13px] w-full h-[35.5px] hover:bg-[#f5f5f5] dark:hover:bg-[#2a3035] rounded-lg mb-3 transition-colors duration-150 gap-1"
 				>
 					<TrashIcon class="mr-2 h-4 w-4 stroke-[#b03d32]" />
 					Delete Board
@@ -103,7 +103,7 @@
 
 				<button
 					on:click={() => showComponent('Archived Items')}
-					class="flex items-center px-3 font-medium text-[13px] w-full h-[35.5px] hover:bg-[#f5f5f5] dark:hover:bg-[#262626] rounded-lg mb-3 transition-colors duration-150 gap-1"
+					class="flex items-center px-3 font-medium text-[13px] w-full h-[35.5px] hover:bg-[#f5f5f5] dark:hover:bg-[#2a3035] rounded-lg mb-3 transition-colors duration-150 gap-1"
 				>
 					<FolderIcon class="mr-2 h-4 w-4 " />
 					Archived items

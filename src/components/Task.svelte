@@ -43,7 +43,7 @@
 
 <div
 	draggable="true"
-	class="border rounded-xl px-3 py-2 max-w-[250px] w-[250px] z-20 transition-colors duration-150 hover:bg-[#EEEEEE]"
+	class="border rounded-xl px-3 py-2 max-w-[250px] w-[250px] z-20 transition-colors duration-150 dark:hover:bg-[#2a3034] hover:bg-[#EEEEEE]"
 >
 	<a
 		class="w-full text-sm text-[#202020] dark:text-white leading-5"

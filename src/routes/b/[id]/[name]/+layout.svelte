@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Board } from '$lib/types';
-	import { list } from 'postcss';
 	import Navbar from '../../../../components/Navbar.svelte';
 	import TypeBoardButton from '../../../../components/TypeBoardButton.svelte';
 	import { page } from '$app/stores';
@@ -8,12 +7,14 @@
 	import MembersGroupAvatar from '../../../../components/MembersGroupAvatar.svelte';
 	import Sidebar from '../../../../components/Sidebar.svelte';
 	import { getBoardById, updateOrderList } from '$lib/requestsBackend';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { dndzone, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	import AddAnotherList from '../../../../components/AddAnotherList.svelte';
 	import ListTasks from '../../../../components/ListTasks.svelte';
 	import { fade } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
+	import { cubicIn } from 'svelte/easing';
+	import updateTask from '$lib/stores/updateTask';
 
 	export let data;
 	const boardId = $page.params.id;
@@ -44,6 +45,11 @@
 		return unsubcribe;
 	});
 
+	const updatedTask = updateTask.subscribe(async (value) => {
+		if (value) await updateBoard();
+		updateTask.set(false);
+	});
+
 	const updateBoard = async () => {
 		board = await getBoardById(sessionToken, board.id);
 		EndContainer();
@@ -53,6 +59,10 @@
 		const container = document.getElementById('board');
 		if (container) container.scrollLeft = container.scrollWidth;
 	};
+
+	onDestroy(() => {
+		updatedTask();
+	});
 </script>
 
 <svelte:head>

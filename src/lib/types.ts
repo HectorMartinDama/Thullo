@@ -47,6 +47,7 @@ export type TaskItem = {
 	dueDate?: string;
 	attachments?: AttachmentType[];
 	cover?: string;
+	members: User[] | [];
 	labels?: Label[];
 };
 

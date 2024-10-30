@@ -26,7 +26,7 @@
 <section class="flex flex-col mt-3 md:mt-10 px-9 md:px-[100px] w-full">
 	<main class="flex flex-col md:flex-row justify-between mt-8 w-full">
 		<div class="mb-8 md:mb-0">
-			<h1 class="font-extrabold text-3xl md:text-6xl text-[#1C1E21] inline">
+			<h1 class="font-extrabold text-3xl md:text-6xl text-[#1C1E21] dark:text-white inline">
 				<span
 					style="background: linear-gradient(to right, #afabff, #1080CF, #7877c6); color: transparent; background-clip: text;"
 					>Thullo</span

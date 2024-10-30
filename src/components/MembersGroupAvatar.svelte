@@ -1,13 +1,14 @@
 <script lang="ts">
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
+	import type { User } from 'lib/types';
 
-	export let admin;
-	export let members;
+	export let admin: User;
+	export let members: User[] | [];
 </script>
 
 <div class="flex -space-x-4">
-	{#if members.length > 0}
+	{#if members?.length > 0}
 		<Tooltip.Root>
 			<Tooltip.Trigger>
 				<Avatar.Root class="w-8 h-8 hover:z-10 transition-transform hover:scale-110">
